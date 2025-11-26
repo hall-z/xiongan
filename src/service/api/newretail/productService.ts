@@ -67,10 +67,10 @@ export const ProductService = {
   /**
    * 查询商品分类树+商品数量
    */
-  getCategoryWithCountByStore: (params: GetCategoryWithCountParams): Promise<any> => {
+  getCategoryWithCountByStore: (storeIds) => {
     const requestParams = {
-      storeIds: params.storeIds,
-      purposes: params.purposes || 'ONLINE,CURRENCY'
+      storeIds,
+      purposes: 'ONLINE,CURRENCY'
     }
     return request.get('/newretail/api/mall/product/category/getCategoryWithCountByStore', requestParams)
   },

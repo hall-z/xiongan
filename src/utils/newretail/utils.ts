@@ -437,7 +437,7 @@ const tenxunInverseAnalysisAddress = (longitude, latitude) => {
 // 经纬度逆解析地址
 const inverseAnalysisAddress = async (lat, lon, that, reject1, resolve1) => {
   const app = getApp()
-  const distributionService = require("../api/distributionService")
+  const distributionService = import('@/service/api/newretail/distributionService')
   return new Promise(async function (resolve, reject) {
     if(app.globalData.systemConfigure.deliveryDistanceThirdMap == 'TIANDITU') {
       // 天地图情况下需要转换坐标
@@ -473,7 +473,7 @@ const inverseAnalysisAddress = async (lat, lon, that, reject1, resolve1) => {
 // 获取配送距离
 const getTripDist = (longitude, latitude, storeInfoLon, storeInfoLat, that, reject1, resolve1) => {
   const app = getApp()
-  const distributionService = require("../api/distributionService")
+  const distributionService = import('@/service/api/newretail/distributionService')
   return new Promise(async function (resolve, reject) {
     if(app.globalData.systemConfigure.deliveryDistanceThirdMap == 'TIANDITU') {
       let change1 = await distributionService.gcj02TOwgs84(longitude,latitude)
