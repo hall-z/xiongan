@@ -1,0 +1,245 @@
+/* components/pay/pay.css */
+
+.popup-content-card {
+  background: #fff;
+  width: 670rpx;
+  height: 502rpx;
+  padding: 0;
+  box-sizing: border-box;
+  border-radius: 8rpx;
+  overflow: hidden;
+  margin: 40% auto;
+  position: relative;
+}
+
+.popup-content-card .title {
+  color: #707070;
+  font-size: 34rpx;
+  line-height: 94rpx;
+  height: 94rpx;
+  text-align: center;
+  border-bottom: 1rpx solid #f5f4f4;
+}
+
+.popup-content-card .content {
+  font-size: 28rpx;
+  line-height: 36rpx;
+  color: #676666;
+  padding: 0 40rpx;
+  margin-top: 72rpx;
+}
+
+.popup-content-card .content .uesd {
+  color: #ffaf61;
+  margin-bottom: 18rpx;
+}
+
+.popup-content-card .content password-input {
+  height: 96rpx;
+}
+
+.popup-content-card .content .password-text {
+  text-align: right;
+  width: 100%;
+  font-size: 28rpx;
+  line-height: 50rpx;
+  height: 50rpx;
+}
+
+.popup-content-card .content .forget-password {
+  margin-top: 10rpx;
+  font-size: 26rpx;
+  line-height: 46rpx;
+}
+
+.popup-content-card .pay-box text:first-of-type {
+  margin-bottom: 16rpx;
+}
+
+.popup-content-card .content .forget-password {
+  float: right;
+  font-size: 30rpx;
+  line-height: 62rpx;
+  margin-top: 16rpx;
+  color: #1a1a1a;
+}
+
+.popup-content-card .button-box {
+  display: flex;
+  width: 100%;
+  height: 100rpx;
+  position: absolute;
+  bottom: 0;
+}
+
+.popup-content-card .button-box button {
+  flex: 1;
+  font-size: 32rpx;
+  height: 100rpx;
+  font-weight: bold;
+  line-height: 100rpx;
+  border-radius: 0;
+  border: none;
+  color: #fff;
+}
+
+button::after {
+  border: none;
+}
+
+.popup-content-card .close {
+  width: 88rpx;
+  height: 88rpx;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.popup-content-card .close image {
+  position: absolute;
+  width: 44rpx;
+  height: 44rpx;
+  right: 40rpx;
+  top: 30rpx;
+}
+
+.popup-content {
+  width: 670rpx;
+  height: 500rpx;
+  background: #fff;
+  border-radius: 6rpx;
+  position: relative;
+}
+
+.popup-content-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 400rpx;
+}
+
+.popup-content-box image {
+  width: 410rpx;
+  height: 421rpx;
+}
+
+.popup-content .button {
+  height: 100rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+  line-height: 100rpx;
+  width: 100%;
+  color: #fff;
+  text-align: center;
+  border-bottom-left-radius: 6rpx;
+  border-bottom-right-radius: 6rpx;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+/* 适配Vue组件的样式 */
+.password-popup {
+  background: #fff;
+  width: 670rpx;
+  height: auto;
+  padding: 0;
+  box-sizing: border-box;
+  border-radius: 8rpx;
+  overflow: hidden;
+}
+
+.popup-header {
+  color: #707070;
+  font-size: 34rpx;
+  line-height: 94rpx;
+  height: 94rpx;
+  text-align: center;
+  border-bottom: 1rpx solid #f5f4f4;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 30rpx;
+}
+
+.popup-header .close-icon {
+  font-size: 40rpx;
+  color: #999;
+}
+
+.popup-content {
+  padding: 40rpx;
+}
+
+.popup-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+  padding: 0 40rpx 40rpx;
+}
+
+.confirm-btn {
+  background: var(--theme-color, #FF9F43);
+  color: #fff;
+  border-radius: 8rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  font-size: 32rpx;
+  border: none;
+}
+
+.forgot-btn {
+  background: transparent;
+  color: #999;
+  border: none;
+  font-size: 26rpx;
+}
+
+.timeout-popup {
+  background: #fff;
+  width: 670rpx;
+  height: 500rpx;
+  border-radius: 6rpx;
+  position: relative;
+  text-align: center;
+}
+
+.timeout-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400rpx;
+}
+
+.timeout-icon {
+  width: 410rpx;
+  height: 421rpx;
+}
+
+.timeout-text {
+  font-size: 28rpx;
+  color: #333;
+  margin-top: 20rpx;
+}
+
+.timeout-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
+.timeout-btn {
+  height: 100rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+  line-height: 100rpx;
+  width: 100%;
+  color: #fff;
+  text-align: center;
+  border-bottom-left-radius: 6rpx;
+  border-bottom-right-radius: 6rpx;
+  background: var(--theme-color, #FF9F43);
+  border: none;
+}

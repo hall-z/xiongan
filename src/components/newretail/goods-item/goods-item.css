@@ -1,0 +1,354 @@
+/* components/goods-item/goods-item.css */
+
+.gm-goods-item {
+  min-height: 180rpx;
+  margin-bottom: 20rpx;
+  border-radius: 10rpx;
+  padding: 20rpx;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  background-color: #fff;
+  overflow: hidden;
+}
+
+.gm-goods-box .gm-goods-item:last-of-type {
+  border-bottom: none;
+}
+
+.gm-goods-img-box {
+  width: 247rpx;
+  height: 247rpx;
+  overflow: hidden;
+  float: left;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.gm-goods-img-box image {
+  width: 100%;
+  height: 100%;
+}
+
+.gm-goods-img-box .no-balance {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+
+.gm-goods-info {
+  width: calc(100% - 285rpx);
+  min-height: 210rpx;
+  position: relative;
+  float: right;
+}
+
+.gm-goods-info .gm-goods-introduce {
+  font-size: 22rpx;
+  color: #009136;
+  height: 30rpx;
+  line-height: 30rpx;
+}
+
+.gm-goods-info .gm-goods-introduce>text {
+  padding: 0 10rpx;
+  height: 30rpx;
+  border-radius: 6rpx;
+  background: #009136;
+  color: #fff;
+  font-size: 20rpx;
+  line-height: 30rpx;
+  font-weight: normal;
+  display: inline-block;
+  text-align: center;
+  margin-right: 8rpx;
+}
+
+.gm-goods-info .gm-goods-desc,
+.gm-goods-info .gm-goods-sold {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gm-goods-info .gm-goods-name {
+  color: #333;
+  font-size: 28rpx;
+  margin: 10rpx 0 5rpx 0;
+  width: auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  width: 100%;
+  word-break: break-all;
+  word-wrap: break-word;
+  white-space: wrap !important;
+  flex: 1 1 auto;
+}
+
+.gm-goods-info .gm-goods-name text {
+  height: 30rpx;
+  padding: 0 6rpx;
+  border-radius: 6rpx;
+  background: #009136;
+  color: #fff;
+  font-size: 20rpx;
+  line-height: 30rpx;
+  display: inline-block;
+  text-align: center;
+  margin-right: 8rpx;
+  flex-shrink: 0;
+}
+
+.gm-goods-info .gm-goods-name > view {
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  height: 76rpx;
+  line-height: 38rpx;
+  word-break: break-all;
+  white-space: normal;
+}
+
+.gm-goods-info {
+  display: flex;
+  justify-content: flex-start;
+  margin: 10rpx 0 5rpx 0;
+  flex-direction: column;
+}
+
+.gm-goods-labels {
+  min-height: 30rpx;
+  margin: 10rpx 0 5rpx 0;
+  flex: 1 0 auto;
+}
+
+.gm-goods-info .gm-goods-labels>view {
+  font-size: 28rpx;
+  line-height: 28rpx;
+  color: #454545;
+  margin-bottom: 20rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+}
+
+.gm-goods-info .gm-goods-labels .items {
+  height: 30rpx;
+  padding: 0 6rpx;
+  border-radius: 5rpx;
+  border: 1rpx solid #ff8561;
+  font-size: 18rpx;
+  line-height: 42rpx;
+  color: #ff8561;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 8rpx;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.gm-goods-info .gm-goods-desc, .gm-goods-info .gm-goods-sold {
+  color: #999;
+  height: 36rpx;
+  font-size: 20rpx;
+}
+
+.gm-goods-info .gm-goods-sold {
+  margin-top: 5rpx;
+}
+
+.tag-box {
+  min-height: 40rpx;
+  line-height: 40rpx;
+  margin-bottom: 20rpx;
+  overflow: hidden;
+}
+
+.tag-box view {
+  display: inline-block;
+  height: 24rpx;
+  line-height: 24rpx;
+  font-size: 22rpx;
+  padding: 2rpx 10rpx;
+  border: 1px solid #f00;
+  border-radius: 14rpx;
+  margin-right: 10rpx;
+  vertical-align: middle;
+}
+
+.gm-goods-price {    
+  padding-top: 25rpx;
+  position: relative;
+  margin-top: 22rpx;
+  line-height: 40rpx;
+  display: flex;
+  font-size: 20rpx;
+  flex: 1;
+  align-items: flex-end;
+}
+
+.gm-goods-price .nowPrice {
+  font-size: 34rpx;
+  margin-right: 16rpx;
+  color: #ff8561;
+}
+
+.gm-goods-price .oldPrice {
+  font-size: 22rpx;
+  color: #999;
+  text-decoration: line-through;
+  font-weight: 400;
+}
+
+.gm-goods-item .gm-cart-control {
+  position: absolute;
+  right: 0;
+  bottom: -2rpx;
+  width: 80rpx;
+  height: 80rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 80rpx;
+  text-align: center;
+}
+
+.gm-goods-item .add-box, .gm-goods-item .add-box1, .gm-goods-item .reduce-box {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  padding: 0;
+  background-color: #FF8425;
+  font-weight: 400;
+}
+
+.gm-small-goods-info .add-box1 {
+  color: #FF8425;
+  background-color: transparent;
+}
+
+.gm-goods-item .add-box {
+  position: absolute;
+  right: 20rpx;
+  bottom: 0;
+}
+
+.gm-goods-item .reduce-box {
+  position: absolute;
+  left: 0;
+}
+
+.gm-goods-item .add-box button, .gm-goods-item .reduce-box button {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  z-index: 1;
+}
+
+.gm-goods-item .add-box button::after, .gm-goods-item .reduce-box button::after {
+  border: 0;
+}
+
+.gm-goods-item .add-box .add_text {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -60%);
+  font-size: 45rpx;
+  line-height: 30rpx;
+}
+
+.add-img, .reduce-img {
+  width: 29rpx;
+  height: 27rpx;
+  padding: 0;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.gm-cart-control .cart-count {
+  font-size: 28rpx;
+  color: #454545;
+  height: 100%;
+}
+
+.add-box .cart-count {
+  position: absolute;
+  top: -6rpx;
+  right: -6rpx;
+  font-size: 18rpx;
+  background-color: #FF2000;
+  color: #fff;
+  height: 24rpx;
+  border-radius: 12rpx;
+  line-height: 24rpx;
+  padding: 0 6rpx;
+  z-index: 1;
+}
+
+button.button-hover {
+  color: transparent;
+  background-color: transparent;
+  border: none;
+}
+
+.gm-goods-item button::after {
+  border: 0;
+}
+
+.vip-price {
+  font-size: 24rpx;
+  line-height: 36rpx;
+  color: #171613;
+  display: inline-flex;
+  align-items: center;
+}
+
+.vip-price text {
+  flex-shrink: 0;
+}
+
+.vip-price .vip-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-width: 71rpx;
+  height: 25rpx;
+  flex-shrink: 0;
+  margin-top: -4rpx;
+  transform: translateY(25%);
+}
+
+.vip-price .vip-label image {
+  width: 71rpx;
+  height: 25rpx;
+}
+
+.vip-price .vip-label text {
+  white-space: nowrap;
+  min-width: calc(100% - 12rpx);
+  height: 100%;
+  padding: 0 6rpx;
+  display: inline-block;
+  font-size: 18rpx;
+  line-height: 25rpx;
+  text-align: center;
+  color: #ffeba5;
+  background: #403e3e;
+  position: absolute;
+  left: 6rpx;
+  top: 2rpx;
+  z-index: 2;
+  border-radius: 4rpx;
+}

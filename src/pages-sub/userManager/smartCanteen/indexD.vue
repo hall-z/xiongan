@@ -1,0 +1,576 @@
+<route lang="json5" type="page">
+{
+  layout: 'default',
+  realNameAuthentication: true,
+  style: {
+    navigationStyle: 'custom',
+    'mp-alipay': {
+      transparentTitle: 'always',
+      titlePenetrate: 'YES',
+      defaultTitle: '',
+      titlePenetrate: 'NO',
+    },
+  },
+}
+</route>
+
+<script lang="ts" setup>
+import { openIdCode } from '@/service/api/auth'
+import { appCanteenRecharge2, canteenRecharge2 } from '@/service/api/cardServe'
+import { getOrderInfo } from '@/service/api/shop'
+import { searchUser } from '@/service/api/userMessage'
+import { useUserStore } from '@/store'
+import { nameHide, routeTo } from '@/utils'
+import { alPayMain, getLoginCode, openEmbeddedMiniProgram } from '@/utils/uniapi'
+import { useMessage, useToast } from 'wot-design-uni'
+import foodicon02 from '../static/images/smartCanteen/foodicon02.png'
+import qiehuan from '../static/images/smartCanteen/qiehuan.png'
+
+const { VITE_HALF_APPID } = import.meta.env
+const busy = ref(false)
+const choose = ref(false)
+const userStore = useUserStore()
+const toast = useToast()
+const message = useMessage()
+const title = ref('智慧食堂充值')
+const dataObj = ref({})
+const listInfo = ref([])
+
+const orderId = ref('')
+
+const lists: any = ref([])
+
+const show = ref(false)
+const moneyList = ref([
+  {
+    id: 1,
+    money: 10,
+  },
+  {
+    id: 2,
+    money: 20,
+  },
+  {
+    id: 3,
+    money: 30,
+  },
+  {
+    id: 4,
+    money: 50,
+  },
+  {
+    id: 5,
+    money: 100,
+  },
+  {
+    id: 6,
+    money: '',
+  },
+])
+const minCont = ref(1)
+const maxCurentAmount = ref(500)
+
+const statusList = ref(['未支付', '支付成功', '充值失败', '充值成功'])
+const activeNum = ref(1)
+const timmer = ref(null)
+const num = ref(0)
+const payStatus = ref(null)
+
+const userName = ref('')
+const userPhone = ref('')
+const radioValue = ref(0)
+const restaurant = ref()
+const personId: any = ref('')
+const info: any = ref({})
+
+function change() {
+  restaurant.value = radioValue.value
+  update()
+}
+
+const getPayStatus = () => {
+  getOrderInfo({ orderId: orderId.value }).then((res: any) => {
+    console.log('查询订单结果', res)
+    num.value++
+    if (res.settleStatus === 3) {
+      clearInterval(timmer.value)
+      uni.hideLoading()
+      message
+        .alert({
+          msg: '充值成功',
+          title: '提示',
+        })
+        .then((e) => {
+          orderId.value = null
+          uni.navigateBack()
+        })
+    } else if (res.settleStatus === 0) {
+      // uni.showToast({
+      //   title: '用户取消支付',
+      //   icon: 'error',
+      // })
+      // clearInterval(timmer.value)
+    } else {
+      payStatus.value = res.settleStatus
+    }
+  })
+}
+
+function gopaylist() {
+  console.log(dataObj.value)
+  const da = JSON.stringify({
+    // ...dataObj.value,
+    phones: dataObj.value.phones,
+    names: dataObj.value.names,
+    merchantId: canteenNameList[restaurant.value].merchantId,
+    userPhone: userStore.userInfo.userPhone, // 用户电话号
+    canteenName: restaurant.value, // 食堂
+    personId: personId.value,
+  })
+
+  routeTo({
+    url: '/pages-sub/userManager/smartCanteen/paylist?item=' + da,
+  })
+}
+
+const canteenNameList = {
+  // JT2: {
+  //   name: '集团食堂(待启用)',
+  //   value: 'JT2',
+  //   mid: '2411250913509978',
+  //   tid: '087481292',
+  //   merchantId: '1835238852856737794',
+  //   isShow: false,
+  // },
+  B5: {
+    name: '华望城食堂B5/C5',
+    value: 'B5',
+    mid: '2411250913405161',
+    tid: '087526887',
+    merchantId: '1863183900566712322',
+    isShow: false,
+  },
+  B7: {
+    name: '华望城食堂B7',
+    value: 'B7',
+    mid: '2411250913149466',
+    tid: '087526888',
+    merchantId: '1862084318529114113',
+    isShow: false,
+  },
+}
+
+async function getlist(phone, name) {
+  await searchUser({
+    pageNo: 1,
+    pageSize: 10,
+    phone,
+    personName: name,
+    // canteenName: value.value,
+    // certificateNo: userStore.userInfo.idCardNumber,
+  }).then((res: any) => {
+    if (res.data && res.data.data && Object.keys(res.data.data).length > 0) {
+      listInfo.value = res.data.data
+      update()
+    } else {
+      listInfo.value = []
+
+      toast.error('此账号在该食堂不存在！')
+    }
+  })
+}
+
+const submit = async () => {
+  if (!busy.value) {
+    busy.value = true
+
+    console.log('点击了充值按钮')
+    const obj = moneyList.value.find((it) => it.id === activeNum.value)
+    if (!obj.money) {
+      busy.value = false
+      return toast.error('请输入充值金额')
+    } else if (!userStore.openid) {
+      console.log('getLoginCode')
+      const res: any = await getLoginCode()
+      const { openId }: any = await openIdCode({ code: res })
+      busy.value = false
+      userStore.setOpenid(openId)
+    } else {
+      console.log('校验通过准备中')
+
+      console.log('充值金额', obj.money)
+
+      const my = obj.money.toString()
+      if (my.match(/^(0|([1-9][0-9]*))((\.[0-9]|\.[0-9][0-9]){0,1})$/)) {
+        if (Number(obj.money) * 1 < minCont.value) {
+          toast.error('金额不得小于' + minCont.value + '元')
+          busy.value = false
+        } else if (Number(obj.money) > maxCurentAmount.value) {
+          toast.error(`金额不得大于${maxCurentAmount.value}元`)
+          busy.value = false
+        } else {
+          const data = {
+            totalAmount: obj.money, // 订单金额
+            openId: userStore.openid, // 用户子标识
+            userId: userStore.userInfo.userDId, // 用户ID
+            userName: userStore.userInfo.userName, // 用户名
+            merchantId: canteenNameList[restaurant.value].merchantId,
+            userPhone: userStore.userInfo.userPhone, // 用户电话号
+            canteenName: restaurant.value, // 食堂
+            personId: personId.value,
+            cardNo: userStore.userInfo.cardId,
+            appKey: 'wx',
+          }
+
+          // #ifdef MP-WEIXIN
+
+          const res: any = await canteenRecharge2(data).catch((e) => {
+            if (e.data.code === '500') {
+              busy.value = false
+            }
+          })
+
+          uni.hideLoading()
+          console.log('canteenRecharge')
+          const { encryptStr, mid, tid, merOrderId } = res
+          console.log('食堂充值', merOrderId)
+          orderId.value = merOrderId
+          console.log('打开小程序')
+          await openEmbeddedMiniProgram(
+            `/pages/pay/wxMiniPay?encryptStr=${encryptStr}&mid=${mid}&tid=${tid}`,
+          )
+
+          // #endif
+
+          // #ifdef MP-ALIPAY
+          const {
+            encryptStr: encryptStr1,
+            mid: mid1,
+            tid: tid1,
+            merOrderId: merOrderId1,
+            code: code1,
+          } = (await canteenRecharge2(data)) as any
+          orderId.value = merOrderId1
+          if (code1 === '500') {
+            busy.value = false
+          }
+          orderId.value = merOrderId1
+          const payFlog = await alPayMain({
+            encryptStr: encryptStr1,
+            mid: mid1,
+            tid: tid1,
+            openId: userStore.openid,
+          })
+          console.log('🍱[data]:', payFlog)
+          setTimeout(() => {
+            reloadInfo()
+          }, 1000)
+
+          // #endif
+
+          // #ifdef APP-PLUS
+
+          appCanteenRecharge2({ ...data, payType: '1' }).then((res: any) => {
+            console.log('准备支付', res)
+            const { merOrderId } = res
+            orderId.value = merOrderId
+            plus.runtime.openURL(res.redirectUrl, (err) => {
+              console.log('失败', err)
+            })
+
+            busy.value = false
+          })
+
+          // #endif
+        }
+      } else {
+        busy.value = false
+        toast.error('请输入正确金额')
+      }
+    }
+  } else {
+    console.log('重复打开')
+  }
+}
+
+function update() {
+  show.value = false
+  personId.value = ''
+  info.value = {}
+  busy.value = false
+
+  lists.value = []
+
+  const len5 = listInfo.value.B5 ? listInfo.value.B5.list.length : 0
+  const len7 = listInfo.value.B7 ? listInfo.value.B7.list.length : 0
+  // const lenJT2 = listInfo.value.JT2 ? listInfo.value.JT2.list.length : 0
+
+  if (len5 > 0 || len7 > 0) {
+    // if (lenJT2 > 0) {
+    //   canteenNameList.JT2.isShow = true
+    //   !restaurant.value && (restaurant.value = 'JT2')
+    // }
+    if (len5 > 0) {
+      canteenNameList.B5.isShow = true
+      !restaurant.value && (restaurant.value = 'B5')
+    }
+    if (len7 > 0) {
+      canteenNameList.B7.isShow = true
+      !restaurant.value && (restaurant.value = 'B7')
+    }
+
+    info.value = listInfo.value[restaurant.value].list[0]
+    console.log('info.value', info.value)
+    if (!radioValue.value) {
+      radioValue.value = restaurant.value
+    }
+
+    // if (info.value.personName.length === 2) {
+    //   name.value = info.value.personName.slice(0, 1) + '*'
+    // } else if (info.value.personName.length === 3) {
+    //   name.value = info.value.personName.slice(0, 1) + '*' + info.value.personName.slice(2, 3)
+    // } else {
+    //   name.value =
+    //     info.value.personName.slice(0, 1) +
+    //     '*' +
+    //     info.value.personName.slice(2, info.value.personName.length)
+    // }
+
+    personId.value = info.value.personId
+
+    console.log(info.value)
+  } else {
+    info.value = ''
+    message
+      .alert({
+        msg: '未查询到食堂卡号！',
+        title: '提示',
+      })
+      .then((e) => {
+        uni.navigateBack()
+      })
+  }
+}
+
+onLoad(async (options) => {
+  dataObj.value = JSON.parse(options.item)
+
+  userName.value = nameHide(dataObj.value.names)
+  userPhone.value = dataObj.value.phones
+
+  await getlist(dataObj.value.phones, dataObj.value.names)
+})
+const reloadInfo = () => {
+  // 0-未支付，1-支付成功，2-充值失败，3-充值成功
+  busy.value = false
+  if (orderId.value) {
+    // uni.showLoading({
+    //   title: '充值中...',
+    // })
+
+    if (timmer.value) {
+      clearInterval(timmer.value)
+    } else {
+      getPayStatus()
+    }
+  }
+}
+onShow(() => {
+  reloadInfo()
+})
+</script>
+
+<template>
+  <view class="flex flex-col bg-no-repeat dy-blue-bg2" style="min-height: 100vh">
+    <view>
+      <dy-navbar
+        :leftTitle="title"
+        left
+        isNavShow
+        color="#000"
+        custom-style="background: transparent;position: relative;"
+      ></dy-navbar>
+      <view class="topbg flex flex-col pos-relative">
+        <view
+          class="brge pos-absolute pos-top-none pos-right-none flex justify-center items-center"
+          @click="show = true"
+        >
+          <wd-img :src="qiehuan" :width="13" :height="11" custom-class="mr-5px"></wd-img>
+          <wd-text text="切换食堂" color="#A5D8FF" size="12px"></wd-text>
+        </view>
+        <view class="flex-1 flex items-center ml-20px">
+          <wd-text
+            :text="userPhone"
+            mode="phone"
+            :format="true"
+            size="26px"
+            color="#fff"
+            bold
+          ></wd-text>
+        </view>
+        <view
+          class="w-full h-36px line-height-38px px-20px box-border flex justify-between"
+          style="background: rgba(19, 35, 187, 0.3)"
+        >
+          <!--          <wd-text :text="canteenNameList[restaurant].name" size="20px" color="#fff" lineHeight="28px"></wd-text>-->
+          <wd-text
+            v-if="restaurant"
+            :text="canteenNameList[restaurant].name"
+            size="16px"
+            color="#A5D8FF"
+            bold
+          ></wd-text>
+          <wd-text :text="userName" size="16px" color="#94C1E3" bold></wd-text>
+        </view>
+      </view>
+      <!-- 充值 -->
+      <view class="bg-white mx-15px border-rd-5px p-15px box-border">
+        <view class="w-full flex">
+          <wd-img :src="foodicon02" :width="22" :height="22"></wd-img>
+          <wd-text text="选择面额" color="#000" size="16px" custom-class="ml-8px"></wd-text>
+        </view>
+        <view class="grid list mt-21px">
+          <view
+            class="border-solid border-1px border-#E5E5E5 border-rd-5px flex justify-center items-center overflow-hidden"
+            :class="it.id === activeNum ? 'active' : ''"
+            v-for="it in moneyList"
+            :key="it.id"
+            @click="activeNum = it.id"
+          >
+            <wd-text v-if="it.id !== 6" :text="it.money + '元'" color="#000" size="20px"></wd-text>
+
+            <wd-text
+              v-if="it.id === 6 && activeNum !== 6"
+              text="自定义金额"
+              color="moneyList"
+              size="16px"
+            ></wd-text>
+
+            <wd-input
+              v-if="activeNum === 6 && it.id === 6"
+              type="number"
+              v-model="it.money"
+              :focus="activeNum === 6"
+              no-border
+              placeholder=""
+              size="large"
+              custom-input-class="text-center"
+              custom-class=" h-60px w-full box-border flex items-center"
+            />
+          </view>
+        </view>
+      </view>
+      <!-- 按钮 -->
+      <view class="w-full pos-fixed flex flex-col items-center pos-bottom-44px">
+        <view
+          class="w-337px h-40px border-rd-6px bg-#2D69EF text-center line-height-40px color-white mb-22px"
+          @tap.stop="!busy ? submit() : ''"
+        >
+          立即充值
+        </view>
+        <view class="FHcc" style="justify-content: space-evenly; width: 100%">
+          <view class="color-#2D69EF" @click="gopaylist">充值记录</view>
+        </view>
+      </view>
+    </view>
+    <wd-popup
+      v-model="show"
+      custom-style="height:440px;borderRadius:20px 20px 0 0 ;padding:15px 20px 25px 28px;box-sizing:border-box;display:flex;flex-direction: column;"
+      position="bottom"
+    >
+      <view class="flex justify-center items-center pos-relative">
+        <wd-text text="切换食堂"></wd-text>
+        <view class="pos-absolute pos-right-5px pos-top-5spx" @click="show = false">
+          <wd-icon name="close" size="12px" color="#C9C9C9"></wd-icon>
+        </view>
+      </view>
+      <view class="flex-1 overflow-y-auto mt-30px">
+        <wd-radio-group v-model="radioValue" inline shape="dot" checked-color="#F44D24">
+          <view class="w-full mb-10px flex flex-col">
+            <view v-for="it in canteenNameList" :key="it.mid" class="FHcl">
+              <wd-radio :value="it.value" custom-class="mb-15px" :disabled="!it.isShow">
+                <wd-text
+                  :text="it.name"
+                  size="16px"
+                  color="#000000"
+                  custom-class="ml-15px"
+                  custom-style="text-align: left;"
+                ></wd-text>
+              </wd-radio>
+            </view>
+          </view>
+          <!-- <view class="w-full flex items-center mb-10px">
+            <wd-radio value="B5" custom-class="mb-15px">
+              <wd-text
+                :text="'B5/C5 食堂'"
+                size="16px"
+                color="#000000"
+                custom-class="ml-15px"
+              ></wd-text>
+            </wd-radio>
+          </view> -->
+        </wd-radio-group>
+      </view>
+
+      <view
+        class="w-full h-40px flex justify-center items-center bg-#2D69EF color-#fff border-rd-6px mt-30px"
+        @click="change"
+      >
+        确认切换
+      </view>
+    </wd-popup>
+  </view>
+</template>
+
+<style lang="scss" scoped>
+:deep(.custom-cell-picker) {
+  @apply bg-#fff;
+
+  .wd-picker__arrow {
+    @apply hidden;
+  }
+}
+
+.active {
+  color: #2d69ef;
+  background: #e4edff;
+  border: 1px solid #b8d6f6;
+  border-radius: 5px 5px 5px 5px;
+}
+
+.list {
+  grid-template-rows: repeat(2, 60px);
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 10px;
+}
+
+.topbg {
+  width: calc(100% - 30px);
+  height: 100px;
+  margin: 15px auto;
+  overflow: hidden;
+  background: linear-gradient(132deg, #2bc5ff 0%, #1d4adc 100%);
+  border-radius: 6px 6px 6px 6px;
+
+  .brge {
+    width: 87px;
+    height: 28px;
+    background: rgba(35, 31, 150, 0.42);
+    border-radius: 0px 8px 0px 25px;
+  }
+}
+
+:deep(.custom-view-picker) {
+  @apply flex justify-between items-center;
+}
+
+:deep(.cz) {
+  width: 60px;
+  color: #ff8800 !important;
+  background-color: #feece7 !important;
+}
+
+.dy-blue-bg2 {
+  background: linear-gradient(180deg, #d1e9fe, #f3f4f6, #f3f4f6, #f3f4f6) !important;
+}
+</style>

@@ -1,0 +1,426 @@
+<route lang="json5">
+{
+  layout: 'default',
+  needLogin: true,
+  style: {
+    navigationStyle: 'custom',
+    'mp-alipay': {
+      transparentTitle: 'always',
+      titlePenetrate: 'YES',
+      defaultTitle: '',
+      titlePenetrate: 'NO',
+    },
+  },
+}
+</route>
+
+<script lang="ts" setup>
+import { get8service } from '@/service/api/source'
+import { useBaseStore } from '@/store'
+import { routeTo } from '@/utils'
+import { getLocation, useToLocation } from '@/utils/uniapi'
+import { ref } from 'vue'
+import { useToast } from 'wot-design-uni'
+
+import dizhi from '../static/images/zhenwu/dizhi.png'
+const title =
+  'https://oss.xay.xacloudy.cn/images/2025-08/3614eb9d-1e68-4407-93db-6008413f149d%E7%BB%84%2046233@2x.png'
+const bgimg =
+  'https://oss.xay.xacloudy.cn/images/2025-08/5bb42c79-b7fa-4412-a9c6-eefba7442c48%E8%B4%AD%E7%89%A9@2x.png'
+onMounted(async () => {
+  location()
+})
+const baseStore = useBaseStore()
+
+const areaCode = ref([])
+const areaList = ref([
+  {
+    title: '雄县',
+    value: '130638',
+    select: false,
+  },
+  {
+    title: '容城县',
+    value: '130629',
+    select: false,
+  },
+  {
+    title: '安新县',
+    value: '130632',
+    select: false,
+  },
+])
+const toast = useToast()
+
+function toDetil(index) {
+  routeTo({
+    url: '/pages-sub/serveMassage/StudentTravel/detle',
+
+    data: { index: index.id },
+  })
+}
+
+const paging = ref(null)
+const dataList = ref([])
+const queryList = async (pageNo, pageSize) => {
+  const params = {
+    page: pageNo,
+    size: pageSize,
+    latitude: baseStore.userLocation.latitude ? baseStore.userLocation.latitude : '',
+    longitude: baseStore.userLocation.longitude ? baseStore.userLocation.longitude : '',
+    sceneType: 6,
+    areaCode: areaCode.value ? areaCode.value.join(',') : '',
+    name: name.value,
+  }
+  // 调用接口获取数据
+  try {
+    const res: any = await get8service(params)
+    paging.value.complete(res.content)
+  } catch (error) {
+    paging.value.complete(false)
+  }
+}
+const timeShow = ref(false)
+
+const footerBtns2 = ref([
+  {
+    text: '出示二维码',
+    size: 'medium',
+    round: false,
+    plain: true,
+    type: 'primary',
+    action: 'continue',
+    customClass: 'btn-class',
+  },
+  {
+    text: '我的门票',
+    size: 'medium',
+    round: false,
+    plain: true,
+    type: 'primary',
+    customClass: 'custom-class-mine-dyinfo',
+    action: 'over',
+  },
+])
+
+async function btnClick(item) {
+  toast.show('功能开发中，敬请期待!...')
+}
+const show = ref(false)
+const searchArea = ref([])
+const name = ref('')
+const handleOpen = () => {
+  show.value = true
+}
+const handleClose = () => {
+  show.value = false
+  handleReset()
+}
+const handleReset = () => {
+  areaCode.value = []
+  name.value = ''
+}
+const handleConfirms = () => {
+  show.value = false
+
+  paging.value.reload()
+}
+const search = () => {
+  name.value = name.value.trim()
+  paging.value.reload()
+}
+const onTrim = () => {
+  name.value = name.value.trim() // 自动去除前后空格
+}
+const searchchange = ({ event }) => {
+  // const rawVal = event?.value ?? ''
+  // const filtered = rawVal.trim()
+  // nextTick(() => {
+  //   name.value = filtered
+  // })
+  if (event === '') {
+    handleChange()
+  }
+}
+const handleChange = () => {
+  paging.value.reload()
+}
+const location = async () => {
+  try {
+    if (baseStore.userLocation.latitude) {
+      return
+    }
+    const location = await getLocation()
+    await baseStore.setLocation(location)
+    paging.value.reload()
+  } catch (error) {
+    console.log('🍺[error]:', error)
+  }
+}
+</script>
+<template>
+  <view class="size-100% fixed top-0 right-0 left-0 bottom-0 bg-no-repeat z-[-1] dy-blue-bg"></view>
+  <z-paging
+    ref="paging"
+    v-model="dataList"
+    @query="queryList"
+    :auto-show-system-loading="true"
+    :safe-area-inset-bottom="true"
+  >
+    <template #top>
+      <!-- 顶部 -->
+      <dy-navbar leftTitle="" left isNavShow color="#000"></dy-navbar>
+      <view class="flex justify-around items-center px-10px">
+        <wd-img :src="title" width="187" height="81"></wd-img>
+        <wd-img :src="bgimg" width="174" height="174"></wd-img>
+      </view>
+      <view style="padding: 10px 15px 10px 15px; background: #fff" class="FHcs">
+        <wd-input
+          no-border
+          v-model="name"
+          custom-class="searchBox"
+          placeholder="请输入搜索关键词"
+          @input="searchchange"
+          @blur="onTrim"
+          :paging-style="{
+            flex: 1,
+          }"
+        >
+          <template #suffix>
+            <view class="searchBtn" @click="search">
+              <wd-icon name="search" size="14px"></wd-icon>
+            </view>
+            <!--            <view class="searchBtn" @click="search"></view>-->
+          </template>
+        </wd-input>
+        <view class="searchBtn2 FHcr" @click="search" @click.stop="handleOpen">
+          筛选
+          <wd-icon name="caret-down-small" size="22px"></wd-icon>
+        </view>
+      </view>
+      <view class="tagsBox" v-show="areaList && areaList.length > 0">
+        <template v-for="(it, index) in areaList" :key="index">
+          <wd-tag type="primary" custom-class="tag" plain v-if="areaCode.includes(it.value)">
+            {{ it.title }}
+          </wd-tag>
+        </template>
+      </view>
+      <wd-popup
+        v-model="show"
+        position="right"
+        custom-style="width: 250px;"
+        @close="handleClose"
+        custom-class="popup-class"
+      >
+        <view class="p-10px pr-0 pt-50px">
+          <view class="text-14px color-#333 mt-20px mb-0px">区域</view>
+          <view>
+            <wd-checkbox-group v-model="areaCode" shape="button" max-width="10">
+              <wd-checkbox :modelValue="item.value" v-for="(item, index) in areaList" :key="index">
+                {{ item.title }}
+              </wd-checkbox>
+            </wd-checkbox-group>
+          </view>
+          <view class="absolute bottom-10px left-0 right-0 p-10px p-20px">
+            <view class="flex justify-around gap-10px">
+              <view class="flex-1">
+                <wd-button size="small" plain @click="handleReset" block :round="false">
+                  重置
+                </wd-button>
+              </view>
+              <view class="flex-1">
+                <wd-button size="small" type="primary" @click="handleConfirms" block :round="false">
+                  确定
+                </wd-button>
+              </view>
+            </view>
+          </view>
+        </view>
+      </wd-popup>
+    </template>
+    <view class="px-10px pt-10px">
+      <view
+        class="p-10px bg-#fff rounded-5px mb-10px flex items-center gap-10px"
+        v-for="(item, index) in dataList"
+        :key="index"
+        @click="toDetil(item)"
+      >
+        <view class="rounded-5px overflow-hidden h-74px">
+          <wd-img
+            :src="
+              item.scenicImg != null && JSON.parse(item.scenicImg).length > 0
+                ? JSON.parse(item.scenicImg)[0].url
+                : null
+            "
+            width="94"
+            height="74"
+          ></wd-img>
+        </view>
+        <view class="flex-1 pt-2px">
+          <view class="text-16px font-600">
+            {{ item.name }}
+          </view>
+          <view
+            class="flex justify-between items-center bb-1px_#ECECEC pr-10px text-14px color-#999 truncate-1 line-height-30px"
+          >
+            <view @click="useToLocation(item)">地址: {{ item.address }}</view>
+          </view>
+          <view
+            class="flex justify-between items-center line-height-20px pr-10px text-14px color-#999 mt-5px"
+            @click.stop="useToLocation(item)"
+          >
+            <view>距您: {{ item.distance.toFixed(2) }}km</view>
+            <view class="mt-3px">
+              <wd-img :src="dizhi" width="14" height="16"></wd-img>
+            </view>
+          </view>
+          <view class="tags FHcl mt-5px">
+            <view
+              class="tagitem FHcl"
+              style="padding: 3px 7px; margin: 0 10px 0 0; background: #f0f5fe; border-radius: 3px"
+              v-if="item.card === '1'"
+            >
+              <view
+                class="tagicon"
+                style="
+                  width: 14px;
+                  height: 14px;
+                  margin-right: 5px;
+                  line-height: 14px;
+                  color: #fff;
+                  text-align: center;
+                  background: #3e82f6;
+                  border-radius: 10px;
+                "
+              >
+                <wd-icon name="check-bold" size="12px"></wd-icon>
+              </view>
+              <view style="font-size: 12px; color: #3e82f6">实体社保卡</view>
+            </view>
+
+            <view
+              class="tagitem FHcl"
+              style="padding: 3px 7px; margin: 0 10px 0 0; background: #edf7f6; border-radius: 3px"
+              v-if="item.socialCard === '1'"
+            >
+              <view
+                class="tagicon"
+                style="
+                  width: 14px;
+                  height: 14px;
+                  margin-right: 5px;
+                  line-height: 14px;
+                  color: #fff;
+                  text-align: center;
+                  background: #539587;
+                  border-radius: 10px;
+                "
+              >
+                <wd-icon name="check-bold" size="12px"></wd-icon>
+              </view>
+              <view style="font-size: 12px; color: #539587">电子社保卡</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+    <!-- <template #bottom>
+      <!~~ 底部 ~~>
+      <view class="p-10px bg-#fff">
+        <view class="flex gap-15px">
+          <view class="flex-1" v-for="(item, index) in footerBtns2" :key="index">
+            <wd-button
+              :round="item.round"
+              block
+              :size="item.size"
+              :type="item.type"
+              :customClass="item.customClass"
+              @click="btnClick(item)"
+            >
+              {{ item.text }}
+            </wd-button>
+          </view>
+        </view>
+      </view>
+    </template>-->
+  </z-paging>
+</template>
+
+<style lang="scss" scoped>
+:deep(.z-paging-content) {
+  background: linear-gradient(180deg, #d6eafe 0%, #f3f4f6 40%, #f2f3f7 100%) !important;
+}
+
+:deep(.custom-class-pop) {
+  @apply w-80%  rounded-10px;
+}
+:deep(.searchBox) {
+  box-sizing: border-box;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  height: 40px;
+  padding: 10px 10px 5px 10px;
+  background: rgba(199, 199, 199, 0.18) !important;
+  border: none;
+  border-radius: 6px 6px 6px 6px;
+
+  .wd-icon-search {
+    background: transparent !important;
+  }
+
+  .searchBtn {
+    display: inline-block;
+    height: 16px;
+    padding: 0 5px;
+    margin: 0;
+    font-size: 14px;
+    line-height: 16px;
+    color: #a7a7a7;
+  }
+}
+
+.searchBtn2 {
+  height: 30px;
+  padding-left: 10px;
+  margin-right: -12px;
+
+  font-size: 14px;
+  line-height: 30px;
+  color: #000000;
+  text-align: center;
+}
+:deep(.popup-class) {
+  /* #ifdef H5 */
+  @apply pt-44px!;
+  /* #endif */
+}
+:deep(.wd-icon.wd-checkbox__btn-check) {
+  display: none;
+  padding: 0;
+  margin: 0;
+}
+
+:deep(.wd-checkbox.is-button-box) {
+  box-sizing: border-box !important;
+  display: inline-flex;
+  width: 48% !important;
+  padding: 6px !important;
+  margin: 0 !important;
+}
+
+.tagsBox {
+  padding-bottom: 0px;
+  overflow: hidden;
+  white-space: nowrap;
+  background: #fff;
+
+  :deep(.tag) {
+    @apply ml-10px mt-10px;
+    &:first-child {
+      margin-left: 20px;
+    }
+  }
+}
+</style>

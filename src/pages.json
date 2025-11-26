@@ -1,0 +1,2945 @@
+{
+  "globalStyle": {
+    "navigationStyle": "default",
+    "navigationBarTitleText": "雄安一卡通",
+    "allowsBounceVertical": "NO",
+    "navigationBarBackgroundColor": "#f8f8f8",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#FFFFFF"
+  },
+  "easycom": {
+    "autoscan": true,
+    "custom": {
+      "^wd-(.*)": "wot-design-uni/components/wd-$1/wd-$1.vue",
+      "^(?!z-paging-refresh|z-paging-load-more)z-paging(.*)": "z-paging/components/z-paging$1/z-paging$1.vue",
+      "^dy-(.*)": "components/dy-$1/dy-$1.vue"
+    }
+  },
+  "tabBar": {
+    "color": "#000000",
+    "selectedColor": "#3177f6",
+    "backgroundColor": "#fff",
+    "borderStyle": "black",
+    "height": "50px",
+    "fontSize": "10px",
+    "iconWidth": "24px",
+    "spacing": "3px",
+    "list": [
+      {
+        "iconPath": "static/tabbar2/index.png",
+        "selectedIconPath": "static/tabbar2/index-a.png",
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "iconPath": "static/tabbar2/fuwu.png",
+        "selectedIconPath": "static/tabbar2/fuwu-a.png",
+        "pagePath": "pages/serve/index",
+        "text": "服务"
+      },
+      {
+        "iconPath": "static/tabbar2/shop.png",
+        "selectedIconPath": "static/tabbar2/shop-a.png",
+        "pagePath": "pages/shop/index",
+        "text": "惠生活"
+      },
+      {
+        "iconPath": "static/tabbar2/mine.png",
+        "selectedIconPath": "static/tabbar2/mine-a.png",
+        "pagePath": "pages/mine/index",
+        "text": "我的"
+      }
+    ]
+  },
+  "pages": [
+    {
+      "path": "pages/index/index",
+      "type": "home",
+      "layout": "default",
+      "needLogin": true,
+      "style": {
+        "navigationStyle": "custom",
+        "mp-alipay": {
+          "transparentTitle": "always",
+          "defaultTitle": "",
+          "titlePenetrate": "NO",
+          "backButtonIcon": null
+        }
+      }
+    },
+    {
+      "path": "pages/codeshare",
+      "type": "page",
+      "layout": "default",
+      "needLogin": true,
+      "style": {
+        "navigationStyle": "custom",
+        "mp-alipay": {
+          "transparentTitle": "always",
+          "titlePenetrate": "NO",
+          "defaultTitle": ""
+        }
+      }
+    },
+    {
+      "path": "pages/privacyAgreement",
+      "type": "page",
+      "layout": "default",
+      "realNameAuthentication": true,
+      "style": {
+        "navigationStyle": "custom",
+        "mp-alipay": {
+          "transparentTitle": "always",
+          "titlePenetrate": "NO",
+          "defaultTitle": ""
+        }
+      }
+    },
+    {
+      "path": "pages/YHwebview",
+      "type": "page",
+      "layout": "default",
+      "realNameAuthentication": true,
+      "style": {
+        "navigationStyle": "custom",
+        "mp-alipay": {
+          "transparentTitle": "always",
+          "titlePenetrate": "NO",
+          "defaultTitle": ""
+        }
+      }
+    },
+    {
+      "path": "pages/index/list",
+      "type": "page",
+      "layout": "default",
+      "needLogin": true,
+      "style": {
+        "navigationStyle": "custom",
+        "mp-alipay": {
+          "transparentTitle": "always",
+          "defaultTitle": "",
+          "titlePenetrate": "NO",
+          "backButtonIcon": null
+        }
+      }
+    },
+    {
+      "path": "pages/login/index",
+      "type": "page",
+      "layout": "default",
+      "needLogin": true,
+      "style": {
+        "navigationStyle": "custom",
+        "mp-alipay": {
+          "transparentTitle": "always",
+          "titlePenetrate": "NO",
+          "defaultTitle": ""
+        }
+      }
+    },
+    {
+      "path": "pages/login/loginsmrz",
+      "type": "page",
+      "layout": "default",
+      "style": {
+        "navigationStyle": "custom",
+        "mp-alipay": {
+          "transparentTitle": "always",
+          "titlePenetrate": "NO",
+          "defaultTitle": ""
+        }
+      }
+    },
+    {
+      "path": "pages/login/phoneLogin",
+      "type": "page",
+      "layout": "default",
+      "needLogin": true,
+      "style": {
+        "navigationStyle": "custom",
+        "mp-alipay": {
+          "transparentTitle": "always",
+          "titlePenetrate": "NO",
+          "defaultTitle": ""
+        }
+      }
+    },
+    {
+      "path": "pages/login/phoneLoginbc",
+      "type": "page",
+      "layout": "default",
+      "needLogin": true,
+      "style": {
+        "navigationStyle": "custom",
+        "mp-alipay": {
+          "transparentTitle": "always",
+          "titlePenetrate": "NO",
+          "defaultTitle": ""
+        }
+      }
+    },
+    {
+      "path": "pages/login/QRcode",
+      "type": "page",
+      "layout": "default",
+      "needLogin": true,
+      "style": {
+        "navigationStyle": "custom",
+        "mp-alipay": {
+          "transparentTitle": "always",
+          "titlePenetrate": "NO",
+          "defaultTitle": ""
+        }
+      }
+    },
+    {
+      "path": "pages/login/sfzLogin",
+      "type": "page",
+      "layout": "default",
+      "needLogin": true,
+      "style": {
+        "navigationStyle": "custom",
+        "mp-alipay": {
+          "transparentTitle": "always",
+          "titlePenetrate": "NO",
+          "defaultTitle": ""
+        }
+      }
+    },
+    {
+      "path": "pages/mine/index",
+      "type": "page",
+      "layout": "default",
+      "style": {
+        "navigationStyle": "custom",
+        "backgroundColor": "#F3F4F6",
+        "mp-alipay": {
+          "transparentTitle": "always",
+          "titlePenetrate": "NO",
+          "defaultTitle": ""
+        }
+      }
+    },
+    {
+      "path": "pages/pay/aliPayTest",
+      "type": "page",
+      "layout": "default",
+      "needLogin": true,
+      "style": {
+        "navigationBarTitleText": "支付宝测试支付",
+        "mp-alipay": {
+          "transparentTitle": "always",
+          "titlePenetrate": "NO",
+          "defaultTitle": ""
+        }
+      }
+    },
+    {
+      "path": "pages/pay/index",
+      "type": "page",
+      "layout": "default",
+      "realNameAuthentication": true,
+      "style": {
+        "navigationStyle": "custom",
+        "mp-alipay": {
+          "transparentTitle": "always",
+          "titlePenetrate": "NO",
+          "defaultTitle": ""
+        }
+      }
+    },
+    {
+      "path": "pages/pay/mainResult",
+      "type": "page",
+      "layout": "default",
+      "needLogin": true,
+      "style": {
+        "navigationBarTitleText": "雄安一卡通",
+        "mp-alipay": {
+          "transparentTitle": "always",
+          "titlePenetrate": "NO",
+          "defaultTitle": ""
+        }
+      }
+    },
+    {
+      "path": "pages/pay/sacnResult",
+      "type": "page",
+      "layout": "default",
+      "needLoginPages": true,
+      "style": {
+        "navigationStyle": "custom",
+        "mp-alipay": {
+          "transparentTitle": "always",
+          "titlePenetrate": "NO",
+          "defaultTitle": ""
+        }
+      }
+    },
+    {
+      "path": "pages/serve/index",
+      "type": "page",
+      "needLogin": true,
+      "layout": "default",
+      "style": {
+        "navigationStyle": "custom",
+        "mp-alipay": {
+          "transparentTitle": "always",
+          "titlePenetrate": "NO",
+          "defaultTitle": ""
+        }
+      }
+    },
+    {
+      "path": "pages/shop/classify",
+      "type": "page",
+      "layout": "default",
+      "needLogin": true,
+      "style": {
+        "navigationStyle": "custom",
+        "mp-alipay": {
+          "transparentTitle": "always",
+          "defaultTitle": "",
+          "titlePenetrate": "NO",
+          "backButtonIcon": null
+        }
+      }
+    },
+    {
+      "path": "pages/shop/index",
+      "type": "page",
+      "layout": "default",
+      "style": {
+        "navigationStyle": "custom",
+        "mp-alipay": {
+          "transparentTitle": "always",
+          "defaultTitle": "",
+          "titlePenetrate": "NO",
+          "backButtonIcon": null
+        }
+      }
+    },
+    {
+      "path": "pages/shop/shopSearch",
+      "type": "page",
+      "layout": "default",
+      "needLogin": true,
+      "style": {
+        "navigationStyle": "custom",
+        "mp-alipay": {
+          "transparentTitle": "always",
+          "defaultTitle": "",
+          "titlePenetrate": "NO",
+          "backButtonIcon": null
+        }
+      }
+    }
+  ],
+  "subPackages": [
+    {
+      "root": "pages-sub/serveMain",
+      "pages": [
+        {
+          "path": "cardApplyFromType",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "cardApplyType",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "cardFromType",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "cardMessType",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "cardUserManager",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "handleCardProgress",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "lifespanFoundation",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "lifespanInfo",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "OcrCamera",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "defaultTitle": "",
+              "titlePenetrate": "NO",
+              "backButtonIcon": null
+            }
+          }
+        },
+        {
+          "path": "OcrCameraApp",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "defaultTitle": "",
+              "titlePenetrate": "NO",
+              "backButtonIcon": null
+            }
+          }
+        },
+        {
+          "path": "SocCertFacSucess",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "socCertInfo",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "socCertPlan",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "socCertRecord",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "socCertRecordDetail",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        }
+      ]
+    },
+    {
+      "root": "pages-sub/serveMassage",
+      "pages": [
+        {
+          "path": "businessOutlets/index",
+          "type": "page",
+          "needLogin": true,
+          "style": {
+            "navigationBarTitleText": "网点查询",
+            "backgroundColor": "#fff",
+            "navigationBarBackgroundColor": "#fff",
+            "navigationBarTextStyle": "black"
+          }
+        },
+        {
+          "path": "daiyu/index",
+          "type": "page",
+          "layout": "default",
+          "needLogin": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "huimingServe/index",
+          "type": "page",
+          "layout": "default",
+          "needLogin": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "jiaotong/detil",
+          "type": "home",
+          "layout": "default",
+          "needLogin": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "jiaotong/index",
+          "type": "page",
+          "layout": "default",
+          "needLogin": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "messageList/index",
+          "type": "page",
+          "layout": "default",
+          "needLogin": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "serchFor/index",
+          "type": "page",
+          "layout": "default",
+          "needLogin": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "serchFor/index2",
+          "type": "page",
+          "layout": "default",
+          "needLogin": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "StudentTravel/detle",
+          "type": "page",
+          "layout": "default",
+          "needLogin": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "defaultTitle": "",
+              "titlePenetrate": "NO",
+              "backButtonIcon": null
+            }
+          }
+        },
+        {
+          "path": "StudentTravel/index",
+          "type": "page",
+          "layout": "default",
+          "needLogin": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "travel/detle",
+          "type": "page",
+          "layout": "default",
+          "needLogin": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "defaultTitle": "",
+              "titlePenetrate": "NO",
+              "backButtonIcon": null
+            }
+          }
+        },
+        {
+          "path": "travel/index",
+          "type": "page",
+          "layout": "default",
+          "needLogin": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "wenhuaServe/index",
+          "type": "page",
+          "layout": "default",
+          "needLogin": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "workGuide/index",
+          "type": "page",
+          "layout": "default",
+          "needLogin": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "yiyao/index",
+          "type": "page",
+          "layout": "default",
+          "needLogin": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "zhwuServe/index",
+          "type": "page",
+          "layout": "default",
+          "needLogin": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        }
+      ]
+    },
+    {
+      "root": "pages-sub/webView",
+      "pages": [
+        {
+          "path": "alIndex",
+          "type": "page",
+          "layout": "default",
+          "needLogin": true,
+          "style": {
+            "navigationBarTitleText": "支付",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "index",
+          "type": "page",
+          "layout": "default",
+          "needLogin": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "defaultTitle": "",
+              "titlePenetrate": "NO",
+              "backButtonIcon": null
+            }
+          }
+        },
+        {
+          "path": "index2info",
+          "type": "page",
+          "layout": "default",
+          "needLogin": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "defaultTitle": "",
+              "titlePenetrate": "NO",
+              "backButtonIcon": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "root": "pages-sub/system",
+      "pages": [
+        {
+          "path": "sysconfig/cancellation",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "sysconfig/cancePhone",
+          "type": "page",
+          "layout": "default",
+          "needLogin": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "sysconfig/index",
+          "type": "page",
+          "needLogin": true,
+          "style": {
+            "navigationBarTitleText": "设置",
+            "backgroundColor": "#fff",
+            "navigationBarBackgroundColor": "#fff",
+            "navigationBarTextStyle": "black"
+          }
+        },
+        {
+          "path": "sysconfig/setting",
+          "type": "page",
+          "needLogin": true,
+          "style": {
+            "navigationBarTitleText": "免密登录设置",
+            "backgroundColor": "#fff",
+            "navigationBarBackgroundColor": "#fff",
+            "navigationBarTextStyle": "black"
+          }
+        },
+        {
+          "path": "userInfo/index",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        }
+      ]
+    },
+    {
+      "root": "pages-sub/userManager",
+      "pages": [
+        {
+          "path": "address/editor",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "address/list",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "applyForCard/index",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "applyForCard/list",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "bankCard/addCard",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "bankCard/cardinfo",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "bankCard/cardsList",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "bankCard/changePW",
+          "type": "page",
+          "needLogin": true,
+          "style": {
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "bankCard/index",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "bankCard/PayInfo",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "bankCard/resetPW",
+          "type": "page",
+          "needLogin": true,
+          "style": {
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "cardManager/index",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": "",
+              "showBackButton": "false"
+            }
+          }
+        },
+        {
+          "path": "codeServe/cardResut",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "defaultTitle": "",
+              "titlePenetrate": "NO",
+              "backButtonIcon": null
+            }
+          }
+        },
+        {
+          "path": "codeServe/index",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": "",
+              "showBackButton": "false"
+            }
+          }
+        },
+        {
+          "path": "collection/collection",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationBarTitleText": "我的收藏",
+            "backgroundColor": "#fff",
+            "navigationBarBackgroundColor": "#fff",
+            "navigationBarTextStyle": "black"
+          }
+        },
+        {
+          "path": "collection/follow",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationBarTitleText": "店铺关注",
+            "backgroundColor": "#fff",
+            "navigationBarBackgroundColor": "#fff",
+            "navigationBarTextStyle": "black"
+          }
+        },
+        {
+          "path": "daiyu/index",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "myMessage/massage",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": "",
+              "showBackButton": "false"
+            }
+          }
+        },
+        {
+          "path": "nightSchoolSign/courseList",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "nightSchoolSign/index",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "smartCanteen/index",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "smartCanteen/indexD",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "smartCanteen/payInfo",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "smartCanteen/paylist",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "smartCanteen/recharge",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "smartCanteen/searchD",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "SocialSecurityCard/barcode",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationBarTitleText": "条形码",
+            "navigationBarBackgroundColor": "#fff",
+            "navigationBarTextStyle": "black"
+          }
+        },
+        {
+          "path": "SocialSecurityCard/detil",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": "",
+              "showBackButton": "false"
+            }
+          }
+        },
+        {
+          "path": "SocialSecurityCard/index",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": "",
+              "showBackButton": "false"
+            }
+          }
+        },
+        {
+          "path": "SocialSecurityCard/indexback",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "YES",
+              "defaultTitle": "",
+              "showBackButton": "false"
+            }
+          }
+        },
+        {
+          "path": "suggest/list",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "suggest/suggest",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "suggest/suggestDetil",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "tickets/list",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "tickets/ticketsInfo",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "tickets/ticketsInfoDetil",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "transit/index",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "transit/list",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "userCenter/user",
+          "type": "page",
+          "layout": "default",
+          "needLogin": true,
+          "style": {
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "compoents/changeBankPay/index",
+          "type": "page"
+        }
+      ]
+    },
+    {
+      "root": "pages-sub/marketManager",
+      "pages": [
+        {
+          "path": "activity/index",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "defaultTitle": "",
+              "titlePenetrate": "NO",
+              "backButtonIcon": null
+            }
+          }
+        },
+        {
+          "path": "coupon/availableMerchants",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "coupon/coupDeil",
+          "type": "page",
+          "layout": "default",
+          "needLogin": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "coupon/exchangewebview",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "coupon/index",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "coupon/mycoupon",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "coupon/webview",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "coupon/writeOffCoup",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "coupon/writeOffCoupList",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "coupon/writeOffOrder",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "integral/index",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "defaultTitle": "",
+              "titlePenetrate": "NO",
+              "backButtonIcon": null
+            }
+          }
+        },
+        {
+          "path": "integral/interList",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "IntegralMarket/IntegralMarket/buyOrder",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "IntegralMarket/IntegralMarket/exchangeRecords",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "IntegralMarket/IntegralMarket/info",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "IntegralMarket/IntegralMarket/list",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "IntegralMarket/IntegralMarket/virtualGoods",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "IntegralMarket/IntegralMarket/virtualResult",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        }
+      ]
+    },
+    {
+      "root": "pages-sub/shopManager",
+      "pages": [
+        {
+          "path": "addEvaluate",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationBarTitleText": "评价",
+            "backgroundColor": "#fff",
+            "navigationBarBackgroundColor": "#fff",
+            "navigationBarTextStyle": "black"
+          }
+        },
+        {
+          "path": "evaluateList",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationBarTitleText": "全部评价",
+            "backgroundColor": "#fff",
+            "navigationBarBackgroundColor": "#fff",
+            "navigationBarTextStyle": "black"
+          }
+        },
+        {
+          "path": "index",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "defaultTitle": "",
+              "titlePenetrate": "NO",
+              "backButtonIcon": null
+            }
+          }
+        },
+        {
+          "path": "shopCategory",
+          "type": "page",
+          "layout": "default",
+          "needLogin": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "defaultTitle": "",
+              "titlePenetrate": "NO",
+              "backButtonIcon": null
+            }
+          }
+        },
+        {
+          "path": "shopCode",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "defaultTitle": "",
+              "titlePenetrate": "NO",
+              "backButtonIcon": null
+            }
+          }
+        },
+        {
+          "path": "shopHome",
+          "type": "page",
+          "layout": "default",
+          "needLogin": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "defaultTitle": "",
+              "titlePenetrate": "NO",
+              "backButtonIcon": null
+            }
+          }
+        },
+        {
+          "path": "shopList",
+          "type": "page",
+          "layout": "default",
+          "needLogin": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "defaultTitle": "",
+              "titlePenetrate": "NO",
+              "backButtonIcon": null
+            }
+          }
+        },
+        {
+          "path": "shopListZY",
+          "type": "page",
+          "layout": "default",
+          "needLogin": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "defaultTitle": "",
+              "titlePenetrate": "NO",
+              "backButtonIcon": null
+            }
+          }
+        },
+        {
+          "path": "shopPayList",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "defaultTitle": "",
+              "titlePenetrate": "NO",
+              "backButtonIcon": null
+            }
+          }
+        },
+        {
+          "path": "shopPayMingxi",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "defaultTitle": "",
+              "titlePenetrate": "NO",
+              "backButtonIcon": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "root": "pages-sub/order",
+      "pages": [
+        {
+          "path": "logistics",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "defaultTitle": "",
+              "titlePenetrate": "NO",
+              "backButtonIcon": null
+            }
+          }
+        },
+        {
+          "path": "orderInfo",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "defaultTitle": "",
+              "titlePenetrate": "NO",
+              "backButtonIcon": null
+            }
+          }
+        },
+        {
+          "path": "orderInfoBusiness",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "defaultTitle": "",
+              "titlePenetrate": "NO",
+              "backButtonIcon": null
+            }
+          }
+        },
+        {
+          "path": "orderInfoC",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "defaultTitle": "",
+              "titlePenetrate": "NO",
+              "backButtonIcon": null
+            }
+          }
+        },
+        {
+          "path": "orderInfoJF",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "defaultTitle": "",
+              "titlePenetrate": "NO",
+              "backButtonIcon": null
+            }
+          }
+        },
+        {
+          "path": "orderList",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "defaultTitle": "",
+              "titlePenetrate": "NO",
+              "backButtonIcon": null
+            }
+          }
+        },
+        {
+          "path": "orderListBusiness",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "defaultTitle": "",
+              "titlePenetrate": "NO",
+              "backButtonIcon": null
+            }
+          }
+        },
+        {
+          "path": "tickets",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "defaultTitle": "",
+              "titlePenetrate": "NO",
+              "backButtonIcon": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "root": "pages-sub/homeManager",
+      "pages": [
+        {
+          "path": "action",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "defaultTitle": "",
+              "titlePenetrate": "NO",
+              "backButtonIcon": null
+            }
+          }
+        },
+        {
+          "path": "goodsSearch",
+          "type": "page",
+          "layout": "default",
+          "needLogin": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "defaultTitle": "",
+              "titlePenetrate": "NO",
+              "backButtonIcon": null
+            }
+          }
+        },
+        {
+          "path": "order",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "defaultTitle": "",
+              "titlePenetrate": "NO",
+              "backButtonIcon": null
+            }
+          }
+        },
+        {
+          "path": "orderC",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "defaultTitle": "",
+              "titlePenetrate": "NO",
+              "backButtonIcon": null
+            }
+          }
+        },
+        {
+          "path": "orderC_Coupon",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "defaultTitle": "",
+              "titlePenetrate": "NO",
+              "backButtonIcon": null
+            }
+          }
+        },
+        {
+          "path": "shopCar",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationBarTitleText": "购物车",
+            "backgroundColor": "#fff",
+            "navigationBarBackgroundColor": "#fff",
+            "navigationBarTextStyle": "black"
+          }
+        },
+        {
+          "path": "shopInfo",
+          "type": "page",
+          "layout": "default",
+          "needLogin": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "defaultTitle": "",
+              "titlePenetrate": "NO",
+              "backButtonIcon": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "root": "pages-sub/AfterSalesService",
+      "pages": [
+        {
+          "path": "Application/index",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "defaultTitle": "",
+              "titlePenetrate": "NO",
+              "backButtonIcon": null
+            }
+          }
+        },
+        {
+          "path": "ReturnForm/index",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "defaultTitle": "",
+              "titlePenetrate": "NO",
+              "backButtonIcon": null
+            }
+          }
+        },
+        {
+          "path": "ReturnShipment/index",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "defaultTitle": "",
+              "titlePenetrate": "NO",
+              "backButtonIcon": null
+            }
+          }
+        },
+        {
+          "path": "SalesDetil/index",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "defaultTitle": "",
+              "titlePenetrate": "NO",
+              "backButtonIcon": null
+            }
+          }
+        },
+        {
+          "path": "SalesMerchant/index",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "defaultTitle": "",
+              "titlePenetrate": "NO",
+              "backButtonIcon": null
+            }
+          }
+        },
+        {
+          "path": "SalesMerchantfaill/index",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "defaultTitle": "",
+              "titlePenetrate": "NO",
+              "backButtonIcon": null
+            }
+          }
+        },
+        {
+          "path": "SalesMerchantOver/index",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "defaultTitle": "",
+              "titlePenetrate": "NO",
+              "backButtonIcon": null
+            }
+          }
+        },
+        {
+          "path": "SalesMerchantReject/index",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "defaultTitle": "",
+              "titlePenetrate": "NO",
+              "backButtonIcon": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "root": "pages-sub/promotionCenter",
+      "pages": [
+        {
+          "path": "index",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "promotionDetail",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "promotionInstituDetail",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        }
+      ]
+    },
+    {
+      "root": "pages-sub/housingProvident",
+      "pages": [
+        {
+          "path": "accountInfo",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "businessDetail",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "index",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "loanRepayment",
+          "type": "page",
+          "layout": "default",
+          "realNameAuthentication": true,
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        }
+      ]
+    },
+    {
+      "root": "pages-sub/map",
+      "pages": [
+        {
+          "path": "index",
+          "type": "page"
+        }
+      ]
+    },
+    {
+      "root": "pages-sub/newretail",
+      "pages": [
+        {
+          "path": "pages/logs/logs",
+          "type": "page"
+        },
+        {
+          "path": "pages/customerService/customerService/customerService",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/advertising/advertising",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/creditCard/creditCard",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/invite/invite",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/preview/index",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/qiyu/index",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/shareShopcart/shareShopcart",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/sysNotice/sysNotice",
+          "type": "page"
+        },
+        {
+          "path": "pages/memberModule/bindMobile/bindMobile",
+          "type": "page"
+        },
+        {
+          "path": "pages/memberModule/index/index",
+          "type": "page"
+        },
+        {
+          "path": "pages/memberModule/myCard/myCard",
+          "type": "page"
+        },
+        {
+          "path": "pages/memberModule/qiyu/index",
+          "type": "page"
+        },
+        {
+          "path": "pages/memberModule/score/score",
+          "type": "page"
+        },
+        {
+          "path": "pages/memberModule/selectStore/selectStore",
+          "type": "page"
+        },
+        {
+          "path": "pages/wxfaceapp/index/index",
+          "type": "page"
+        },
+        {
+          "path": "pages/wxfaceapp/payment/payment",
+          "type": "page"
+        },
+        {
+          "path": "pages/mall/solitaire/solitaireDetails/solitaireDetails",
+          "type": "page"
+        },
+        {
+          "path": "pages/mall/solitaire/solitaireList/solitaireList",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/activity/advanceSell/advanceSell",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/activity/assistanceCoupon/assistanceCoupon",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/activity/cycle/cycle",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/activity/luckDraw/luckDraw",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/activity/newmbrActivity/newmbrActivity",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/activity/scoreRaffle/scoreRaffle",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/activity/seckill/seckill",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/bargain/bargainAddOrder/bargainAddOrder",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/bargain/bargainDetails/bargainDetails",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/bargain/bargainList/bargainList",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/bargain/helpBargain/helpBargain",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/bargain/myBargain/myBargain",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/benefitPlan/grantSign/grantSign",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/benefitPlan/myTourism/myTourism",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/benefitPlan/routeEvaluation/routeEvaluation",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/benefitPlan/tourismPlan/tourismPlan",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/benefitPlan/tourismPlanDetail/tourismPlanDetail",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/benefitPlan/welfareMember/welfareMember",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/benefitPlan/welfarePlan/welfarePlan",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/benefitPlan/welfarePlanSearch/welfarePlanSearch",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/coupon/choiceCoupon/choiceCoupon",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/coupon/choiceCouponMore/choiceCouponMore",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/coupon/couponCenter/couponCenter",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/coupon/couponDetails/couponDetails",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/coupon/couponHistory/couponHistory",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/coupon/exchangeCoupon/exchangeCoupon",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/coupon/myCoupon/myCoupon",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/distribution/apply/apply",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/distribution/myDistribution/myDistribution",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/distribution/profit/profit",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/distribution/rankingList/rankingList",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/distribution/teamList/teamList",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/fightGroup/fightGroup/fightGroup",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/fightGroup/groupPurchase/groupPurchase",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/fightGroup/teamList/teamList",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/florist/serviceList/serviceList",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/goods/flowerDetail/index",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/goods/goodsComment/goodsComment",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/goods/goodsDetail/goodsDetail",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/goods/goodsList/goodsList",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/goods/newGoods/newGoods",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/goods/packaging/packaging",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/goods/search/search",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/index/index/index",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/index/selectAddress/selectAddress",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/index/selectStore/selectStore",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/liveplay/showDetails/showDetails",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/liveplay/showList/showList",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/member/agreement/agreement",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/member/authorize/authorize",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/member/benefits/benefits",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/member/bindMobile/bindMobile",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/member/feedback/feedback",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/member/grade/grade",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/member/mealCard/mealCard",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/member/mealCardDetails/mealCardDetails",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/member/memberInfo/memberInfo",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/member/payment/payment",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/member/salesclerkViewing/salesclerkViewing",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/member/scoreVip/scoreVip",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/member/share/share",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/member/sign/index",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/member/system/system",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/member/vip/vip",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/member/vipPay/vipPay",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/miniAppLiveplay/showList/showList",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/myCard/balance/balance",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/myCard/memberCard/memberCard",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/myCard/recharge/recharge",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/myCard/resetPassword/resetPassword",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/myCard/topUp/topUp",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/myCard/topUpRecord/topUpRecord",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/order/addRemarks/addRemarks",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/order/evaluate/evaluate",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/order/invoice/invoice",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/order/logisticsInfo/logisticsInfo",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/order/logisticsInfoItem/logisticsInfoItem",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/order/meituan/orderMeituan",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/order/moneyGoing/moneyGoing",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/order/offlineOrderDetails/offlineOrderDetails",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/order/order/order",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/order/orderDetails/orderDetails",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/order/orderTrajectory/orderTrajectory",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/order/perfectOrder/perfectOrder",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/order/pickup/pickup",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/order/pickupResult/pickupResult",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/order/qiyu/index",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/order/queryGoods/queryGoods",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/order/refund/refund",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/order/refundAddDetails/refundAddDetails",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/order/refundDetails/refundDetails",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/order/refundList/refundList",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/order/waitPay/waitPay",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/pay/pay/pay",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/pay/payment/payment",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/pay/payMethod/payMethod",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/recommend/details/details",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/recommend/my/my",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/recommend/release/release",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/recommend/square/square",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/score/score/score",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/score/scoreAddOrder/scoreAddOrder",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/score/scoreMall/scoreMall",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/score/scoreMall copy/scoreMall",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/score/scoreOrder/scoreOrder",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/score/selectStore/selectStore",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/score/thirdCouponCode/thirdCouponCode",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/store-detail/storeDetail/storeDetail",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/tabbar/my/my",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/tabbar/selfLifting/selfLifting",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/tabbar/shopcart/shopcart",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/template/addCart/addCart",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/treaty/clause/clause",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/treaty/policy/policy",
+          "type": "page"
+        },
+        {
+          "path": "pages/memberModule/balance/balancePay/balancePay",
+          "type": "page"
+        },
+        {
+          "path": "pages/memberModule/balance/balancePayList/balancePayList",
+          "type": "page"
+        },
+        {
+          "path": "pages/memberModule/balance/changeBalancePass/changeBalancePass",
+          "type": "page"
+        },
+        {
+          "path": "pages/memberModule/balance/storedValue/storedValue",
+          "type": "page"
+        },
+        {
+          "path": "pages/memberModule/giftCard/bindGiftCard/bindGiftCard",
+          "type": "page"
+        },
+        {
+          "path": "pages/memberModule/giftCard/buyHistory/buyHistory",
+          "type": "page"
+        },
+        {
+          "path": "pages/memberModule/giftCard/cardBuyResult/cardBuyResult",
+          "type": "page"
+        },
+        {
+          "path": "pages/memberModule/giftCard/choiceGiftCard/choiceGiftCard",
+          "type": "page"
+        },
+        {
+          "path": "pages/memberModule/giftCard/choiceGiftCard copy/choiceGiftCard",
+          "type": "page"
+        },
+        {
+          "path": "pages/memberModule/giftCard/giftCard/giftCard",
+          "type": "page"
+        },
+        {
+          "path": "pages/memberModule/giftCard/giftCardBuy/giftCardBuy",
+          "type": "page"
+        },
+        {
+          "path": "pages/memberModule/giftCard/giftCardDetails/giftCardDetails",
+          "type": "page"
+        },
+        {
+          "path": "pages/memberModule/giftCard/giftCardPayQR/giftCardPayQR",
+          "type": "page"
+        },
+        {
+          "path": "pages/memberModule/giftCard/giftCardPaysuccess/giftCardPaysuccess",
+          "type": "page"
+        },
+        {
+          "path": "pages/memberModule/giftCard/giveState/giveState",
+          "type": "page"
+        },
+        {
+          "path": "pages/memberModule/giftCard/myGiftCard/myGiftCard",
+          "type": "page"
+        },
+        {
+          "path": "pages/memberModule/giftCard/storeList/storeList",
+          "type": "page"
+        },
+        {
+          "path": "pages/memberModule/giftCard/useNeedKnow/useNeedKnow",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/activity/lottery/helpLottery/helpLottery",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/activity/lottery/lotteryIndex/lotteryIndex",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/activity/lottery/myLottery/myLottery",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/activity/penny/goodsDetail/goodsDetail",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/activity/penny/helpPenny/helpPenny",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/activity/penny/pennyList/pennyList",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/member/address/addAddress/addAddress",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/member/address/addAddressOrder/addAddress",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/member/address/addressList/addressList",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/member/authorize/authorize/authorize",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/member/shoppingGuide/applyInfo/applyInfo",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/member/shoppingGuide/cashout/cashout",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/member/shoppingGuide/goods/goods",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/member/shoppingGuide/task/task",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/tabbar/category/category-list/category-list",
+          "type": "page"
+        },
+        {
+          "path": "pages/mallModule/tabbar/category/category-main/category-main",
+          "type": "page"
+        }
+      ]
+    }
+  ]
+}
