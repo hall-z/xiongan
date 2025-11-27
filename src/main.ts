@@ -4,6 +4,7 @@ import { createSSRApp } from 'vue'
 import App from './App.vue'
 import { prototypeInterceptor, routeInterceptor } from './interceptors'
 import store from './store'
+import navigationBar from './components/navigation-bar/navigation-bar.vue'
 
 import shareModule from '@/utils/share'
 uni.$zp = {
@@ -18,6 +19,7 @@ uni.$zp = {
 export function createApp() {
   const app = createSSRApp(App)
   app.mixin(shareModule)
+  app.component('navigationBar', navigationBar)
   app.use(store)
   app.use(routeInterceptor)
   app.use(prototypeInterceptor)
