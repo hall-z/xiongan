@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { changeDict, dataDesensitization } from '@/utils'
-import sortBy from 'lodash-es/sortBy'
+import sortBy from 'lodash/sortBy'
+// import sortBy from 'lodash-es/sortBy'
 import useCardMessage from '../hooks/useCardMessage'
 import {
   bankCodeList,

@@ -33,7 +33,7 @@
     <!-- tabbar -->
     <view class="tab-box">
       <view class="tab-bar">
-        <view v-for="(item, index) in state.tabBarList" :key="index">
+        <template v-for="(item, index) in state.tabBarList" :key="index">
           <view
             v-if="item.show"
             :class="item.type === state.scoreProductType ? 'tab-bar-item active' : 'tab-bar-item'"
@@ -43,7 +43,7 @@
             <view class="item-name">{{ item.name }}</view>
             <view class="item-activity"></view>
           </view>
-        </view>
+        </template>
       </view>
       <!-- 切换展示图标 -->
       <view class="score-show-icon" @click="changeShowModel">
@@ -76,7 +76,7 @@
         :data-traceId="item.traceId"
       >
         <view class="goods-img-box">
-          <image :src="item.product.imageUrl" mode="widthFix"></image>
+          <image v-if="item.product" :src="item.product.imageUrl" mode="widthFix"></image>
           <image
             class="qiangguang"
             :hidden="item.total > 0 ? true : false"
@@ -89,7 +89,7 @@
             <!-- <view class="goods-introduce" wx:if="{{item.product.produtlabel.length > 0 || item.product.specifications}}">
           <text wx:for="{{item.product.produtlabel}}" wx:key="index" style="background:rgb({{item.color}})" wx:if="{{index < 3}}">{{item.labelName}}</text>
         </view> -->
-            <text class="name">{{ item.product.name }}</text>
+            <text class="name" v-if="item.product">{{ item.product.name }}</text>
           </view>
           <text class="goods-now-state">
             已兑：{{ filters.filterProductNum(item.prizeCount, item.total) }}/{{ item.total }}
@@ -114,7 +114,7 @@
               <text
                 class="oldPrice"
                 v-if="
-                  item.product.originalPrice && item.product.sellPrice < item.product.originalPrice
+                  item.product && item.product.originalPrice && item.product.sellPrice < item.product.originalPrice
                 "
               >
                 ￥{{ item.originalPrice }}
@@ -132,7 +132,7 @@
                   v-if="
                     item.availableStockAmount !== 0 &&
                     item.total !== 0 &&
-                    item.product.balance !== 0
+                    item.product && item.product.balance !== 0
                   "
                   :class="state.score >= item.score ? 'enable' : 'unable'"
                   :data-goodsId="item.id"
@@ -147,10 +147,10 @@
                   v-if="
                     item.availableStockAmount === 0 ||
                     item.total === 0 ||
-                    item.product.balance === 0
+                    (item.product && item.product.balance === 0)
                   "
                   class="unable"
-                  :data-goodsId="item.product.id"
+                  :data-goodsId="item.product && item.product.id"
                   :data-type="item.type"
                   :data-balance="item.total"
                   :data-traceId="item.traceId"
@@ -454,14 +454,14 @@
     >
       <view class="exchange-popup">
         <view class="e-p-goods">
-          <view class="ex-goods-left" v-if="state.scoreProductType === 'SCORE_PRODUCT_PRODUCT'">
+          <view class="ex-goods-left" v-if="state.scoreProductType === 'SCORE_PRODUCT_PRODUCT' && state.selectGood && state.selectGood.product">
             <image
               :src="state.selectGood.product.imageUrl"
               mode="widthFix"
               class="goods-img"
             ></image>
           </view>
-          <view class="ex-goods-right">
+          <view class="ex-goods-right" v-if="state.selectGood && state.selectGood.product">
             <view class="goods-title">{{ state.selectGood.product.name }}</view>
             <view class="goods-price">
               <text class="small-font">兑换价</text>
@@ -554,6 +554,7 @@ import _apiHelpActivityServiceJs from '@/service/api/newretail/helpActivityServi
 import _apiMemberServiceJs from '@/service/api/newretail/memberService'
 import _apiBannerServiceJs from '@/service/api/newretail/bannerService'
 import _apiScoreProductService from '@/service/api/newretail/scoreProductService'
+import * as filters from '@/utils/newretail/filters'
 // import { onLoad, onReady, onShow, onHide, onUnload, onPullDownRefresh, onReachBottom, onShareAppMessage } from "@dcloudio/uni-app";
 import { reactive } from 'vue'
 import popup from '@/pages-sub/newretail/components/popup/popup.vue';
@@ -602,6 +603,12 @@ const colorRgba = (sHex, alpha = 1) => {
     return sColor
   }
 }
+
+// Module-level variables for lifecycle management
+let changeStore = false
+let pageOnHide = false
+let options = {}
+
 const state = reactive({
   isCanBeOrdered: true,
   productNum: 1,
@@ -1602,7 +1609,10 @@ function initPage(options) {
   }
   getBannerList(app.globalData.storeInfo.id)
 }
+
+
 onLoad(function (_options) {
+  options = _options || {}
   changeStore = false
   pageOnHide = false
   console.log(app.globalData, 'app.globalDataapp.globalDataapp.globalData')
@@ -1686,9 +1696,9 @@ onLoad(function (_options) {
     initPage(_options)
   } else {
     // 获取当前地理位置，然后筛选出最近的门店，根据当前门店获取门店的商品
-    ADDRESS.getLocation()
-      .then((res) => {
-        app.globalData.storeInfo = res
+    ADDRESS.getRecentlyStore()
+      .then(() => {
+        const res = app.globalData.storeInfo
         state.storeId = res.id
         state.storeName = res.name
         if (_options.link === 'score_coupon') {

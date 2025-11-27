@@ -5,15 +5,15 @@
 
 interface NavigateToOptions {
   url: "/pages/index/index" |
+       "/pages/YHwebview" |
        "/pages/codeshare" |
        "/pages/privacyAgreement" |
-       "/pages/YHwebview" |
        "/pages/index/list" |
+       "/pages/login/QRcode" |
        "/pages/login/index" |
        "/pages/login/loginsmrz" |
        "/pages/login/phoneLogin" |
        "/pages/login/phoneLoginbc" |
-       "/pages/login/QRcode" |
        "/pages/login/sfzLogin" |
        "/pages/mine/index" |
        "/pages/pay/aliPayTest" |
@@ -24,6 +24,9 @@ interface NavigateToOptions {
        "/pages/shop/classify" |
        "/pages/shop/index" |
        "/pages/shop/shopSearch" |
+       "/pages-sub/serveMain/OcrCamera" |
+       "/pages-sub/serveMain/OcrCameraApp" |
+       "/pages-sub/serveMain/SocCertFacSucess" |
        "/pages-sub/serveMain/cardApplyFromType" |
        "/pages-sub/serveMain/cardApplyType" |
        "/pages-sub/serveMain/cardFromType" |
@@ -32,13 +35,12 @@ interface NavigateToOptions {
        "/pages-sub/serveMain/handleCardProgress" |
        "/pages-sub/serveMain/lifespanFoundation" |
        "/pages-sub/serveMain/lifespanInfo" |
-       "/pages-sub/serveMain/OcrCamera" |
-       "/pages-sub/serveMain/OcrCameraApp" |
-       "/pages-sub/serveMain/SocCertFacSucess" |
        "/pages-sub/serveMain/socCertInfo" |
        "/pages-sub/serveMain/socCertPlan" |
        "/pages-sub/serveMain/socCertRecord" |
        "/pages-sub/serveMain/socCertRecordDetail" |
+       "/pages-sub/serveMassage/StudentTravel/detle" |
+       "/pages-sub/serveMassage/StudentTravel/index" |
        "/pages-sub/serveMassage/businessOutlets/index" |
        "/pages-sub/serveMassage/daiyu/index" |
        "/pages-sub/serveMassage/huimingServe/index" |
@@ -47,8 +49,6 @@ interface NavigateToOptions {
        "/pages-sub/serveMassage/messageList/index" |
        "/pages-sub/serveMassage/serchFor/index" |
        "/pages-sub/serveMassage/serchFor/index2" |
-       "/pages-sub/serveMassage/StudentTravel/detle" |
-       "/pages-sub/serveMassage/StudentTravel/index" |
        "/pages-sub/serveMassage/travel/detle" |
        "/pages-sub/serveMassage/travel/index" |
        "/pages-sub/serveMassage/wenhuaServe/index" |
@@ -58,21 +58,25 @@ interface NavigateToOptions {
        "/pages-sub/webView/alIndex" |
        "/pages-sub/webView/index" |
        "/pages-sub/webView/index2info" |
-       "/pages-sub/system/sysconfig/cancellation" |
        "/pages-sub/system/sysconfig/cancePhone" |
+       "/pages-sub/system/sysconfig/cancellation" |
        "/pages-sub/system/sysconfig/index" |
        "/pages-sub/system/sysconfig/setting" |
        "/pages-sub/system/userInfo/index" |
+       "/pages-sub/userManager/SocialSecurityCard/barcode" |
+       "/pages-sub/userManager/SocialSecurityCard/detil" |
+       "/pages-sub/userManager/SocialSecurityCard/index" |
+       "/pages-sub/userManager/SocialSecurityCard/indexback" |
        "/pages-sub/userManager/address/editor" |
        "/pages-sub/userManager/address/list" |
        "/pages-sub/userManager/applyForCard/index" |
        "/pages-sub/userManager/applyForCard/list" |
+       "/pages-sub/userManager/bankCard/PayInfo" |
        "/pages-sub/userManager/bankCard/addCard" |
        "/pages-sub/userManager/bankCard/cardinfo" |
        "/pages-sub/userManager/bankCard/cardsList" |
        "/pages-sub/userManager/bankCard/changePW" |
        "/pages-sub/userManager/bankCard/index" |
-       "/pages-sub/userManager/bankCard/PayInfo" |
        "/pages-sub/userManager/bankCard/resetPW" |
        "/pages-sub/userManager/cardManager/index" |
        "/pages-sub/userManager/codeServe/cardResut" |
@@ -89,10 +93,6 @@ interface NavigateToOptions {
        "/pages-sub/userManager/smartCanteen/paylist" |
        "/pages-sub/userManager/smartCanteen/recharge" |
        "/pages-sub/userManager/smartCanteen/searchD" |
-       "/pages-sub/userManager/SocialSecurityCard/barcode" |
-       "/pages-sub/userManager/SocialSecurityCard/detil" |
-       "/pages-sub/userManager/SocialSecurityCard/index" |
-       "/pages-sub/userManager/SocialSecurityCard/indexback" |
        "/pages-sub/userManager/suggest/list" |
        "/pages-sub/userManager/suggest/suggest" |
        "/pages-sub/userManager/suggest/suggestDetil" |
@@ -151,9 +151,9 @@ interface NavigateToOptions {
        "/pages-sub/AfterSalesService/ReturnShipment/index" |
        "/pages-sub/AfterSalesService/SalesDetil/index" |
        "/pages-sub/AfterSalesService/SalesMerchant/index" |
-       "/pages-sub/AfterSalesService/SalesMerchantfaill/index" |
        "/pages-sub/AfterSalesService/SalesMerchantOver/index" |
        "/pages-sub/AfterSalesService/SalesMerchantReject/index" |
+       "/pages-sub/AfterSalesService/SalesMerchantfaill/index" |
        "/pages-sub/promotionCenter/index" |
        "/pages-sub/promotionCenter/promotionDetail" |
        "/pages-sub/promotionCenter/promotionInstituDetail" |
@@ -162,7 +162,6 @@ interface NavigateToOptions {
        "/pages-sub/housingProvident/index" |
        "/pages-sub/housingProvident/loanRepayment" |
        "/pages-sub/map/index" |
-       "/pages-sub/newretail/pages/logs/logs" |
        "/pages-sub/newretail/pages/customerService/customerService/customerService" |
        "/pages-sub/newretail/pages/mallModule/advertising/advertising" |
        "/pages-sub/newretail/pages/mallModule/creditCard/creditCard" |
@@ -275,8 +274,8 @@ interface NavigateToOptions {
        "/pages-sub/newretail/pages/mallModule/order/refundList/refundList" |
        "/pages-sub/newretail/pages/mallModule/order/waitPay/waitPay" |
        "/pages-sub/newretail/pages/mallModule/pay/pay/pay" |
-       "/pages-sub/newretail/pages/mallModule/pay/payment/payment" |
        "/pages-sub/newretail/pages/mallModule/pay/payMethod/payMethod" |
+       "/pages-sub/newretail/pages/mallModule/pay/payment/payment" |
        "/pages-sub/newretail/pages/mallModule/recommend/details/details" |
        "/pages-sub/newretail/pages/mallModule/recommend/my/my" |
        "/pages-sub/newretail/pages/mallModule/recommend/release/release" |

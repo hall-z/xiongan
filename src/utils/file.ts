@@ -1,4 +1,5 @@
-import isEmpty from 'lodash-es/isEmpty'
+import isEmpty from 'lodash/isEmpty'
+// import isEmpty from 'lodash-es/isEmpty'
 import { isArray, isString } from 'wot-design-uni/components/common/util'
 
 interface rightUlrOption {
