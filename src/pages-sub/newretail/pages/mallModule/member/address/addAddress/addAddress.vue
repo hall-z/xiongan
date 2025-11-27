@@ -174,7 +174,6 @@ import _utilsImagesPathJs from '@/utils/newretail/imagesPath'
 import _libsQqmapWxJssdkMinJs from '@/libs/qqmap-wx-jssdk'
 import _apiSystemServiceJs from '@/service/api/newretail/systemService'
 import _apiAddressServiceJs from '@/service/api/newretail/addressService'
-import _componentsNavigationBarNavigationBarJs from '@/pages-sub/newretail/components/navigation-bar/navigation-bar'
 // import { onLoad, onReady, onShow, onHide, onUnload, onPullDownRefresh, onReachBottom, onShareAppMessage } from "@dcloudio/uni-app";
 import { reactive } from 'vue'
 const app = getApp()

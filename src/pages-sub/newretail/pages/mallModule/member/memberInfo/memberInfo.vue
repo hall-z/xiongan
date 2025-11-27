@@ -311,8 +311,7 @@
               @input="handleDetails"
               @blur="handleBlur"
               @focus="handleFocus"
-            >
-            </textarea>
+            ></textarea>
             <view class="address" @click="chooseAddress">
               <image class="address-img" :src="state.imagesPath.iconPositionActive"></image>
               <text>定位</text>
@@ -339,7 +338,6 @@ import _utilsUtilsJs from '@/utils/newretail/utils'
 import _utilsAuthJs from '@/utils/newretail/auth'
 import _apiMemberServiceJs from '@/service/api/newretail/memberService'
 import _apiWxaUserServiceJs from '@/service/api/newretail/wxaUserService'
-import _componentsNavigationBarNavigationBarJs from '@/pages-sub/newretail/components/navigation-bar/navigation-bar'
 // import { onLoad, onReady, onShow, onHide, onUnload } from "@dcloudio/uni-app";
 import { reactive } from 'vue'
 const app = getApp()

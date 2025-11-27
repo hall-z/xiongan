@@ -41,7 +41,6 @@ import _apiBargainServiceJs from '@/service/api/newretail/bargainService'
 // import { onLoad, onReady, onShow, onHide, onUnload, onPullDownRefresh, onReachBottom, onShareAppMessage } from "@dcloudio/uni-app";
 import { reactive } from 'vue'
 import bargainItem from '@/pages-sub/newretail/components/bargain/bargain-item/bargain-item.vue'
-import navigationBar from '@/pages-sub/newretail/components/navigation-bar/navigation-bar.vue'
 const app = getApp()
 
 // pages/mallModule/bargain/bargainList/bargainList.js

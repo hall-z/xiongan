@@ -42,7 +42,6 @@ import _utilsImagesPathJs from '@/utils/newretail/imagesPath'
 import _apiBargainServiceJs from '@/service/api/newretail/bargainService'
 // import { onLoad, onReady, onShow, onHide, onUnload, onPullDownRefresh, onReachBottom, onShareAppMessage } from "@dcloudio/uni-app";
 import { reactive } from 'vue'
-import navigationBar from '@/pages-sub/newretail/components/navigation-bar/navigation-bar.vue'
 import bargainItem from '@/pages-sub/newretail/components/bargain/bargain-item/bargain-item.vue'
 const app = getApp()
 

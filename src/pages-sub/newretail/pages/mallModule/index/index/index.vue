@@ -520,7 +520,7 @@ import _apiStoreServiceJs from '@/service/api/newretail/storeService'
 // import { onLoad, onShow, onShareAppMessage, onPullDownRefresh, onUnload, onHide, onPageScroll } from "@dcloudio/uni-app";
 import { reactive } from 'vue'
 import bus from 'iny-bus'
-import NavigationBar from '@/pages-sub/newretail/components/navigation-bar/navigation-bar.vue'
+
 import CustomLoadingPage from '@/pages-sub/newretail/components/customLoadingPage/customLoadingPage.vue'
 import lazyLoadPage from '@/pages-sub/newretail/components/lazy-load-page/lazy-load-page.vue'
 import CustomLoading from '@/pages-sub/newretail/components/loading/loading.vue'

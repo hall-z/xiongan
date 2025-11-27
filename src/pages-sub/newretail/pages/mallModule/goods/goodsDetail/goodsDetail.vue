@@ -843,7 +843,6 @@ import trueIcon from '@/utils/newretail/image/true.png'
 // import detailIcon from '@/utils/newretail/image/detail.png'
 // import { onLoad, onReady, onShow, onHide, onUnload, onPullDownRefresh, onReachBottom, onShareAppMessage } from "@dcloudio/uni-app";
 import { reactive } from "vue";
-import NavigationBar from '@/pages-sub/newretail/components/navigation-bar/navigation-bar.vue';
 import GoodAttr from '@/pages-sub/newretail/components/good-attr/index.vue';
 import GoodsItemSmall from '@/pages-sub/newretail/components/goods-item-small/goods-item-small.vue';
 import SetMeal from '@/pages-sub/newretail/components/setMeal/setMeal.vue';

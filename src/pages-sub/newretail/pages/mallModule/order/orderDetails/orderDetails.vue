@@ -1141,7 +1141,6 @@ import _utilsUtilsJs from "@/utils/newretail/utils";
 import _utilsSelfJs from "@/utils/newretail/self";
 import _apiRequestJs from "@/service/api/newretail/request";
 import _apiOrderServiceJs from "@/service/api/newretail/orderService";
-import _componentsNavigationBarNavigationBarJs from "@/pages-sub/newretail/components/navigation-bar/navigation-bar";
 // import { onLoad, onReady, onShow, onHide, onUnload, onPullDownRefresh, onReachBottom, onShareAppMessage } from "@dcloudio/uni-app";
 import { reactive } from "vue";
 import pay from '@/pages-sub/newretail/components/pay/pay.vue';
