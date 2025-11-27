@@ -2521,7 +2521,17 @@
         },
         {
           "path": "pages/mallModule/index/index/index",
-          "type": "page"
+          "type": "page",
+          "needLogin": true,
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
         },
         {
           "path": "pages/mallModule/index/selectAddress/selectAddress",
@@ -2777,7 +2787,17 @@
         },
         {
           "path": "pages/mallModule/store-detail/storeDetail/storeDetail",
-          "type": "page"
+          "type": "page",
+          "needLogin": true,
+          "layout": "default",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
         },
         {
           "path": "pages/mallModule/tabbar/my/my",

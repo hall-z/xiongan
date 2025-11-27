@@ -11,7 +11,6 @@
       class="topHandleView"
       :style="'border-color: ' + state.theme.color"
       @click="handleConfirm"
-      :hidden="searchLabelShow"
     >
       <image
         lazy-load=""
@@ -40,7 +39,7 @@
       <view class="member-code"></view>
     </view>
   </view>
-  <view class="top-search-block" v-if="isSearchFixed"></view>
+  <view class="top-search-block" v-if="state.isSearchFixed"></view>
 </template>
 <script setup>
 import _homePageCommonBehaviorJs from '../homePageCommonBehavior'
@@ -134,6 +133,7 @@ onMounted(function () {
     navHeight = navHeight + 86 * rate
   }
   state.navHeight = navHeight
+  state.loaded = true
   state.theme = {
     color:
       app.globalData.uiconfig && app.globalData.uiconfig.themeColor != null
@@ -192,9 +192,11 @@ function reload(refresh = false) {
         }
       })
       .catch((err) => {
+        state.loaded = true
         console.log(err)
       })
   } else if (refresh) {
+    state.loaded = true
     handleStore()
   }
 }
@@ -217,12 +219,16 @@ function goOrderList() {
 function handleConfirm(e) {
   const keyword = state.searchText
   uni.navigateTo({
-    url: '../../goods/search/search?keyword=' + keyword + '&type=wait',
+    url:
+      '/pages-sub/newretail/pages/mallModule/goods/search/search?keyword=' + keyword + '&type=wait',
     fail: function (e) {
       console.log(e)
       // 无法跳转成功，说明是预览页面，层级往上一层
       uni.navigateTo({
-        url: '../goods/search/search?keyword=' + keyword + '&type=wait',
+        url:
+          '/pages-sub/newretail/pages/mallModule/goods/search/search?keyword=' +
+          keyword +
+          '&type=wait',
       })
     },
   })

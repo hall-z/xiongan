@@ -5,7 +5,7 @@
 </view> -->
   <!-- v-if="showFlag" -->
   <view style="position: relative; padding-bottom: 60rpx">
-    <view class="search_bar" v-if="isHomeShowTopSearch && topSearchStyle === '2'">
+    <view class="search_bar" v-if="state.isHomeShowTopSearch && state.topSearchStyle === '2'">
       <search-bar
         id="search-bar"
         :show="true"
@@ -331,9 +331,9 @@ const state = reactive({
   // 是否显示添加收藏组件
   showHotGoods: true,
   homeModel: [],
-  topSearchStyle: '',
   // 搜索栏区域风格 风格1搜索显示在标题行左侧/风格2显示在标题行下方，搜索框的颜色取系统主题色配置
   nearStoreStyle: '',
+  topSearchStyle: '',
   // 附近门店区风格  风格1显示在标题行左侧，风格2位置固定在界面第一个组件下方，风格3固定在商场精选上方
   navHeight: 0,
 })
@@ -737,9 +737,9 @@ async function preLoading() {
       } else if (key == 'bgMarginTop') {
         state.bgMarginTop = conventionConfig[key] * 2 - 6
       } else if (BooleanList.indexOf(key) > -1) {
-        state.key = conventionConfig[key] === 'TRUE'
+        state[key] = conventionConfig[key] === 'TRUE'
       } else {
-        state.key = conventionConfig[key]
+        state[key] = conventionConfig[key]
         if (key == 'liveRoomLogoUrl') {
           app.globalData.systemConfigure[key] = conventionConfig[key]
         }

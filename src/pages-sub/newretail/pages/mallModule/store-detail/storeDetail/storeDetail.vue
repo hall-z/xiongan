@@ -1,3 +1,18 @@
+<route lang="json5" type="page">
+{
+  needLogin: true,
+  layout: 'default',
+  style: {
+    navigationStyle: 'custom',
+    'mp-alipay': {
+      transparentTitle: 'always',
+      titlePenetrate: 'YES',
+      defaultTitle: '',
+      titlePenetrate: 'NO',
+    },
+  },
+}
+</route>
 <template>
   <!-- pages/mallModule/tabbar/category/category-list/category-list.wxml -->
 
@@ -692,7 +707,7 @@ function toHome() {
 function handleConfirm() {
   uni.navigateTo({
     // url: '../../goods/search/search?keyword=' + keyword + '&type=wait',
-    url: '../../../goods/search/search?tongpei=true',
+    url: '/pages-sub/newretail/pages/mallModule/goods/search/search?tongpei=true',
     fail: function (e) {
       console.log(e)
     },

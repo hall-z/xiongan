@@ -1,10 +1,136 @@
-<template></template>
+<template>
+  <!--components/navigation-bar/navigation-bar.wxml-->
+  <wd-navbar
+    :loading="props.loading"
+    safeAreaInsetTop
+    fixed
+    placeholder
+    :animated="props.animated"
+    :custom-style="
+      (!props.isShowTopNavigation
+        ? 'position: absolute;left: 0;top:0;' + props.extStyle
+        : props.extStyle) +
+      ('background: ' + props.isHome && props.isShowTopNavigationFlag && !props.isShowTopNavigation
+        ? 'transparent'
+        : props.background)
+    "
+    :color="props.color"
+    :title="props.title"
+    :back="props.back"
+  >
+    <template #left>
+      <view v-if="props.isShowAddress">
+        <view
+          :class="
+            'left-navigation-bar-box ' +
+            (state.hideBack ? 'no-back' : '') +
+            ' ' +
+            props.leftClass +
+            ' left-navigation-bar-box1'
+          "
+          v-if="!state.isTabbar"
+        >
+          <view class="navigation_bar_btn_goback" @click="goBack" v-if="!state.hideBack">
+            <image
+              class=""
+              :src="state.imagesPath.navigation_bar_btn_goback"
+              mode="widthFix"
+            ></image>
+          </view>
+          <view class="navigation_bar_btn_gohome" @click="goHome" v-if="state.hideBack">
+            <image :src="state.imagesPath.navigation_bar_btn_gohome" mode="widthFix"></image>
+          </view>
+          <view class="search search1" @click="handleConfirm" v-if="props.isShowSearch">
+            <image style="width: 28rpx; height: 28rpx" :src="state.imagesPath.iconSearch"></image>
+            请输入搜索关键词
+          </view>
+          <view
+            v-if="props.isShowCustomer"
+            @click="props.isOpenCustomerService ? '' : 'callPhone'"
+            class="contact-icon"
+          >
+            <button v-if="props.isOpenCustomerService" open-type="contact">
+              <image :src="imagesPath.iconCustomerService" mode="widthFix"></image>
+              <text>客服</text>
+            </button>
+          </view>
+          <view
+            class="store-type-text"
+            v-if="props.storeTypeText"
+            :style="'width: ' + props.storeTypeText.length * 42 + 'rpx'"
+          >
+            {{ props.storeTypeText }}
+          </view>
+          <view class="address" v-if="props.isShowAddressText" @click="changeAddress">
+            <image
+              style="width: 22rpx; height: 30rpx"
+              :src="state.imagesPath.iconNearStoreAddress"
+            ></image>
+            <text>{{ state.addressName || '暂无地址信息' }}</text>
+          </view>
+        </view>
+      </view>
+      <view v-else-if="!props.isHome">
+        <view
+          :class="
+            'left-navigation-bar-box ' + (state.hideBack ? 'no-back' : '') + ' ' + props.leftClass
+          "
+          v-if="!state.isTabbar"
+        >
+          <view class="navigation_bar_btn_goback" @click="goBack" v-if="!state.hideBack">
+            <image
+              class=""
+              :src="state.imagesPath.navigation_bar_btn_goback"
+              mode="widthFix"
+            ></image>
+          </view>
+          <view class="navigation_bar_btn_gohome" @click="goHome">
+            <image :src="state.imagesPath.navigation_bar_btn_gohome" mode="widthFix"></image>
+          </view>
+        </view>
+      </view>
+      <view v-else>
+        <view :class="'left-box ' + (!props.isShowTopNavigationFlag ? 'top-left-box' : '')">
+          <view class="address" v-if="props.nearStoreStyle === '1'" @click="changeAddress">
+            <image
+              style="width: 22rpx; height: 30rpx"
+              :src="state.imagesPath.iconNearStoreAddress"
+            ></image>
+            <text>{{ state.addressName || '暂无地址信息' }}</text>
+          </view>
+          <view class="search" @click="handleConfirm" v-if="props.topSearchStyle === '1'">
+            <image style="width: 28rpx; height: 28rpx" :src="state.imagesPath.iconSearch"></image>
+          </view>
+        </view>
+      </view>
+    </template>
+    <template #right>
+      <view v-if="props.isShopcart">
+        <view class="share-shopping-cart" style="position: relative">
+          <button
+            @click.stop="shareView"
+            open-type="share"
+            style="
+              position: absolute;
+              left: 0;
+              top: 0;
+              width: 100%;
+              height: 100%;
+              background-color: transparent;
+            "
+          ></button>
+          <image :src="state.imagesPath.share_shopping_cart" mode="widthFix"></image>
+        </view>
+      </view>
+    </template>
+  </wd-navbar>
+</template>
 <script setup>
 import _apiSystemServiceJs from '@/service/api/newretail/systemService'
 import _utilsNavPageJs from '@/utils/newretail/navPage'
 import _utilsUtilsJs from '@/utils/newretail/utils'
 import _utilsImagesPathJs from '@/utils/newretail/imagesPath'
-import { reactive, watch } from 'vue'
+import { reactive, watch, onBeforeMount, onMounted } from 'vue'
 
 const app = getApp()
 // components/navigation-bar/navigation-bar.js
@@ -132,8 +258,15 @@ const props = defineProps({
   },
 })
 watch(
-  [nearStoreStyle, storeInfo, latitudeAndLongitude],
-  function (nearStoreStyle, storeInfo, latitudeAndLongitude) {
+  () => [props.nearStoreStyle, props.storeInfo, props.latitudeAndLongitude],
+  function (changeVal) {
+    const [nearStoreStyle, storeInfo, latitudeAndLongitude] = changeVal
+    console.log(
+      nearStoreStyle,
+      storeInfo,
+      latitudeAndLongitude,
+      'nearStoreStyle, storeInfo, latitudeAndLongitude',
+    )
     if (latitudeAndLongitude && latitudeAndLongitude !== state.latitudeAndLongitude1) {
       const latitudeAndLongitudeList = latitudeAndLongitude.split(',')
       // 2、根据坐标获取当前位置名称，显示在顶部:腾讯地图逆地址解析
@@ -151,7 +284,7 @@ watch(
     }
   },
 )
-function attached() {
+onBeforeMount(() => {
   const that = this
   state.storeInfo = app.globalData.storeInfo
   state.storeInfoName = app.globalData.storeInfo ? app.globalData.storeInfo.name : ''
@@ -190,13 +323,13 @@ function attached() {
       return this._storeInfo
     },
   })
-}
-function ready() {
+})
+onMounted(() => {
   updateStoreInfo()
-}
-function onShow() {
+})
+onShow(() => {
   updateStoreInfo()
-}
+})
 function callPhone() {
   // let picture = this.data.productPictures[0].url
   // let title = this.data.name
@@ -231,7 +364,7 @@ function changeStore() {
 function handleConfirm(e) {
   uni.navigateTo({
     url:
-      '../../goods/search/search' +
+      '/pages-sub/newretail/pages/mallModule/goods/search/search' +
       (state.isStoreDetail ? '?showType=product&storeId=' + state.storeId : ''),
   })
 }

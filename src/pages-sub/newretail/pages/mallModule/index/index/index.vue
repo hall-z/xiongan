@@ -1,3 +1,18 @@
+<route lang="json5" type="page">
+{
+  needLogin: true,
+  layout: 'default',
+  style: {
+    navigationStyle: 'custom',
+    'mp-alipay': {
+      transparentTitle: 'always',
+      titlePenetrate: 'YES',
+      defaultTitle: '',
+      titlePenetrate: 'NO',
+    },
+  },
+}
+</route>
 <template>
   <!-- index.wxml -->
   <view>
@@ -41,14 +56,14 @@
     >
       <!-- v-if="state.hasaAuthorization || !state.isUserLocationTrueShowPage" -->
       <view
-        :class="(isIphoneX ? 'iphoneX-height' : '') + ' bgcp'"
+        :class="(state.isIphoneX ? 'iphoneX-height' : '') + ' bgcp'"
         :style="
           'background-image: url(' +
-          homeBackgroundImage +
+          state.homeBackgroundImage +
           ');background-color: ' +
-          homeBackgroundColour +
+          state.homeBackgroundColour +
           ';background-repeat:no-repeat; background-position: left ' +
-          bgMarginTop +
+          state.bgMarginTop +
           'rpx'
         "
       >
@@ -2144,7 +2159,7 @@ function getPageConfig(data) {
       } else if (key == 'bgMarginTop') {
         state.bgMarginTop = conventionConfig[key] * 2 - 6
       } else {
-        state.key = conventionConfig[key]
+        state[key] = conventionConfig[key]
         if (key == 'liveRoomLogoUrl') {
           app.globalData.systemConfigure[key] = conventionConfig[key]
         }

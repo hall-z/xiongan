@@ -329,9 +329,9 @@ import _apiWxaUserServiceJs from '@/service/api/newretail/wxaUserService'
 // import { onLoad, onReady, onShow, onHide, onUnload, onPullDownRefresh, onReachBottom, onShareAppMessage } from "@dcloudio/uni-app";
 import { reactive } from 'vue'
 import bus from 'iny-bus'
-import popup from '@/pages-sub/newretail/components/popup/popup.vue';
+import popup from '@/pages-sub/newretail/components/popup/popup.vue'
 const app = getApp()
-
+let toIndex = false
 // pages/mallModule/member/authorize/authorize.js
 const wxaUserService = _apiWxaUserServiceJs
 const NavigationBar = _componentsNavigationBarNavigationBarJs
