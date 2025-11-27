@@ -52,7 +52,6 @@
 <script setup>
 import _utilsUtilsJs from '@/utils/newretail/utils'
 import _apiMemberServiceJs from '@/service/api/newretail/memberService'
-import _componentsNavigationBarNavigationBarJs from '@/pages-sub/newretail/components/navigation-bar/navigation-bar'
 // import { onLoad, onReady, onShow, onHide, onUnload, onPullDownRefresh, onReachBottom, onShareAppMessage } from "@dcloudio/uni-app";
 import { reactive } from 'vue'
 const memberService = _apiMemberServiceJs

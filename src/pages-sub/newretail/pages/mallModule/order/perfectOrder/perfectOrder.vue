@@ -1361,7 +1361,6 @@ import _utilsAnalysisJs from "@/utils/newretail/analysis";
 import _libsMta_analysisJs from "@/libs/mta_analysis";
 import _utilsImagesPathJs from "@/utils/newretail/imagesPath";
 import _componentsNotifyNotifyJs from "@/pages-sub/newretail/components/notify/notify";
-import _componentsNavigationBarNavigationBarJs from "@/pages-sub/newretail/components/navigation-bar/navigation-bar";
 import _componentsCustomLoadingCustomLoadingJs from "@/pages-sub/newretail/components/customLoading/customLoading";
 import _componentsPopupPopupJs from "@/pages-sub/newretail/components/popup/popup";
 import _utilsAuthJs from "@/utils/newretail/auth";

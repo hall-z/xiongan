@@ -96,7 +96,6 @@ import _utilsNavPageJs from "@/utils/newretail/navPage";
 import _utilsUtilsJs from "@/utils/newretail/utils";
 import _utilsSelfJs from "@/utils/newretail/self";
 import _apiProductServiceJs from "@/service/api/newretail/productService";
-import _componentsNavigationBarNavigationBarJs from "@/pages-sub/newretail/components/navigation-bar/navigation-bar";
 import _apiStoreServiceJs from "@/service/api/newretail/storeService";
 import _apiOrderServiceJs from "@/service/api/newretail/orderService";
 import _apiMemberServiceJs from "@/service/api/newretail/memberService";

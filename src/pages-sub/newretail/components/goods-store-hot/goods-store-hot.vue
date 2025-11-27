@@ -2,11 +2,13 @@
   <!--components/goods-item-small/goods-item-small.wxml-->
   <view>
     <view
-      :class="'gm-small-goods-item gm-small-goods-item' + (idx === 0 || idx ? idx : '')"
-      :data-productId="goodsData.id"
-      :data-storeId="goodsData.storeId"
-      :data-easyScene="goodsData.easyScene != null ? goodsData.easyScene : 'none'"
-      :id="'products-' + goodsData.id"
+      :class="
+        'gm-small-goods-item gm-small-goods-item' + (props.idx === 0 || props.idx ? props.idx : '')
+      "
+      :data-productId="state.goodsData.id"
+      :data-storeId="state.goodsData.storeId"
+      :data-easyScene="state.goodsData.easyScene != null ? state.goodsData.easyScene : 'none'"
+      :id="'products-' + state.goodsData.id"
       data-type="normal"
       @click="clickGoodsItem"
     >
@@ -20,15 +22,17 @@
         <image
           class="no-balance"
           :src="imagesPath.soldOutIcon"
-          v-if="goodsData.balance <= 0 && goodsData.business !== 'DISTRIBUTION'"
+          v-if="state.goodsData.balance <= 0 && state.goodsData.business !== 'DISTRIBUTION'"
           mode="widthFix"
         ></image>
       </view>
       <view class="gm-small-goods-info">
-        <text class="gm-small-goods-name">{{ goodsData.name ? goodsData.name : '' }}</text>
-        <view style="height: 36rpx" v-if="!recommed">
-          <view v-if="goodsData.labels && goodsData.labels.length > 0">
-            <view v-for="(item, index) in goodsData.labels" :key="index" v-if="index < 2">
+        <text class="gm-small-goods-name">
+          {{ state.goodsData.name ? state.goodsData.name : '' }}
+        </text>
+        <view style="height: 36rpx" v-if="!props.recommed">
+          <view v-if="state.goodsData.labels && state.goodsData.labels.length > 0">
+            <view v-for="(item, index) in state.goodsData.labels" :key="index" v-show="index < 2">
               <view
                 class="promotions"
                 v-if="item.labelName && !item.imageUrl"
@@ -52,120 +56,120 @@
           </view>
         </view>
         <view class="gm-small-goods-price">
-          <view v-if="goodsData.promotionPrice != null">
+          <view v-if="state.goodsData.promotionPrice != null">
             <text class="nowPrice">
               <text style="font-size: 20rpx">￥</text>
-              {{ filters.filtToFix(goodsData.promotionPrice) }}
+              {{ filtToFix(state.goodsData.promotionPrice) }}
             </text>
             <text
               style="font-size: 20rpx; margin-left: 4rpx"
-              v-if="goodsData.style == 'SPEC_PARENT'"
+              v-if="state.goodsData.style == 'SPEC_PARENT'"
             >
               起
             </text>
             <view style="display: flex; align-items: center">
               <text style="text-decoration: line-through; color: #999; margin-left: 10rpx">
                 ￥{{
-                  goodsData.originalPrice > goodsData.sellPrice
-                    ? filters.filtToFix(goodsData.originalPrice)
-                    : filters.filtToFix(goodsData.sellPrice)
+                  state.goodsData.originalPrice > state.goodsData.sellPrice
+                    ? filtToFix(state.goodsData.originalPrice)
+                    : filtToFix(state.goodsData.sellPrice)
                 }}
               </text>
             </view>
           </view>
           <view v-else>
-            <view style="display: flex" v-if="goodsData.memberPrice">
+            <view style="display: flex" v-if="state.goodsData.memberPrice">
               <view class="nowPrice">
                 <view>
                   <text style="font-size: 20rpx">￥</text>
-                  {{ filters.filtToFix(goodsData.memberPrice) }}
+                  {{ filtToFix(state.goodsData.memberPrice) }}
                   <text
                     style="font-size: 20rpx; margin-left: 4rpx"
-                    v-if="goodsData.style == 'SPEC_PARENT'"
+                    v-if="state.goodsData.style == 'SPEC_PARENT'"
                   >
                     起
                   </text>
                 </view>
                 <view
-                  v-if="goodsData.memberPrice && isMember"
+                  v-if="state.goodsData.memberPrice && props.isMember"
                   style="text-decoration: line-through; color: #999; font-size: 20rpx"
                 >
                   ￥{{
-                    goodsData.originalPrice > goodsData.sellPrice
-                      ? filters.filtToFix(goodsData.originalPrice)
-                      : filters.filtToFix(goodsData.sellPrice)
+                    state.goodsData.originalPrice > state.goodsData.sellPrice
+                      ? filtToFix(state.goodsData.originalPrice)
+                      : filtToFix(state.goodsData.sellPrice)
                   }}
                 </view>
               </view>
               <view
-                v-if="goodsData.memberPrice && isMember"
+                v-if="state.goodsData.memberPrice && props.isMember"
                 style="display: flex; padding-top: 10rpx"
               >
                 <view class="vipBtn">{{ vipGradeConfig.priceLabel }}</view>
                 <!-- <text style="text-decoration:line-through;color: #999;margin-left: 10rpx;">
-              ￥{{filters.filtToFix(goodsData.sellPrice)}}
+              ￥{{filtToFix(state.goodsData.sellPrice)}}
             </text> -->
               </view>
             </view>
             <view style="display: flex" v-else>
               <view class="nowPrice">
                 <view>
-                  <!-- goodsData.originalPrice > goodsData.sellPrice ? filters.filtToFix(goodsData.originalPrice) :  -->
+                  <!-- state.goodsData.originalPrice > state.goodsData.sellPrice ? filtToFix(state.goodsData.originalPrice) :  -->
                   <text style="font-size: 20rpx">￥</text>
-                  {{ filters.filtToFix(goodsData.sellPrice) }}
+                  {{ filtToFix(state.goodsData.sellPrice) }}
                   <text
                     style="font-size: 20rpx; margin-left: 4rpx"
-                    v-if="goodsData.style == 'SPEC_PARENT'"
+                    v-if="state.goodsData.style == 'SPEC_PARENT'"
                   >
                     起
                   </text>
                 </view>
                 <view
-                  v-if="goodsData.memberPrice && isMember"
+                  v-if="state.goodsData.memberPrice && props.isMember"
                   style="text-decoration: line-through; color: #999; font-size: 20rpx"
                 >
-                  ￥{{ filters.filtToFix(goodsData.memberPrice) }}
+                  ￥{{ filtToFix(state.goodsData.memberPrice) }}
                 </view>
               </view>
               <view
-                v-if="goodsData.memberPrice && isMember"
+                v-if="state.goodsData.memberPrice && props.isMember"
                 style="display: flex; padding-top: 10rpx"
               >
                 <view class="vipBtn">{{ vipGradeConfig.priceLabel }}</view>
                 <!-- <text style="text-decoration:line-through;color: #999;margin-left: 10rpx;">
-              ￥{{filters.filtToFix(goodsData.memberPrice)}}
+              ￥{{filtToFix(state.goodsData.memberPrice)}}
             </text> -->
               </view>
             </view>
           </view>
           <form @submit.stop="addToCart" @click.stop="noop">
-            <view class="add-box" :style="'background-color: ' + themeColor + ';'">
+            <view class="add-box" :style="'background-color: ' + state.themeColor + ';'">
               <button v-if="!hasUserInfo" @click="getUserInfo"></button>
               <button
                 v-else
                 form-type="submit"
                 data-addType="three"
                 :data-index="i"
-                :data-storeId="goodsData.storeId"
-                :data-id="goodsData.id"
-                :data-style="goodsData.style"
-                :data-balance="goodsData.balance"
-                :data-business="goodsData.business"
-                :data-initialpurchasenumber="goodsData.initialPurchaseNumber"
-                :data-traceId="goodsData.traceId"
+                :data-storeId="state.goodsData.storeId"
+                :data-id="state.goodsData.id"
+                :data-style="state.goodsData.style"
+                :data-balance="state.goodsData.balance"
+                :data-business="state.goodsData.business"
+                :data-initialpurchasenumber="state.goodsData.initialPurchaseNumber"
+                :data-traceId="state.goodsData.traceId"
               ></button>
-              <text class="cart-count" v-if="shopCart[goodsData.id]">
-                {{ shopCart[goodsData.id] ? shopCart[goodsData.id] : '' }}
+              <text class="cart-count" v-if="props.shopCart[state.goodsData.id]">
+                {{ props.shopCart[state.goodsData.id] ? props.shopCart[state.goodsData.id] : '' }}
               </text>
               <image class="add-img" :src="gouwuche"></image>
             </view>
           </form>
         </view>
-        <!-- <view> <text class="labelsActive" style="margin-right: 10rpx;" wx:for="{{goodsData.labels}}" wx:key="index"  wx:if="{{index<2}}">{{item.labelName}}</text> </view>     -->
+        <!-- <view> <text class="labelsActive" style="margin-right: 10rpx;" wx:for="{{state.goodsData.labels}}" wx:key="index"  wx:if="{{index<2}}">{{item.labelName}}</text> </view>     -->
         <!-- <form  catch:submit="addToCart" catch:tap="noop">
       <view class="add-box">
         <button wx:if="{{!hasUserInfo}}" bindtap="getUserInfo"></button>
-        <button wx:else form-type="submit" data-addType='three' data-index="{{i}}" data-id="{{goodsData.id}}" data-style="{{goodsData.style}}" data-balance="{{goodsData.balance}}" data-business="{{goodsData.business}}" data-traceId="{{goodsData.traceId}}"></button>
+        <button wx:else form-type="submit" data-addType='three' data-index="{{i}}" data-id="{{state.goodsData.id}}" data-style="{{state.goodsData.style}}" data-balance="{{state.goodsData.balance}}" data-business="{{state.goodsData.business}}" data-traceId="{{state.goodsData.traceId}}"></button>
         <image class="add-img" src='{{imagesPath.iconNewAdd}}'></image>
       </view>
     </form> -->
@@ -184,7 +188,7 @@ import _apiProductServiceJs from '@/service/api/newretail/productService'
 import _apiShopcartServiceJs from '@/service/api/newretail/shopcartService'
 import gouwuche from '@/utils/newretail/image/gouwuche.png'
 // import { attached, ready, detached } from "@dcloudio/uni-app";
-import { reactive } from 'vue'
+import { reactive, onMounted, onBeforeMount, onUnmounted } from 'vue'
 const app = getApp()
 
 // components/goods-item-small/goods-item-small.js
@@ -262,7 +266,7 @@ watch(
   },
 )
 
-attached(function () {
+onBeforeMount(function () {
   if (app.globalData.userInfo && app.globalData.userInfo.member) {
     state.isMember = true
   }
@@ -272,7 +276,7 @@ attached(function () {
     state.reduceImage = state.imagesPath.iconMinus
   }
 })
-ready(function () {
+onMounted(function () {
   if (app.globalData.userInfo) {
     state.hasUserInfo = true
   }
@@ -283,34 +287,42 @@ ready(function () {
       ? app.globalData.uiconfig.themeColor
       : uni.getStorageSync('themeColor')
 })
-detached(function () {
+onUnmounted(function () {
   // 在组件实例进入页面节点树时执行
   if (state.addImage === '' && state.reduceImage === '') {
     state.addImage = state.imagesPath.iconJoin
     state.reduceImage = state.imagesPath.iconMinus
   }
 })
+const emit = defineEmits([
+  'onClickGoods',
+  'addToCart',
+  'decrease',
+  'subscribeArrivalRemind',
+  'noop',
+])
+
 function clickGoodsItem(e) {
-  triggerEvent('onClickGoods', e.currentTarget.dataset)
+  emit('onClickGoods', e.currentTarget.dataset)
 }
 function addToCart(e) {
-  triggerEvent('addToCart', {
+  emit('addToCart', {
     dataset: e.currentTarget.dataset,
     context: this,
     detail: e.detail,
   })
 }
 function decrease(e) {
-  triggerEvent('decrease', e.currentTarget.dataset)
+  emit('decrease', e.currentTarget.dataset)
 }
 function subscribeArrivalRemind(e) {
-  triggerEvent('subscribeArrivalRemind', e.currentTarget.dataset)
+  emit('subscribeArrivalRemind', e.currentTarget.dataset)
 }
 function noop(e) {
-  triggerEvent('noop', e.currentTarget.dataset)
+  emit('noop', e.currentTarget.dataset)
 }
 function getUserInfo(e) {
-  triggerEvent('getUserInfo', e)
+  emit('getUserInfo', e)
 }
 </script>
 <style scoped>
