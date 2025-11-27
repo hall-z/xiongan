@@ -5,6 +5,7 @@
 
 import utils from './utils'
 
+import distributionService from '@/service/api/newretail/distributionService'
 const KEY_ACCESS_TOKENS = "__access_tokens__"
 const KEY_USER = "__user__"
 const KEY_DISTRIBUTOR = "__distributor__"
@@ -125,7 +126,6 @@ export const getDistributor = async (): Promise<void> => {
       } else {
         if ((app as any).globalData.userInfo?.member) {
           // 动态导入distributionService
-          const { distributionService } = await import('@/service/api/newretail/distributionService')
           distributionService.getDistributionUser().then((res: DistributorInfo) => {
             if (res) {
               if (res.status === "AUDITED") {
@@ -151,7 +151,6 @@ export const bindDistribution = async (): Promise<void> => {
   const app = getApp()
   if ((app as any).globalData.systemConfigure?.openDistribution) {
     if ((app as any).globalData.userInfo?.member) {
-      const { distributionService } = await import('@/service/api/newretail/distributionService')
       
       const shareId = (app as any).globalData.distributionAccountShareId
       if (!shareId) {

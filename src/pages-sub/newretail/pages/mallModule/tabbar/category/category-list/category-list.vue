@@ -389,7 +389,7 @@ function toHome() {
 function handleConfirm() {
   uni.navigateTo({
     // url: '../../goods/search/search?keyword=' + keyword + '&type=wait',
-    url: '../../../goods/search/search?tongpei=true',
+    url: '/pages-sub/newretail/pages/mallModule/goods/search/search?tongpei=true',
     fail: function (e) {
       console.log(e)
     },
