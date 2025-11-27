@@ -211,7 +211,7 @@ import _utilsImagesPathJs from '@/utils/newretail/imagesPath'
 // import { attached } from "@dcloudio/uni-app";
 import { reactive, watch } from 'vue'
 import goodsItemSmall from '../../goods-item-small-new/goods-item-small.vue'
-import banner from '@/pages-sub/newretail/components/home-page/banner/banner.vue'
+import banner from '@/pages-sub/newretail/components/home-page/banner2/banner2.vue'
 // import signin from '../../signin/signin.vue'
 const app = getApp()
 

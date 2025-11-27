@@ -88,7 +88,7 @@ export const ProductService = {
   /**
    * 查询门店商品
    */
-  query: (postData?: QueryParams): Promise<any> => {
+  query: (postData: any) => {
     const params = {
       ...postData,
       isApp: true

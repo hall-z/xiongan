@@ -40,7 +40,7 @@ import _utilsUtilsJs from '@/utils/newretail/utils'
 import _utilsThemeManagerJs from '@/utils/newretail/themeManager'
 import _apiBannerServiceJs from '@/service/api/newretail/bannerService'
 // import { ready } from "@dcloudio/uni-app";
-import { reactive, watch } from 'vue'
+import { reactive, watch, onMounted } from 'vue'
 import signin from '../signin/signin.vue'
 const app = getApp()
 // components/home-page/banner/banner.js
@@ -78,7 +78,7 @@ const props = defineProps({
     value: '',
   },
 })
-ready(function () {
+onMounted(() => {
   state.themeColor =
     app && app.globalData && app.globalData.uiconfig && app.globalData.uiconfig.themeColor
       ? app.globalData.uiconfig.themeColor

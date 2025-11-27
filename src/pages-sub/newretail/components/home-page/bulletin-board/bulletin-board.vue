@@ -1,11 +1,11 @@
 <template>
   <!--components/home-page/bulletin-board/bulletin-board.wxml-->
-  <view class="hotNotice-box no-data" :hidden="loaded && isShow">
+  <view class="hotNotice-box no-data" v-if="!state.loaded || !state.isShow">
     <image lazy-load=""></image>
     <view class="swiper_item"></view>
     <view class="moreNotice"></view>
   </view>
-  <view class="hotNotice-box" v-if="noticeList.length != 0">
+  <view class="hotNotice-box" v-if="state.noticeList?.length != 0">
     <!-- <image lazy-load="" :src="tongz" class="hot-point"></image> -->
     <swiper
       class="swiper_container"
@@ -14,13 +14,13 @@
       circular="true"
       interval="2000"
     >
-      <view v-for="(item, index) in noticeList" :key="key">
+      <view v-for="(item, index) in state.noticeList" :key="key">
         <swiper-item>
           <view
             class="swiper_item"
             @click="jumptoDetail"
             :data-notice-obj="item"
-            :style="colour ? 'color: ' + colour : ''"
+            :style="colour ? 'color: ' + props.colour : ''"
           >
             {{ item.title }}
           </view>
@@ -28,7 +28,11 @@
       </view>
     </swiper>
     <!-- <image lazy-load class="right-icon" src='{{imagesPath.icon_more}}'></image> -->
-    <view class="moreNotice" @click="moreNotice" :style="colour ? 'color: ' + colour : ''">
+    <view
+      class="moreNotice"
+      @click="moreNotice"
+      :style="props.colour ? 'color: ' + props.colour : ''"
+    >
       更多>>
     </view>
   </view>

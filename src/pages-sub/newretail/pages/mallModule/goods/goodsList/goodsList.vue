@@ -129,6 +129,7 @@ import _apiShopcartServiceJs from '@/service/api/newretail/shopcartService'
 import _apiProductServiceJs from '@/service/api/newretail/productService'
 import _apiStoreServiceJs from '@/service/api/newretail/storeService'
 import NavigationBar from '@/pages-sub/newretail/components/navigation-bar/navigation-bar.vue'
+import productItemCard from '@/pages-sub/newretail/components/product/goods-item-card/goods-item-card.vue'
 // import { onLoad, onReady, onShow, onHide, onUnload, onPullDownRefresh, onReachBottom, onShareAppMessage, onPageScroll } from "@dcloudio/uni-app";
 import { reactive } from 'vue'
 import bus from 'iny-bus'
@@ -392,7 +393,10 @@ onShareAppMessage(function () {
     return {
       title: '',
       path:
-        '/pages-sub/newretail/pages/mallModule/goods/search/search?shareId=' + memberId + '&storeId=' + state.storeId,
+        '/pages-sub/newretail/pages/mallModule/goods/search/search?shareId=' +
+        memberId +
+        '&storeId=' +
+        state.storeId,
       imageUrl: sharePictures,
       success(e) {},
     }

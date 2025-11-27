@@ -10,8 +10,8 @@
         id="search-bar"
         :show="true"
         :isSearchFixed="state.isSearchFixed"
-        :isShowCollection="isShowCollection"
-        :pageScrollData="pageScrollData"
+        :isShowCollection="state.isShowCollection"
+        :pageScrollData="props.pageScrollData"
         :refreshType="state.refreshTypeData"
         @toMemberCard="toMemberCard"
         @getUserInfo="getUserInfo"
@@ -20,10 +20,10 @@
     <view v-if="props.ownModule === 'homePage'">
       <collection
         id="collection"
-        v-if="isShowCollection"
+        v-if="state.isShowCollection"
         :show="true"
         :isSearchFixed="state.isSearchFixed"
-        :pageScrollData="pageScrollData"
+        :pageScrollData="props.pageScrollData"
         @pushCollect="handlePushCollect"
       ></collection>
       <subscribe-bar
@@ -38,7 +38,7 @@
           item &&
           (!item.beginTimeStamp ||
             !item.endTimeStamp ||
-            (item.beginTimeStamp < timeNumber && timeNumber < item.endTimeStamp))
+            (item.beginTimeStamp < state.timeNumber && state.timeNumber < item.endTimeStamp))
         "
       >
         <top-member
@@ -47,16 +47,16 @@
           :show="true"
           :refreshType="state.refreshTypeData"
           :ownModule="props.ownModule"
-          :pageScrollData="pageScrollData"
+          :pageScrollData="props.pageScrollData"
           :itemData="item"
-          :timeNumber="timeNumber"
+          :timeNumber="state.timeNumber"
           :moduleSpacing="item.moduleSpacing"
           :modelMargin="item.modelMargin"
           :pageMargin="item.pageMargin"
           @toMemberCard="toMemberCard"
           @refresh="handleRefreshData"
-          :memberCodeType="codeType"
-          :memberResource="memberResource"
+          :memberCodeType="state.codeType"
+          :memberResource="state.memberResource"
         ></top-member>
         <!-- 轮播图模块 -->
         <view
@@ -74,7 +74,7 @@
             :showInfo="item.type"
             :imageUrl="item.imageUrl"
             :banners="item.imageItems"
-            :timeNumber="timeNumber"
+            :timeNumber="state.timeNumber"
             :pageMargin="item.pageMargin || 0"
             :rotationSpeed="item.rotationSpeed"
             :moduleSpacing="item.moduleSpacing"
@@ -94,8 +94,8 @@
             :key="item.type + '_' + index"
             :show="true"
             :refreshType="state.refreshTypeData"
-            :pageScrollData="pageScrollData"
-            :shopCart="shopCart"
+            :pageScrollData="props.pageScrollData"
+            :shopCart="props.shopCart"
             @refresh="handleRefreshData"
             :itemData="item"
             :moduleSpacing="item.moduleSpacing"
@@ -112,8 +112,8 @@
             id="them-activities"
             :show="true"
             :refreshType="state.refreshTypeData"
-            :pageScrollData="pageScrollData"
-            :shopCart="shopCart"
+            :pageScrollData="props.pageScrollData"
+            :shopCart="props.shopCart"
             @refresh="handleRefreshData"
             :itemData="item"
             :moduleSpacing="item.moduleSpacing"
@@ -133,9 +133,9 @@
             :show="true"
             :dataIndex="index"
             :refreshType="state.refreshTypeData"
-            :pageScrollData="pageScrollData"
-            :pageScrollData1="pageScrollData1"
-            :shopCart="shopCart"
+            :pageScrollData="props.pageScrollData"
+            :pageScrollData1="state.pageScrollData1"
+            :shopCart="props.shopCart"
             @refresh="handleRefreshData"
             :itemData="item.productCategory"
             :selectColor="item.selectFontColor"
@@ -154,10 +154,10 @@
         <!-- 首页金刚区 -->
         <view v-if="item.type == 'tubiaodaohang'">
           <home-function
-            :id="'home-function' + (previewId || '')"
+            :id="'home-function' + (state.previewId || '')"
             :show="true"
             :refreshType="state.refreshTypeData"
-            :pageScrollData="pageScrollData"
+            :pageScrollData="props.pageScrollData"
             @clickFunctionEntry="clickFunctionEntry"
             :colour="item.colour"
             :moduleSpacing="item.moduleSpacing"
@@ -171,9 +171,9 @@
             v-if="item"
             id="coupon-activities"
             :show="true"
-            :timeNumber="timeNumber"
+            :timeNumber="state.timeNumber"
             :refreshType="state.refreshTypeData"
-            :pageScrollData="pageScrollData"
+            :pageScrollData="props.pageScrollData"
             @refresh="handleRefreshData"
             :itemData="item"
             :moduleSpacing="item.moduleSpacing"
@@ -186,19 +186,19 @@
         <!-- 公告显示区 -->
         <bulletin-board
           id="bulletin-board"
-          v-if="isHomeShowNotice && index == 0"
+          v-if="state.isHomeShowNotice && index == 0"
           :show="true"
-          :colour="noticeColour"
+          :colour="state.noticeColour"
           :refreshType="state.refreshTypeData"
-          :pageScrollData="pageScrollData"
+          :pageScrollData="props.pageScrollData"
         ></bulletin-board>
         <nearby-store
           id="nearby-store"
-          :show="showFlag"
+          :show="state.showFlag"
           :refreshType="state.refreshTypeData"
-          :pageScrollData="pageScrollData"
+          :pageScrollData="props.pageScrollData"
           :nearStoreStyle="nearStoreStyle"
-          v-if="isHomeShowNearStore && nearStoreStyle === '2' && index === 0"
+          v-if="state.isHomeShowNearStore && state.nearStoreStyle === '2' && index === 0"
         ></nearby-store>
       </view>
       <!-- 公告显示区 -->
@@ -224,13 +224,13 @@
       <!-- 附近门店区 -->
       <nearby-store
         id="nearby-store"
-        :show="showFlag"
+        :show="state.showFlag"
         :refreshType="state.refreshTypeData"
-        :pageScrollData="pageScrollData"
-        v-if="isHomeShowNearStore && nearStoreStyle === '3'"
+        :pageScrollData="props.pageScrollData"
+        v-if="state.isHomeShowNearStore && state.nearStoreStyle === '3'"
       ></nearby-store>
       <recommend-store
-        :show="showFlag"
+        :show="state.showFlag"
         :refreshType="state.refreshTypeData"
         :pageScrollData="pageScrollData"
         :pageScrollData1="state.pageScrollData1"
@@ -240,16 +240,16 @@
       <!-- 门店精选 -->
       <mall-recommend
         id="mall-recommend"
-        :show="isShowHotGoods"
+        :show="state.isShowHotGoods"
         :refreshType="state.refreshTypeData"
-        :pageScrollData="pageScrollData"
+        :pageScrollData="props.pageScrollData"
         :pageScrollData1="state.pageScrollData1"
-        :shopCart="shopCart"
+        :shopCart="props.shopCart"
         @refresh="handleRefreshData"
-        :displayStyle="displayStyle"
-        :isShowProductAreaTitle="isShowProductAreaTitle"
-        :hotTitleImgUrl="hotTitleImgUrl"
-        v-if="isShowHotGoods"
+        :displayStyle="state.displayStyle"
+        :isShowProductAreaTitle="state.isShowProductAreaTitle"
+        :hotTitleImgUrl="state.hotTitleImgUrl"
+        v-if="state.isShowHotGoods"
       ></mall-recommend>
     </view>
   </view>
@@ -279,7 +279,7 @@ import recommendStore from '../home-page/recommend-store/recommend-store.vue'
 import mallRecommend from '../home-page/mall-recommend2/mall-recommend.vue'
 import loading from '../loading/loading.vue'
 import collection from '../home-page/collection/collection.vue'
-import banner from '../home-page/banner/banner.vue'
+import banner from '../home-page/banner2/banner2.vue'
 const app = getApp()
 
 // components/lazy-load-page/lazy-load-page.js
@@ -891,13 +891,11 @@ function queryGiftCard() {
       .then((res) => {
         if (res) {
           state.memberResource.giftcardNum = res.length
-          state.memberResource = state.memberResource
         }
       })
       .catch((err) => {
         console.error('查询礼品卡报错：', err.message)
         state.memberResource.giftcardNum = 0
-        state.memberResource = state.memberResource
       })
   }
 }
@@ -907,7 +905,6 @@ function queryScore() {
     .getBalance(app.globalData.userInfo.member.mobile)
     .then((res) => {
       state.memberResource.scoreBalance = res
-      state.memberResource = state.memberResource
     })
     .catch((e) => {
       uni.showToast({
@@ -923,7 +920,6 @@ function queryBalance() {
     .then((res) => {
       if (res || res == 0) {
         state.memberResource.reserveBalance = res.toFixed(2)
-        state.memberResource = state.memberResource
       }
     })
     .catch((e) => {
@@ -943,7 +939,6 @@ function queryCoupon() {
     .getMbrUnUseCouponCount()
     .then((res) => {
       state.memberResource.couponNum = res
-      state.memberResource = state.memberResource
     })
     .catch((e) => {
       uni.showToast({

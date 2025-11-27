@@ -1,16 +1,16 @@
 <template>
   <!--components/home-page/banner/banner.wxml-->
-  <view class="banner-box no-data" :hidden="loaded && bannersA !== 0">
+  <view class="banner-box no-data" v-if="!state.loaded || state.bannersA.length == 0">
     <view class="banner-content"></view>
     <view class="dots"></view>
   </view>
   <!-- bindtap="bannerJumping" -->
   <view
     class="banner-box1"
-    :style="'margin: ' + moduleSpacing + 'px 0;padding: 0 ' + pageMargin + 'px'"
-    :hidden="!loaded || showInfo !== 'fenqu'"
+    :style="'margin: ' + props.moduleSpacing + 'px 0;padding: 0 ' + props.pageMargin + 'px'"
+    v-if="state.loaded && props.showInfo == 'fenqu'"
   >
-    <image lazy-load="" :src="imageUrl" class="slide-image" mode="widthFix"></image>
+    <image lazy-load="" :src="state.imageUrl" class="slide-image" mode="widthFix"></image>
     <view
       :style="
         'position: absolute;left: ' +
@@ -25,7 +25,7 @@
         item.fenquHeight +
         'px'
       "
-      v-for="(item, index) in bannersA"
+      v-for="(item, index) in state.bannersA"
       :key="index"
       :data-item="item"
       :data-id="item.id"
@@ -34,95 +34,100 @@
   </view>
   <view
     class="banner-box1"
-    :style="'margin: ' + moduleSpacing + 'px 0;padding: 0 ' + pageMargin + 'px'"
-    :hidden="!loaded || bannersA.length > 1 || showInfo === 'fenqu'"
+    :style="'margin: ' + props.moduleSpacing + 'px 0;padding: 0 ' + props.pageMargin + 'px'"
+    v-if="state.loaded && state.bannersA.length <= 1 && props.showInfo !== 'fenqu'"
   >
     <image
       lazy-load=""
-      v-for="(item, index) in bannersA"
+      v-for="(item, index) in state.bannersA"
       :key="index"
       :src="item.imageUrl"
       :data-id="item.id"
-      @click="bannersA[0] && bannersA[0].isLongPressRecognition ? '' : 'bannerJumping'"
+      @click="index == 0 && item && item.isLongPressRecognition ? '' : 'bannerJumping'"
       class="slide-image"
       mode="widthFix"
-      :show-menu-by-longpress="bannersA[0] && bannersA[0].isLongPressRecognition ? true : false"
-      :style="'border-radius:' + configData.fillet + 'px'"
+      :show-menu-by-longpress="index == 0 && item && item.isLongPressRecognition ? true : false"
+      :style="'border-radius:' + props.configData?.fillet + 'px'"
     ></image>
   </view>
   <view
     class="banner-box"
     :style="
       'height: ' +
-      (type != 'good' ? bannersA[0].imageHeight + 'rpx' : imgHeight + 'px') +
+      (props.type != 'good' ? state.bannersA[0]?.imageHeight + 'rpx' : imgHeight + 'px') +
       ';margin: ' +
-      moduleSpacing +
+      props.moduleSpacing +
       'px 0;padding: 0 ' +
-      pageMargin +
+      props.pageMargin +
       'px'
     "
-    :hidden="!loaded || bannersA.length <= 1 || showInfo === 'fenqu'"
+    v-if="state.loaded && state.bannersA.length > 1 && props.showInfo !== 'fenqu'"
   >
     <swiper
       class="swiper"
-      :style="'height: ' + (type != 'good' ? bannersA[0].imageHeight + 'rpx' : imgHeight + 'px')"
+      :style="
+        'height: ' +
+        (props.type != 'good' ? state.bannersA[0]?.imageHeight + 'rpx' : imgHeight + 'px')
+      "
       autoplay="true"
-      :interval="rotationSpeed || 3000"
+      :interval="state.rotationSpeed || 3000"
       circular="true"
-      :current="swiperCurrent"
+      :current="state.swiperCurrent"
       @change="dotChange"
       @animationfinish="swiperChange"
     >
-      <view
-        v-for="(item, index) in bannersA"
-        :key="index"
-        v-if="
-          !item.beginTimeStamp ||
-          !item.endTimeStamp ||
-          (item.beginTimeStamp < timeNumber && timeNumber < item.endTimeStamp)
-        "
-      >
-        <swiper-item
-          class="swiper-item"
-          :data-item="item"
-          :data-id="item.id"
-          @click="bannerJumping"
-        >
-          <image
-            lazy-load=""
-            v-if="type != 'good'"
-            :src="item.imageUrl"
-            class="slide-image"
-            :style="'border-radius:' + configData.fillet + 'px'"
-          ></image>
-          <image
-            lazy-load=""
-            v-else
-            mode="widthFix"
-            :src="item.imageUrl"
-            class="slide-image"
-          ></image>
-        </swiper-item>
-      </view>
-    </swiper>
-    <view class="dots" v-if="bannersA.length > 1">
-      <view
-        v-for="(item, index) in bannersA"
-        :key="index"
-        v-if="
-          !item.beginTimeStamp ||
-          !item.endTimeStamp ||
-          (item.beginTimeStamp < timeNumber && timeNumber < item.endTimeStamp)
-        "
-      >
+      <block v-for="(item, index) in state.bannersA" :key="index">
         <view
-          class="dot"
-          :style="index == currentDot ? 'background-color:' + themeColor : ''"
-        ></view>
-      </view>
+          v-if="
+            !state.timeNumber1 ||
+            !item.beginTimeStamp ||
+            !item.endTimeStamp ||
+            (item.beginTimeStamp < state.timeNumber1 && state.timeNumber1 < item.endTimeStamp)
+          "
+        >
+          <swiper-item
+            class="swiper-item"
+            :data-item="item"
+            :data-id="item.id"
+            @click="bannerJumping"
+          >
+            <image
+              lazy-load=""
+              v-if="props.type != 'good'"
+              :src="item.imageUrl"
+              class="slide-image"
+              :style="'border-radius:' + props.configData?.fillet + 'px'"
+            ></image>
+            <image
+              lazy-load=""
+              v-else
+              mode="widthFix"
+              :src="item.imageUrl"
+              class="slide-image"
+            ></image>
+          </swiper-item>
+        </view>
+      </block>
+    </swiper>
+    <view class="dots" v-if="state.bannersA.length > 1">
+      <block v-for="(item, index) in state.bannersA" :key="index">
+        <view
+          v-if="
+            !state.timeNumber1 ||
+            !item.beginTimeStamp ||
+            !item.endTimeStamp ||
+            (item.beginTimeStamp < state.timeNumber1 && state.timeNumber1 < item.endTimeStamp)
+          "
+        >
+          <view
+            class="dot"
+            :style="index == state.currentDot ? 'background-color:' + state.themeColor : ''"
+          ></view>
+        </view>
+      </block>
     </view>
   </view>
-  <signin :show="signShow" @close="handleMemberSignInClose"></signin>
+  <signin v-if="state.signShow" @close="handleMemberSignInClose"></signin>
 </template>
 <script setup>
 import _utilsSelfJs from '@/utils/newretail/self'
@@ -133,7 +138,7 @@ import _utilsUtilsJs from '@/utils/newretail/utils'
 import _utilsThemeManagerJs from '@/utils/newretail/themeManager'
 import _apiBannerServiceJs from '@/service/api/newretail/bannerService'
 // import { ready } from "@dcloudio/uni-app";
-import { reactive, watch } from 'vue'
+import { reactive, watch, onMounted } from 'vue'
 import signin from '../signin/signin.vue'
 const app = getApp()
 // components/home-page/banner/banner.js
@@ -147,10 +152,11 @@ const self = _utilsSelfJs
 // 获取应用实例
 const state = reactive({
   themeColor: THEME.color,
-  loaded: false,
-  // loaded: true,
+  // loaded: false,
+  loaded: true,
   bannersA: [],
   swiperCurrent: 0,
+  timeNumber1: 0,
   currentDot: 0,
   storeId: '',
   signShow: false,
@@ -215,10 +221,19 @@ const props = defineProps({
 watch(
   () => props.banners,
   (newVal, oldVal) => {
+    console.log(newVal, 'bannersA=====')
     state.bannersA = newVal
   },
 )
-ready(function () {
+watch(
+  () => props.timeNumber,
+  (newVal, oldVal) => {
+    state.timeNumber1 = newVal
+  },
+)
+onMounted(() => {
+  state.bannersA = props.banners
+
   state.themeColor =
     app && app.globalData && app.globalData.uiconfig && app.globalData.uiconfig.themeColor
       ? app.globalData.uiconfig.themeColor

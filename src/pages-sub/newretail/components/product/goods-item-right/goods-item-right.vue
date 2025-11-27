@@ -1,116 +1,223 @@
 <template>
-<!--components/product/goods-item-right/goods-item-right.wxml-->
-<view class="wm-goods-item" :data-productId="goods1.id" :id="'products-' + goods1.id" :data-type="goodsType" :data-easyScene="goods1.easyScene != null ? goods1.easyScene : 'none'" @click="clickGoodsItem">
-  <view class="wm-goods-img-box">
-    <image class="wm-goods-img" :src="imageUrl" :data-img-url="imageUrl" lazy-load="true" mode="aspectFit"></image>
-    <image class="no-balance" :src="imagesPath.soldOutIcon" v-if="goods1.balance <= 0"></image>
-    <image class="has-member" :src="imagesPath.memberIcon" v-if="goods1.memberPrice && goods1.memberPrice < goods1.sellPrice && !goods1.promotionPrice || goods1.memberPrice && goods1.promotionPrice && goods1.memberPrice < goods1.promotionPrice"></image>
-  </view>
-  <view class="wm-goods-info">
-    <view class="wm-goods-top">
-        <view class="wm-goods-name">
-            <!-- <text wx:for="{{goods1.produtlabel}}" wx:key="index" wx:if="{{index<3}}" style="background-color:rgb({{item.color}})">{{item.labelName}}</text> -->
-            <view>{{goods1.name}}</view>
-          </view>
-          <text class="wm-goods-desc" v-if="goods1.description">{{goods1.description ? goods1.description : ''}}</text>
-          <view v-if="goods1.style === 'SPEC_PARENT' && showSpecParent" class="spec-parent-box">
-            <view v-for="(item , index) in goods1.specDetailsNameDTO.specDetailsJson" :key="index">
-              <view class="spec-parent-item" v-if="index < 4 && item.imageUrl">
-                <image :src="item.imageUrl" mode="widthFix"></image>
-              </view>
-            </view>
-            <view class="spec-parent-sum">共{{goods1.specDetailsNameDTO.specDetailsJson.length}}款</view>
-          </view>
-          <view class="wm-goods-name label-text">
-            <view v-for="(item , index) in goods1.produtlabel" :key="index" v-if="index < 3">
-              <text v-if="item.type != 'PROMOTIONLABEL' && item.labelName && !item.imageUrl" :style="'background-color:rgb(' + item.color + ')'">{{item.labelName}}</text>
-              <image style="height: 100%" mode="heightFix" :src="item.imageUrl" v-else-if="item.imageUrl"></image>
-            </view>
-          </view>
-          <!-- <text class="wm-goods-sold">已售 {{goods1.soldCount}}</text> -->
-          <view class="wm-goods-labels" v-if="promotionsLabels">
-            <view v-for="(item , index) in goods1.promotions" :key="index" :data-id="index" v-if="index < 3">
-              <view v-if="item.type != 'PROMOTIONLABEL'" :style="'border-color:rgb(' + item.color + ')'">{{item.labelName}}</view>
-            </view>
-          </view>
-          <view class="labels-board" :hidden="goods1.promotions.length === 0">
-            <!-- <view class="labels-title">促销:</view> -->
-            <view class="labels-content-board">
-              <view v-for="(item , index) in goods1.promotions" :key="index">
-                <view class="labels-content" v-if="item.type == 'PROMOTIONLABEL'">
-                  <view class="labels-tag">{{item.labelName}}</view>
-                  <text class="labels-content">{{item.labelDetails}}</text>
-                </view>
-              </view>
-            </view>
-          </view>
+  <!--components/product/goods-item-right/goods-item-right.wxml-->
+  <view
+    class="wm-goods-item"
+    :data-productId="state.goods1.id"
+    :id="'products-' + state.goods1.id"
+    :data-type="goodsType"
+    :data-easyScene="state.goods1.easyScene != null ? state.goods1.easyScene : 'none'"
+    @click="clickGoodsItem"
+  >
+    <view class="wm-goods-img-box">
+      <image
+        class="wm-goods-img"
+        :src="state.imageUrl"
+        :data-img-url="state.imageUrl"
+        lazy-load="true"
+        mode="aspectFit"
+      ></image>
+      <image
+        class="no-balance"
+        :src="state.imagesPath.soldOutIcon"
+        v-if="state.goods1.balance <= 0"
+      ></image>
+      <image
+        class="has-member"
+        :src="state.imagesPath.memberIcon"
+        v-if="
+          (state.goods1.memberPrice &&
+            state.goods1.memberPrice < state.goods1.sellPrice &&
+            !state.goods1.promotionPrice) ||
+          (state.goods1.memberPrice &&
+            state.goods1.promotionPrice &&
+            state.goods1.memberPrice < state.goods1.promotionPrice)
+        "
+      ></image>
     </view>
-    <view class="wm-goods-bottom">  
-        <view class="wm-goods-price" :hidden="goods1.sellPrice != null ? false : true">
-            ￥
-            <view v-if="goods1.promotionPrice != null">
-              <text class="nowPrice">{{goods1.sellPrice && goods1.sellPrice < goods1.promotionPrice ? goods1.memberPrice && goods1.memberPrice < goods1.sellPrice ? goods1.memberPrice : goods1.sellPrice : goods1.memberPrice && goods1.memberPrice < goods1.promotionPrice ? goods1.memberPrice : goods1.promotionPrice}}</text><text style="font-size: 20rpx;" v-if="goods1.style == 'SPEC_PARENT'">起</text>
-              <!-- <view class="vip-price" wx:if="{{goods1.memberPrice && goods1.memberPrice < goods1.promotionPrice}}">
-                <view class="vip-label">
-                  <image src="{{imagesPath.iconVipLabel}}"></image>
-                  <text>{{vipGradeConfig.priceLabel}}</text>
-                </view>
-              </view> -->
-              <text class="oldPrice">￥{{goods1.originalPrice > goods1.sellPrice ? goods1.originalPrice : goods1.sellPrice}}</text>
-            </view>
-            <view v-else>
-              <text class="nowPrice">{{goods1.memberPrice && goods1.memberPrice < goods1.sellPrice ? goods1.memberPrice : goods1.sellPrice ? goods1.sellPrice : goods1.originalPrice}}</text><text style="font-size: 20rpx;" v-if="goods1.style == 'SPEC_PARENT'">起</text>
-              <!-- <view class="vip-price" wx:if="{{goods1.memberPrice && goods1.memberPrice < goods1.sellPrice}}">
-                <text class="oldPrice" wx:if="{{goods1.originalPrice && goods1.memberPrice < goods1.originalPrice}}">￥{{goods1.originalPrice}}</text>
-                <view class="vip-label">
-                  <image src="{{imagesPath.iconVipLabel}}"></image>
-                  <text>{{vipGradeConfig.priceLabel}}</text>
-                </view>
-              </view> -->
-              <text class="oldPrice" v-else-if="goods1.originalPrice != null && goods1.sellPrice < goods1.originalPrice">￥{{goods1.originalPrice}}</text>
+    <view class="wm-goods-info">
+      <view class="wm-goods-top">
+        <view class="wm-goods-name">
+          <!-- <text wx:for="{{state.goods1.produtlabel}}" wx:key="index" wx:if="{{index<3}}" style="background-color:rgb({{item.color}})">{{item.labelName}}</text> -->
+          <view>{{ state.goods1.name }}</view>
+        </view>
+        <text class="wm-goods-desc" v-if="state.goods1.description">
+          {{ state.goods1.description ? state.goods1.description : '' }}
+        </text>
+        <view v-if="state.goods1.style === 'SPEC_PARENT' && showSpecParent" class="spec-parent-box">
+          <view
+            v-for="(item, index) in state.goods1.specDetailsNameDTO.specDetailsJson"
+            :key="index"
+          >
+            <view class="spec-parent-item" v-if="index < 4 && item.imageUrl">
+              <image :src="item.imageUrl" mode="widthFix"></image>
             </view>
           </view>
-          <form @submit.stop="addToCart" @click.stop="noop">
-            <view class="wm-cart-control" :hidden="goods1.balance <= 0 && goods1.business !== 'DISTRIBUTION'">
-              <view v-if="goods1.style !== 'MEALS'">
-                <!-- <view class="reduce-box" hidden="{{(!shopCart[goods1.id])}}" style="margin-left: {{(goods1.promotionPrice != null && goods1.memberPrice && goods1.memberPrice < goods1.promotionPrice && goods1.memberPrice < goods1.sellPrice) || (goods1.promotionPrice == null && goods1.memberPrice && goods1.memberPrice < goods1.sellPrice) ? 58 : ''}}rpx"> -->
-                <!-- <view class="reduce-box" hidden="{{!shopCart[goods1.id]}}">
-                    <button form-type="submit" data-balance="{{goods1.balance}}" data-style="{{goods1.style}}" data-type="reduce" data-id="{{goods1.id}}"  data-initialpurchasenumber="{{goods1.initialPurchaseNumber}}" data-business="{{goods1.business}}" data-traceId="{{goods1.traceId}}"></button>
+          <view class="spec-parent-sum">
+            共{{ state.goods1.specDetailsNameDTO.specDetailsJson.length }}款
+          </view>
+        </view>
+        <view class="wm-goods-name label-text">
+          <view v-for="(item, index) in state.goods1.produtlabel" :key="index" v-if="index < 3">
+            <text
+              v-if="item.type != 'PROMOTIONLABEL' && item.labelName && !item.imageUrl"
+              :style="'background-color:rgb(' + item.color + ')'"
+            >
+              {{ item.labelName }}
+            </text>
+            <image
+              style="height: 100%"
+              mode="heightFix"
+              :src="item.imageUrl"
+              v-else-if="item.imageUrl"
+            ></image>
+          </view>
+        </view>
+        <!-- <text class="wm-goods-sold">已售 {{state.goods1.soldCount}}</text> -->
+        <view class="wm-goods-labels" v-if="promotionsLabels">
+          <view
+            v-for="(item, index) in state.goods1.promotions"
+            :key="index"
+            :data-id="index"
+            v-show="index < 3"
+          >
+            <view
+              v-if="item.type != 'PROMOTIONLABEL'"
+              :style="'border-color:rgb(' + item.color + ')'"
+            >
+              {{ item.labelName }}
+            </view>
+          </view>
+        </view>
+        <view class="labels-board" v-if="state.goods1.promotions.length > 0">
+          <!-- <view class="labels-title">促销:</view> -->
+          <view class="labels-content-board">
+            <view v-for="(item, index) in state.goods1.promotions" :key="index">
+              <view class="labels-content" v-if="item.type == 'PROMOTIONLABEL'">
+                <view class="labels-tag">{{ item.labelName }}</view>
+                <text class="labels-content">{{ item.labelDetails }}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="wm-goods-bottom">
+        <view class="wm-goods-price" v-if="state.goods1.sellPrice != null">
+          ￥
+          <view v-if="state.goods1.promotionPrice != null">
+            <text class="nowPrice">
+              {{
+                state.goods1.sellPrice && state.goods1.sellPrice < state.goods1.promotionPrice
+                  ? state.goods1.memberPrice && state.goods1.memberPrice < state.goods1.sellPrice
+                    ? state.goods1.memberPrice
+                    : state.goods1.sellPrice
+                  : state.goods1.memberPrice &&
+                      state.goods1.memberPrice < state.goods1.promotionPrice
+                    ? state.goods1.memberPrice
+                    : state.goods1.promotionPrice
+              }}
+            </text>
+            <text style="font-size: 20rpx" v-if="state.goods1.style == 'SPEC_PARENT'">起</text>
+            <!-- <view class="vip-price" wx:if="{{state.goods1.memberPrice && state.goods1.memberPrice < state.goods1.promotionPrice}}">
+                <view class="vip-label">
+                  <image src="{{state.imagesPath.iconVipLabel}}"></image>
+                  <text>{{vipGradeConfig.priceLabel}}</text>
+                </view>
+              </view> -->
+            <text class="oldPrice">
+              ￥{{
+                state.goods1.originalPrice > state.goods1.sellPrice
+                  ? state.goods1.originalPrice
+                  : state.goods1.sellPrice
+              }}
+            </text>
+          </view>
+          <view v-else>
+            <text class="nowPrice">
+              {{
+                state.goods1.memberPrice && state.goods1.memberPrice < state.goods1.sellPrice
+                  ? state.goods1.memberPrice
+                  : state.goods1.sellPrice
+                    ? state.goods1.sellPrice
+                    : state.goods1.originalPrice
+              }}
+            </text>
+            <text style="font-size: 20rpx" v-if="state.goods1.style == 'SPEC_PARENT'">起</text>
+            <!-- <view class="vip-price" wx:if="{{state.goods1.memberPrice && state.goods1.memberPrice < state.goods1.sellPrice}}">
+                <text class="oldPrice" wx:if="{{state.goods1.originalPrice && state.goods1.memberPrice < state.goods1.originalPrice}}">￥{{state.goods1.originalPrice}}</text>
+                <view class="vip-label">
+                  <image src="{{state.imagesPath.iconVipLabel}}"></image>
+                  <text>{{vipGradeConfig.priceLabel}}</text>
+                </view>
+              </view> -->
+            <text
+              class="oldPrice"
+              v-else-if="
+                state.goods1.originalPrice != null &&
+                state.goods1.sellPrice < state.goods1.originalPrice
+              "
+            >
+              ￥{{ state.goods1.originalPrice }}
+            </text>
+          </view>
+        </view>
+        <form @submit.stop="addToCart" @click.stop="noop">
+          <view
+            class="wm-cart-control"
+            :hidden="state.goods1.balance <= 0 && state.goods1.business !== 'DISTRIBUTION'"
+          >
+            <view v-if="state.goods1.style !== 'MEALS'">
+              <!-- <view class="reduce-box" hidden="{{(!shopCart[state.goods1.id])}}" style="margin-left: {{(state.goods1.promotionPrice != null && state.goods1.memberPrice && state.goods1.memberPrice < state.goods1.promotionPrice && state.goods1.memberPrice < state.goods1.sellPrice) || (state.goods1.promotionPrice == null && state.goods1.memberPrice && state.goods1.memberPrice < state.goods1.sellPrice) ? 58 : ''}}rpx"> -->
+              <!-- <view class="reduce-box" hidden="{{!shopCart[state.goods1.id]}}">
+                    <button form-type="submit" data-balance="{{state.goods1.balance}}" data-style="{{state.goods1.style}}" data-type="reduce" data-id="{{state.goods1.id}}"  data-initialpurchasenumber="{{state.goods1.initialPurchaseNumber}}" data-business="{{state.goods1.business}}" data-traceId="{{state.goods1.traceId}}"></button>
                     <image class="reduce-img" src='{{reduceImage}}'></image>
                 </view> -->
-              </view>
-              <view class="add-box" :style="'background-color: ' + themeColor + ';'">
-                <button v-if="!hasUserInfo" @click="getUserInfo"></button>
-                <button v-else form-type="submit" data-addType="normal" :data-balance="goods1.balance" :data-style="goods1.style" data-type="add" :data-initialpurchasenumber="goods1.initialPurchaseNumber" :data-id="goods1.id" :data-business="goods1.business" :data-traceId="goods1.traceId"></button>
-                <image class="add-img" :src="addImage"></image>
-                <text class="cart-count" v-if="shopCart[goods1.id]">{{shopCart[goods1.id] ? shopCart[goods1.id] : ''}}</text>
-              </view>
             </view>
-          </form>
+            <view class="add-box" :style="'background-color: ' + state.themeColor + ';'">
+              <button v-if="!state.hasUserInfo" @click="getUserInfo"></button>
+              <button
+                v-else
+                form-type="submit"
+                data-addType="normal"
+                :data-balance="state.goods1.balance"
+                :data-style="state.goods1.style"
+                data-type="add"
+                :data-initialpurchasenumber="state.goods1.initialPurchaseNumber"
+                :data-id="state.goods1.id"
+                :data-business="state.goods1.business"
+                :data-traceId="state.goods1.traceId"
+              ></button>
+              <image class="add-img" :src="state.addImage"></image>
+              <text class="cart-count" v-if="props.shopCart[state.goods1.id]">
+                {{ props.shopCart[state.goods1.id] ? props.shopCart[state.goods1.id] : '' }}
+              </text>
+            </view>
+          </view>
+        </form>
+      </view>
     </view>
   </view>
-</view>
 </template>
 <script setup>
-import _utilsThemeManagerJs from "@/utils/newretail/themeManager";
-import _utilsSelfJs from "@/utils/newretail/self";
-import _utilsImagesPathJs from "@/utils/newretail/imagesPath";
-import { reactive , watch} from "vue";
-const app = getApp();
+import _utilsThemeManagerJs from '@/utils/newretail/themeManager'
+import _utilsSelfJs from '@/utils/newretail/self'
+import _utilsImagesPathJs from '@/utils/newretail/imagesPath'
+import { reactive, watch, onBeforeMount } from 'vue'
+const app = getApp()
 // components/product/goods-item-right/goods-item-right.js
-const IMGAGESPATH = _utilsImagesPathJs;
-const self = _utilsSelfJs;
-const themeManager = _utilsThemeManagerJs;
-//获取应用实例
+const IMGAGESPATH = _utilsImagesPathJs
+const self = _utilsSelfJs
+const themeManager = _utilsThemeManagerJs
+// 获取应用实例
 const state = reactive({
   promotionsLabels: false,
-  goods1: null,
+  goods1: {},
   imagesPath: IMGAGESPATH,
   shopCartGoodsId: [],
   vipGradeConfig: null,
+  hasUserInfo: false,
   themeColor: themeManager ? themeManager.color : uni.getStorageSync('themeColor'),
-  hasEasyRecPlugins: false
-});
+  hasEasyRecPlugins: false,
+})
 const props = defineProps({
   goods: {
     // 商品信息
@@ -118,117 +225,135 @@ const props = defineProps({
     // 类型（必填），目前接受的类型包括：String, Number, Boolean, Object, Array, null（表示任意类型）
   },
   addImage: {
-    //加入购物车图片
+    // 加入购物车图片
     type: String,
-    value: ''
+    value: '',
   },
   reduceImage: {
     // 减少购物车图片
     type: String,
-    value: ''
+    value: '',
   },
   goodsType: {
     // 商品类型
     type: String,
-    value: 'normal'
+    value: 'normal',
   },
   shopCart: {
-    //购物车数据
+    // 购物车数据
     type: Object,
-    value: {}
+    value: {},
   },
   hasAnimation: {
-    //加入购物车动画
+    // 加入购物车动画
     type: Boolean,
-    value: false
+    value: false,
   },
-  hasUserInfo: Boolean,
-  showSpecParent: Boolean
-});
-function attached() {
+  // hasUserInfo: Boolean,
+  showSpecParent: Boolean,
+})
+onBeforeMount(() => {
   // 在组件实例进入页面节点树时执行
   if (app.globalData.userInfo) {
-    state.hasUserInfo = true;
+    state.hasUserInfo = true
   }
   if (state.addImage === '' && state.reduceImage === '') {
-    state.addImage = state.imagesPath.shopping_icon_list;
-    state.reduceImage = state.imagesPath.iconMinus;
+    state.addImage = state.imagesPath.shopping_icon_list
+    state.reduceImage = state.imagesPath.iconMinus
   }
-  state.vipGradeConfig = app.globalData.systemConfigure.vipGradeConfig;
-  state.hasEasyRecPlugins = app.globalData.hasEasyRecPlugins;
-  state.themeColor = themeManager ? themeManager.color : uni.getStorageSync('themeColor');
-}
-function detached() {
-  // 在组件实例被从页面节点树移除时执行
-}
-function onShow() {
+  state.vipGradeConfig = app.globalData.systemConfigure.vipGradeConfig
+  state.hasEasyRecPlugins = app.globalData.hasEasyRecPlugins
+  state.themeColor = themeManager ? themeManager.color : uni.getStorageSync('themeColor')
   // 基础库2.23以上触发
-  state.themeColor = themeManager ? themeManager.color : uni.getStorageSync('themeColor');
-}
+  // state.themeColor = themeManager ? themeManager.color : uni.getStorageSync('themeColor')
+})
+
+const emit = defineEmits([
+  'onClickGoods',
+  'addToCart',
+  'decrease',
+  'subscribeArrivalRemind',
+  'noop',
+  'getUserInfo',
+])
 function clickGoodsItem(e) {
-  triggerEvent('onClickGoods', e.currentTarget.dataset);
+  emit('onClickGoods', e.currentTarget.dataset)
 }
 function addToCart(e) {
-  console.log("用户点击了：" + new Date().getTime());
-  triggerEvent("addToCart", {
+  console.log('用户点击了：' + new Date().getTime())
+  emit('addToCart', {
     dataset: e.currentTarget.dataset,
     context: this,
-    detail: e.detail
-  });
+    detail: e.detail,
+  })
 }
 function decrease(e) {
-  triggerEvent("decrease", e.currentTarget.dataset);
+  emit('decrease', e.currentTarget.dataset)
 }
 function subscribeArrivalRemind(e) {
-  triggerEvent("subscribeArrivalRemind", e.currentTarget.dataset);
+  emit('subscribeArrivalRemind', e.currentTarget.dataset)
 }
 function noop(e) {
-  triggerEvent("noop", e.currentTarget.dataset);
+  emit('noop', e.currentTarget.dataset)
 }
 function getUserInfo(e) {
-  triggerEvent("getUserInfo", e);
+  emit('getUserInfo', e)
 }
 
 // Watch listeners converted from observers
-watch(() => props.goods, (newVal, oldVal) => {
-  //  await self.getTemporaryUrl(newVal.imageUrl)
-        // .then (res=>{
-  
-        // })
-        if (newVal.promotionPrice) {
-          newVal.promotionPrice = parseFloat(newVal.promotionPrice.toFixed(2));
-        }
-        if (newVal.sellPrice) {
-          newVal.sellPrice = parseFloat(newVal.sellPrice.toFixed(2));
-        }
-        if (newVal.memberPrice) {
-          newVal.memberPrice = parseFloat(newVal.memberPrice.toFixed(2));
-        }
-        if (newVal.originalPrice) {
-          newVal.originalPrice = parseFloat(newVal.originalPrice.toFixed(2));
-        }
-        if (newVal.style === 'SPEC_PARENT' && newVal.specDetailsNameDTO && newVal.specDetailsNameDTO.specDetailsJson) {
-          newVal.specDetailsNameDTO.specDetailsJson = JSON.parse(newVal.specDetailsNameDTO.specDetailsJson);
-          let newImageList = [];
-          deconstruction(newVal.specDetailsNameDTO.specDetailsJson);
-          function deconstruction(list) {
-            if (Array.isArray(list)) {
-              list.forEach(listItem => {
-                deconstruction(listItem);
-              });
-            } else if (list.status == 'ON') {
-              newImageList.push(list);
-            }
-          }
-          newVal.specDetailsNameDTO.specDetailsJson = newImageList;
-        }
-        if (newVal.promotions && newVal.promotions.length > 0 && newVal.promotions.some(item => item.type != 'PROMOTIONLABEL')) {
-          state.promotionsLabels = true;
-        }
-        state.imageUrl = newVal.categoryImageUrl ? newVal.categoryImageUrl : newVal.imageUrl;
-        state.goods1 = newVal;
-});
+watch(
+  () => props.goods,
+  (newVal, oldVal) => {
+    conosle.log('newVal.imageUrl', newVal)
+    //  await self.getTemporaryUrl(newVal.imageUrl)
+    // .then (res=>{
 
+    // })
+    if (newVal.promotionPrice) {
+      newVal.promotionPrice = parseFloat(newVal.promotionPrice.toFixed(2))
+    }
+    if (newVal.sellPrice) {
+      newVal.sellPrice = parseFloat(newVal.sellPrice.toFixed(2))
+    }
+    if (newVal.memberPrice) {
+      newVal.memberPrice = parseFloat(newVal.memberPrice.toFixed(2))
+    }
+    if (newVal.originalPrice) {
+      newVal.originalPrice = parseFloat(newVal.originalPrice.toFixed(2))
+    }
+    if (
+      newVal.style === 'SPEC_PARENT' &&
+      newVal.specDetailsNameDTO &&
+      newVal.specDetailsNameDTO.specDetailsJson
+    ) {
+      newVal.specDetailsNameDTO.specDetailsJson = JSON.parse(
+        newVal.specDetailsNameDTO.specDetailsJson,
+      )
+      const newImageList = []
+      deconstruction(newVal.specDetailsNameDTO.specDetailsJson)
+      function deconstruction(list) {
+        if (Array.isArray(list)) {
+          list.forEach((listItem) => {
+            deconstruction(listItem)
+          })
+        } else if (list.status == 'ON') {
+          newImageList.push(list)
+        }
+      }
+      newVal.specDetailsNameDTO.specDetailsJson = newImageList
+    }
+    if (
+      newVal.promotions &&
+      newVal.promotions.length > 0 &&
+      newVal.promotions.some((item) => item.type != 'PROMOTIONLABEL')
+    ) {
+      state.promotionsLabels = true
+    }
+    state.imageUrl = newVal.categoryImageUrl ? newVal.categoryImageUrl : newVal.imageUrl
+    state.goods1 = newVal
+  },
+  { immediate: true },
+)
 </script>
 <style scoped>
 /* components/product/goods-item-right/goods-item-right.wxss */
@@ -266,12 +391,12 @@ watch(() => props.goods, (newVal, oldVal) => {
   left: 0;
 }
 .wm-goods-img-box .has-member {
-    width: 78rpx;
-    height: 31rpx;
-    position: absolute;
-    top: 0;
-    right: 0;
-  }
+  width: 78rpx;
+  height: 31rpx;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
 .wm-goods-info {
   width: calc(100% - 246rpx - 18rpx);
   flex: 1;
@@ -282,7 +407,7 @@ watch(() => props.goods, (newVal, oldVal) => {
   float: right;
   margin-left: 18rpx;
   padding-bottom: 20rpx;
-  border-bottom: 1px solid #DDDDDD;
+  border-bottom: 1px solid #dddddd;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -294,7 +419,7 @@ watch(() => props.goods, (newVal, oldVal) => {
   line-height: 30rpx;
   font-weight: bold;
 }
-.wm-goods-info .wm-goods-introduce>text {
+.wm-goods-info .wm-goods-introduce > text {
   padding: 0 10rpx;
   height: 30rpx;
   border-radius: 6rpx;
@@ -329,7 +454,7 @@ watch(() => props.goods, (newVal, oldVal) => {
   justify-content: flex-start;
   flex-wrap: nowrap;
 }
-.wm-goods-info .wm-goods-name text {  
+.wm-goods-info .wm-goods-name text {
   min-height: 30rpx;
   padding: 0 6rpx;
   border-radius: 6rpx;
@@ -413,16 +538,16 @@ watch(() => props.goods, (newVal, oldVal) => {
   vertical-align: middle;
 }
 .wm-goods-top {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 .wm-goods-bottom {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    position: relative;
-    /* margin-top: 30rpx; */
+  width: 100%;
+  display: flex;
+  align-items: center;
+  position: relative;
+  /* margin-top: 30rpx; */
 }
 .wm-goods-price {
   /* padding-top: 25rpx; */
@@ -465,7 +590,7 @@ watch(() => props.goods, (newVal, oldVal) => {
 .wm-goods-item .add-box {
   position: absolute;
   right: 0;
-  background-color: #FF8425;
+  background-color: #ff8425;
 }
 .wm-goods-item .reduce-box {
   position: absolute;
@@ -488,7 +613,7 @@ watch(() => props.goods, (newVal, oldVal) => {
   top: -6rpx;
   right: -6rpx;
   font-size: 18rpx;
-  background-color: #FF2000;
+  background-color: #ff2000;
   color: #fff;
   height: 24rpx;
   border-radius: 12rpx;
@@ -600,7 +725,7 @@ button.button-hover {
   display: flex;
   align-items: center;
 }
-.labels-title{
+.labels-title {
   flex-shrink: 0;
 }
 .spec-parent-box {
@@ -622,6 +747,6 @@ button.button-hover {
   font-family: PingFang SC;
   font-weight: 400;
   font-size: 20rpx;
-  color: #A1A1A1;
+  color: #a1a1a1;
 }
 </style>

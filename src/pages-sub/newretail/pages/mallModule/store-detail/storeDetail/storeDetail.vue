@@ -168,7 +168,7 @@
               isNew="0"
               :shipmentTypes="state.activeShipment"
               :category="state.category"
-              :childrenSelect="childrenSelect"
+              :childrenSelect="state.childrenSelect"
               v-if="!state.loading"
               :shopCart="state.shopCart"
               :counts="listCounts"
@@ -178,14 +178,14 @@
               @noop="noop"
               @getUserInfo="onGetUserInfo"
               :load="state.searchLoad"
-              :currentCategory="currentCategory"
-              :selectedSecondId="selectedSecondId"
-              :currenSelect="currenSelect"
+              :currentCategory="state.currentCategory"
+              :selectedSecondId="state.selectedSecondId"
+              :currenSelect="state.currenSelect"
               @clickCategory="clickCategoryVertical"
               :isPullDownRefresh="state.isPullDownRefresh"
               @clickItem="clickCategoryItem"
               @clickThreeItem="clickThreeCategoryItem"
-              :level="level"
+              :level="state.level"
               :proShowType="state.proShowType"
               @shipmentTypeChange="shipmentTypeChange"
               @showLoadingChange="showLoadingChange"
@@ -335,9 +335,9 @@
       class="good_box"
       :hidden="state.hide_good_box"
       :animation="state.animation"
-      :style="'left:' + bus_x + 'px;top:' + bus_y + 'px;'"
+      :style="'left:' + state.bus_x + 'px;top:' + state.bus_y + 'px;'"
     >
-      <image :src="goodsBoxImage" mode="aspectFit"></image>
+      <image :src="state.goodsBoxImage" mode="aspectFit"></image>
     </view>
   </view>
 </template>
@@ -523,7 +523,6 @@ function getProductsCount() {
     })
 }
 function previewImage(e) {
-  console.log(e, 'sdfjskjdflsjdf')
   if (e.currentTarget.dataset.type == 'photoTypeList') {
     const list = []
     state.photoTypeList.forEach((item) => {
@@ -2188,9 +2187,10 @@ function clickCategoryVertical(e) {
   // 设置当前选中的商品类目
   const self = this
   const category = state.category
-  const categoryId = e.detail.currentTarget
-    ? e.detail.currentTarget.dataset.id
-    : e.currentTarget.dataset.id
+  const categoryId =
+    e.detail && e.detail.currentTarget
+      ? e.detail.currentTarget.dataset.id
+      : e.currentTarget.dataset.id
   let hasChildren = false
   let hasThirdChildren = false
   let tempSelect = categoryId
@@ -2226,8 +2226,8 @@ function clickCategoryItem(e) {
   console.log(e)
   const self = this
   const level = state.level
-  const parentId = e.detail.currentTarget.dataset.parentid
-  const categoryId = e.detail.currentTarget.dataset.id
+  const parentId = e.currentTarget.dataset.parentid
+  const categoryId = e.currentTarget.dataset.id
   const category = state.category
   let fatherCategoryId = null
   let tempSelect = ''
@@ -2268,8 +2268,8 @@ function clickThreeCategoryItem(e) {
   console.log(e)
   const self = this
   const level = state.level
-  const parentId = e.detail.currentTarget.dataset.parentid
-  const categoryId = e.detail.currentTarget.dataset.id
+  const parentId = e.currentTarget.dataset.parentid
+  const categoryId = e.currentTarget.dataset.id
   const category = state.category
   let fatherCategoryId = null
   let tempSelect = ''

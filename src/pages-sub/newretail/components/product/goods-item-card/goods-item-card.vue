@@ -1,105 +1,242 @@
 <template>
-<!--components/product/goods-item-card/goods-item-card.wxml-->
-<view :class="goods1.style === 'SPEC_PARENT' && showSpecParent ? 'gm-small-goods-item' : 'gm-small-goods-item gm-small-two-goods-item'" :style="isCoupon ? 'width: 344rpx;height: 513rpx;background: #fff;' : ''" :data-productId="goods.id" :id="'products-' + goods.id" data-type="normal" :data-easyScene="goods.easyScene != null ? goods.easyScene : 'none'" @click="clickGoodsItem">
-	<view class="gm-small-goods-img-box" :style="isCoupon ? 'width: 344rpx;height: 344rpx;background: #fff;' : ''">
-		<image :src="imageUrl" mode="aspectFit" class="gm-small-goods-img" :data-img-url="imageUrl"></image>
-		<image class="no-balance" :src="imagesPath.soldOutIcon" v-if="goods.balance <= 0" mode="widthFix"></image>
-        <image class="has-member" :src="imagesPath.memberIcon" v-if="goods.memberPrice && goods.memberPrice < goods.sellPrice && !goods.promotionPrice || goods.memberPrice && goods.promotionPrice && goods.memberPrice < goods.promotionPrice"></image>
+  <!--components/product/goods-item-card/goods-item-card.wxml-->
+  <view
+    :class="
+      state.goods1.style === 'SPEC_PARENT' && showSpecParent
+        ? 'gm-small-goods-item'
+        : 'gm-small-goods-item gm-small-two-goods-item'
+    "
+    :style="isCoupon ? 'width: 344rpx;height: 513rpx;background: #fff;' : ''"
+    :data-productId="props.goods.id"
+    :id="'products-' + props.goods.id"
+    data-type="normal"
+    :data-easyScene="props.goods.easyScene != null ? props.goods.easyScene : 'none'"
+    @click="clickGoodsItem"
+  >
+    <view
+      class="gm-small-goods-img-box"
+      :style="isCoupon ? 'width: 344rpx;height: 344rpx;background: #fff;' : ''"
+    >
+      <image
+        :src="state.imageUrl"
+        mode="aspectFit"
+        class="gm-small-goods-img"
+        :data-img-url="state.imageUrl"
+      ></image>
+      <image
+        class="no-balance"
+        :src="state.imagesPath.soldOutIcon"
+        v-if="props.goods.balance <= 0"
+        mode="widthFix"
+      ></image>
+      <image
+        class="has-member"
+        :src="state.imagesPath.memberIcon"
+        v-if="
+          (props.goods.memberPrice &&
+            props.goods.memberPrice < props.goods.sellPrice &&
+            !props.goods.promotionPrice) ||
+          (props.goods.memberPrice &&
+            props.goods.promotionPrice &&
+            props.goods.memberPrice < props.goods.promotionPrice)
+        "
+      ></image>
     </view>
-	<view class="gm-small-goods-info" :style="isCoupon ? 'padding: 0 10rpx;box-sizing:border-box;' : ''">
-        <view class="gm-small-goods-name">{{goods.name ? goods.name : ''}}</view>
-    <text class="gm-small-goods-desc" v-if="goods.description">{{goods.description ? goods.description : ''}}</text>
-    <view v-if="goods1.style === 'SPEC_PARENT' && showSpecParent" class="spec-parent-box">
-      <view v-for="(item , index) in goods1.specDetailsNameDTO.specDetailsJson" :key="index">
-        <view class="spec-parent-item" v-if="index < 3 && item.imageUrl">
-          <image v-if="item.imageUrl" :src="item.imageUrl" mode="widthFix"></image>
-          <image v-else-if="item[0]" :src="item[0].imageUrl" mode="widthFix"></image>
+    <view
+      class="gm-small-goods-info"
+      :style="isCoupon ? 'padding: 0 10rpx;box-sizing:border-box;' : ''"
+    >
+      <view class="gm-small-goods-name">{{ props.goods.name ? props.goods.name : '' }}</view>
+      <text class="gm-small-goods-desc" v-if="props.goods.description">
+        {{ props.goods.description ? props.goods.description : '' }}
+      </text>
+      <view v-if="state.goods1.style === 'SPEC_PARENT' && showSpecParent" class="spec-parent-box">
+        <view v-for="(item, index) in state.goods1.specDetailsNameDTO.specDetailsJson" :key="index">
+          <view class="spec-parent-item" v-if="index < 3 && item.imageUrl">
+            <image v-if="item.imageUrl" :src="item.imageUrl" mode="widthFix"></image>
+            <image v-else-if="item[0]" :src="item[0].imageUrl" mode="widthFix"></image>
+          </view>
+        </view>
+        <view class="spec-parent-sum">
+          共{{ state.goods1.specDetailsNameDTO.specDetailsJson.length }}款
         </view>
       </view>
-      <view class="spec-parent-sum">共{{goods1.specDetailsNameDTO.specDetailsJson.length}}款</view>
-    </view>
-		<view style="display: flex;align-items: center;justify-content: space-between;">
-      <view class="gm-small-goods-price">
-        <view v-if="goods.promotionPrice != null && goods.promotionPrice < goods.sellPrice && (!goods.memberPrice || goods.promotionPrice < goods.memberPrice)">
-          <text class="nowPrice">
-            <text style="font-size: 20rpx;">￥</text>{{goods.promotionPrice}}<text style="font-size: 20rpx;margin-left: 4rpx;" v-if="goods.style == 'SPEC_PARENT'">起</text>
-          </text>
-          <view class="vip-price" v-if="goods1.memberPrice && goods1.memberPrice < goods1.promotionPrice">
-            <view class="vip-label">
-              <image :src="imagesPath.iconVipLabel"></image>
-              <text>{{vipGradeConfig.priceLabel}}</text>
-              <!-- <text>会员价</text> -->
+      <view style="display: flex; align-items: center; justify-content: space-between">
+        <view class="gm-small-goods-price">
+          <view
+            v-if="
+              props.goods.promotionPrice != null &&
+              props.goods.promotionPrice < props.goods.sellPrice &&
+              (!props.goods.memberPrice || props.goods.promotionPrice < props.goods.memberPrice)
+            "
+          >
+            <text class="nowPrice">
+              <text style="font-size: 20rpx">￥</text>
+              {{ props.goods.promotionPrice }}
+              <text
+                style="font-size: 20rpx; margin-left: 4rpx"
+                v-if="props.goods.style == 'SPEC_PARENT'"
+              >
+                起
+              </text>
+            </text>
+            <view
+              class="vip-price"
+              v-if="
+                state.goods1.memberPrice && state.goods1.memberPrice < state.goods1.promotionPrice
+              "
+            >
+              <view class="vip-label">
+                <image :src="state.imagesPath.iconVipLabel"></image>
+                <text>{{ vipGradeConfig.priceLabel }}</text>
+                <!-- <text>会员价</text> -->
+              </view>
             </view>
+            <text
+              class="oldPrice"
+              v-if="
+                props.goods.sellPrice > props.goods.promotionPrice ||
+                props.goods.originalPrice > props.goods.promotionPrice
+              "
+            >
+              ￥{{
+                props.goods.originalPrice > props.goods.sellPrice
+                  ? props.goods.originalPrice
+                  : props.goods.sellPrice
+              }}
+            </text>
           </view>
-          <text class="oldPrice" v-if="goods.sellPrice > goods.promotionPrice || goods.originalPrice > goods.promotionPrice">￥{{goods.originalPrice > goods.sellPrice ? goods.originalPrice : goods.sellPrice}}</text>
-        </view>
-        <view v-else-if="goods.memberPrice != null && goods.memberPrice < goods.sellPrice">
-          <text class="nowPrice">
-            <text style="font-size: 20rpx;">￥</text>{{goods.memberPrice}}<text style="font-size: 20rpx;margin-left: 4rpx;" v-if="goods.style == 'SPEC_PARENT'">起</text>
-          </text>
-          <text class="oldPrice" v-if="goods.sellPrice > goods.memberPrice || goods.originalPrice > goods.memberPrice">￥{{goods.originalPrice > goods.sellPrice ? goods.originalPrice : goods.sellPrice}}</text>
-        </view>
-        <view v-else>
-          <text class="nowPrice">
-            <text style="font-size: 20rpx;" v-if="goods.sellPrice">￥</text>{{goods.sellPrice ? goods.sellPrice : ''}}<text style="font-size: 20rpx;margin-left: 4rpx;" v-if="goods.style == 'SPEC_PARENT' && goods.sellPrice">起</text>
-          </text>
-           <view class="vip-price" v-if="goods1.memberPrice && goods1.memberPrice < goods1.promotionPrice">
-            <view class="vip-label">
-              <image :src="imagesPath.iconVipLabel"></image>
-              <text>{{vipGradeConfig.priceLabel}}</text>
-              <!-- <text>会员价</text> -->
+          <view
+            v-else-if="
+              props.goods.memberPrice != null && props.goods.memberPrice < props.goods.sellPrice
+            "
+          >
+            <text class="nowPrice">
+              <text style="font-size: 20rpx">￥</text>
+              {{ props.goods.memberPrice }}
+              <text
+                style="font-size: 20rpx; margin-left: 4rpx"
+                v-if="props.goods.style == 'SPEC_PARENT'"
+              >
+                起
+              </text>
+            </text>
+            <text
+              class="oldPrice"
+              v-if="
+                props.goods.sellPrice > props.goods.memberPrice ||
+                props.goods.originalPrice > props.goods.memberPrice
+              "
+            >
+              ￥{{
+                props.goods.originalPrice > props.goods.sellPrice
+                  ? props.goods.originalPrice
+                  : props.goods.sellPrice
+              }}
+            </text>
+          </view>
+          <view v-else>
+            <text class="nowPrice">
+              <text style="font-size: 20rpx" v-if="props.goods.sellPrice">￥</text>
+              {{ props.goods.sellPrice ? props.goods.sellPrice : '' }}
+              <text
+                style="font-size: 20rpx; margin-left: 4rpx"
+                v-if="props.goods.style == 'SPEC_PARENT' && props.goods.sellPrice"
+              >
+                起
+              </text>
+            </text>
+            <view
+              class="vip-price"
+              v-if="
+                state.goods1.memberPrice && state.goods1.memberPrice < state.goods1.promotionPrice
+              "
+            >
+              <view class="vip-label">
+                <image :src="state.imagesPath.iconVipLabel"></image>
+                <text>{{ state.vipGradeConfig.priceLabel }}</text>
+                <!-- <text>会员价</text> -->
+              </view>
             </view>
+            <text
+              class="oldPrice"
+              v-if="
+                props.goods.originalPrice != null &&
+                props.goods.sellPrice < props.goods.originalPrice
+              "
+            >
+              ￥{{ props.goods.originalPrice }}
+            </text>
           </view>
-          <text class="oldPrice" v-if="goods.originalPrice != null && goods.sellPrice < goods.originalPrice">￥{{goods.originalPrice}}</text>
         </view>
+        <form @submit.stop="addToCart" @click.stop="noop">
+          <view class="add-box" :style="'background-color: ' + state.themeColor + ';'">
+            <button v-if="!props.hasUserInfo" @click="getUserInfo"></button>
+            <button
+              v-else
+              form-type="submit"
+              data-addType="three"
+              :data-index="i"
+              :data-id="props.goods.id"
+              :data-style="props.goods.style"
+              :data-balance="props.goods.balance"
+              :data-business="props.goods.business"
+              :data-initialpurchasenumber="props.goods.initialPurchaseNumber"
+              :data-traceId="props.goods.traceId"
+            ></button>
+            <image class="add-img" :src="state.addImage"></image>
+            <text class="cart-count" v-if="props.shopCart[props.goods.id]">
+              {{ props.shopCart[props.goods.id] ? props.shopCart[props.goods.id] : '' }}
+            </text>
+            <!-- <button wx:if="{{!hasUserInfo}}" bindtap="getUserInfo"></button>
+          <button wx:else form-type="submit" data-addType='three' data-index="{{i}}" data-id="{{props.goods.id}}" data-style="{{props.goods.style}}" data-balance="{{props.goods.balance}}" data-business="{{props.goods.business}}"  data-initialpurchasenumber="{{props.goods.initialPurchaseNumber}}" data-traceId="{{props.goods.traceId}}"></button>
+          <image class="add-img" src='{{state.imagesPath.iconNewAdd}}'></image> -->
+          </view>
+        </form>
       </view>
-      <form @submit.stop="addToCart" @click.stop="noop">
-        <view class="add-box" :style="'background-color: ' + themeColor + ';'">
-          <button v-if="!hasUserInfo" @click="getUserInfo"></button>
-          <button v-else form-type="submit" data-addType="three" :data-index="i" :data-id="goods.id" :data-style="goods.style" :data-balance="goods.balance" :data-business="goods.business" :data-initialpurchasenumber="goods.initialPurchaseNumber" :data-traceId="goods.traceId"></button>
-          <image class="add-img" :src="addImage"></image>
-          <text class="cart-count" v-if="shopCart[goods.id]">{{shopCart[goods.id] ? shopCart[goods.id] : ''}}</text>
-          <!-- <button wx:if="{{!hasUserInfo}}" bindtap="getUserInfo"></button>
-          <button wx:else form-type="submit" data-addType='three' data-index="{{i}}" data-id="{{goods.id}}" data-style="{{goods.style}}" data-balance="{{goods.balance}}" data-business="{{goods.business}}"  data-initialpurchasenumber="{{goods.initialPurchaseNumber}}" data-traceId="{{goods.traceId}}"></button>
-          <image class="add-img" src='{{imagesPath.iconNewAdd}}'></image> -->
-        </view>
-      </form>
     </view>
-	</view>
-</view>
+  </view>
 </template>
 <script setup>
-import _utilsThemeManagerJs from "@/utils/newretail/themeManager";
-import _utilsSelfJs from "@/utils/newretail/self";
-import _utilsImagesPathJs from "@/utils/newretail/imagesPath";
-import _utilsAuthorizeJs from "@/utils/newretail/authorize";
-import _utilsUtilsJs from "@/utils/newretail/utils";
-import _utilsFlyJs from "@/utils/newretail/fly";
-import _utilsNavPageJs from "@/utils/newretail/navPage";
-import _apiProductServiceJs from "@/service/api/newretail/productService";
-import _apiShopcartServiceJs from "@/service/api/newretail/shopcartService";
+import _utilsThemeManagerJs from '@/utils/newretail/themeManager'
+import _utilsSelfJs from '@/utils/newretail/self'
+import _utilsImagesPathJs from '@/utils/newretail/imagesPath'
+import _utilsAuthorizeJs from '@/utils/newretail/authorize'
+import _utilsUtilsJs from '@/utils/newretail/utils'
+import _utilsFlyJs from '@/utils/newretail/fly'
+import _utilsNavPageJs from '@/utils/newretail/navPage'
+import _apiProductServiceJs from '@/service/api/newretail/productService'
+import _apiShopcartServiceJs from '@/service/api/newretail/shopcartService'
 // import { attached, ready, detached } from "@dcloudio/uni-app";
-import { reactive , watch} from "vue";
-const app = getApp();
+import { reactive, watch, onBeforeMount, onMounted, onUnmounted } from 'vue'
+const app = getApp()
 // components/product/goods-item-card/goods-item-card.js
-const shopcartService = _apiShopcartServiceJs;
-const productService = _apiProductServiceJs;
-const NAVPAGE = _utilsNavPageJs;
-const FLY = _utilsFlyJs;
-const util = _utilsUtilsJs;
-const AUTHORIZE = _utilsAuthorizeJs;
-const IMGAGESPATH = _utilsImagesPathJs;
-const self = _utilsSelfJs;
-const themeManager = _utilsThemeManagerJs;
-//获取应用实例
+const shopcartService = _apiShopcartServiceJs
+const productService = _apiProductServiceJs
+const NAVPAGE = _utilsNavPageJs
+const FLY = _utilsFlyJs
+const util = _utilsUtilsJs
+const AUTHORIZE = _utilsAuthorizeJs
+const IMGAGESPATH = _utilsImagesPathJs
+const self = _utilsSelfJs
+const themeManager = _utilsThemeManagerJs
+// 获取应用实例
 const state = reactive({
   goods1: {},
   imagesPath: IMGAGESPATH,
   vipGradeConfig: null,
   themeColor: uni.getStorageSync('themeColor'),
   // themeColor: themeManager ? themeManager.color : wx.getStorageSync('themeColor'),
-  hasEasyRecPlugins: false
-});
+  hasEasyRecPlugins: false,
+})
+const emit = defineEmits([
+  'onClickGoods',
+  'addToCart',
+  'decrease',
+  'subscribeArrivalRemind',
+  'noop',
+  'getUserInfo',
+])
 const props = defineProps({
   showSpecParent: Boolean,
   isCoupon: Boolean,
@@ -110,113 +247,124 @@ const props = defineProps({
     // 类型（必填），目前接受的类型包括：String, Number, Boolean, Object, Array, null（表示任意类型）
   },
   addImage: {
-    //加入购物车图片
+    // 加入购物车图片
     type: String,
-    value: ''
+    value: '',
   },
   reduceImage: {
     // 减少购物车图片
     type: String,
-    value: ''
+    value: '',
   },
   goodsType: {
     // 商品类型
     type: String,
-    value: 'normal'
+    value: 'normal',
   },
   shopCart: {
-    //购物车数据
+    // 购物车数据
     type: Object,
-    value: {}
+    value: {},
   },
   hasAnimation: {
-    //加入购物车动画
+    // 加入购物车动画
     type: Boolean,
-    value: false
+    value: false,
   },
   goodsWidth: {
     type: String,
-    value: ''
+    value: '',
   },
   goodsHeight: {
     type: String,
-    value: ''
+    value: '',
   },
-  hasUserInfo: Boolean
-});
-attached(function () {
+  hasUserInfo: Boolean,
+})
+onBeforeMount(() => {
   // 在组件实例进入页面节点树时执行
   if (state.addImage === '' && state.reduceImage === '') {
-    state.addImage = state.imagesPath.shopping_icon_list;
-    state.reduceImage = state.imagesPath.iconMinus;
+    state.addImage = state.imagesPath.shopping_icon_list
+    state.reduceImage = state.imagesPath.iconMinus
   }
-});
-ready(function () {
+})
+onMounted(function () {
   if (app.globalData.userInfo) {
-    state.hasUserInfo = true;
+    state.hasUserInfo = true
   }
-  state.vipGradeConfig = app.globalData.systemConfigure.vipGradeConfig;
-  state.hasEasyRecPlugins = app.globalData.hasEasyRecPlugins;
-  state.themeColor = app && app.globalData && app.globalData.uiconfig && app.globalData.uiconfig.themeColor ? app.globalData.uiconfig.themeColor : uni.getStorageSync('themeColor');
-});
-detached(function () {
+  state.vipGradeConfig = app.globalData.systemConfigure.vipGradeConfig
+  state.hasEasyRecPlugins = app.globalData.hasEasyRecPlugins
+  state.themeColor =
+    app && app.globalData && app.globalData.uiconfig && app.globalData.uiconfig.themeColor
+      ? app.globalData.uiconfig.themeColor
+      : uni.getStorageSync('themeColor')
+})
+onUnmounted(function () {
   // 在组件实例进入页面节点树时执行
   if (state.addImage === '' && state.reduceImage === '') {
-    state.addImage = state.imagesPath.shopping_icon_list;
-    state.reduceImage = state.imagesPath.iconMinus;
+    state.addImage = state.imagesPath.shopping_icon_list
+    state.reduceImage = state.imagesPath.iconMinus
   }
-});
+})
 function clickGoodsItem(e) {
-  triggerEvent('onClickGoods', e.currentTarget.dataset);
+  emit('onClickGoods', e.currentTarget.dataset)
 }
 function addToCart(e) {
-  triggerEvent("addToCart", {
+  emit('addToCart', {
     dataset: e.currentTarget.dataset,
     context: this,
-    detail: e.detail
-  });
+    detail: e.detail,
+  })
 }
 function decrease(e) {
-  triggerEvent("decrease", e.currentTarget.dataset);
+  emit('decrease', e.currentTarget.dataset)
 }
 function subscribeArrivalRemind(e) {
-  triggerEvent("subscribeArrivalRemind", e.currentTarget.dataset);
+  emit('subscribeArrivalRemind', e.currentTarget.dataset)
 }
 function noop(e) {
-  triggerEvent("noop", e.currentTarget.dataset);
+  emit('noop', e.currentTarget.dataset)
 }
 function getUserInfo(e) {
-  triggerEvent("getUserInfo", e);
+  emit('getUserInfo', e)
 }
 
 // Watch listeners converted from observers
-watch(() => props.goods, (newVal, oldVal) => {
-  if (newVal.style === 'SPEC_PARENT' && newVal.specDetailsNameDTO && newVal.specDetailsNameDTO.specDetailsJson) {
-          newVal.specDetailsNameDTO.specDetailsJson = JSON.parse(newVal.specDetailsNameDTO.specDetailsJson);
-          let newImageList = [];
-          deconstruction(newVal.specDetailsNameDTO.specDetailsJson);
-          function deconstruction(list) {
-            if (Array.isArray(list)) {
-              list.forEach(listItem => {
-                deconstruction(listItem);
-              });
-            } else if (list.status == 'ON') {
-              newImageList.push(list);
-            }
-          }
-          newVal.specDetailsNameDTO.specDetailsJson = newImageList;
+watch(
+  () => props.goods,
+  (newVal, oldVal) => {
+    if (
+      newVal.style === 'SPEC_PARENT' &&
+      newVal.specDetailsNameDTO &&
+      newVal.specDetailsNameDTO.specDetailsJson
+    ) {
+      newVal.specDetailsNameDTO.specDetailsJson = JSON.parse(
+        newVal.specDetailsNameDTO.specDetailsJson,
+      )
+      const newImageList = []
+      deconstruction(newVal.specDetailsNameDTO.specDetailsJson)
+      function deconstruction(list) {
+        if (Array.isArray(list)) {
+          list.forEach((listItem) => {
+            deconstruction(listItem)
+          })
+        } else if (list.status == 'ON') {
+          newImageList.push(list)
         }
-        // console.log('newVal.imageUrl',newVal)
-        state.imageUrl = newVal.categoryImageUrl ? newVal.categoryImageUrl : newVal.imageUrl;
-        //    await self.getTemporaryUrl(newVal.imageUrl)
-        //       .then (res=>{
-        //        this.setData({
-        //           imageUrl:res
-        //        })
-        //       })
-        state.goods1 = newVal;
-});
-
+      }
+      newVal.specDetailsNameDTO.specDetailsJson = newImageList
+    }
+    // console.log('newVal.imageUrl',newVal)
+    state.imageUrl = newVal.categoryImageUrl ? newVal.categoryImageUrl : newVal.imageUrl
+    //    await self.getTemporaryUrl(newVal.imageUrl)
+    //       .then (res=>{
+    //        this.setData({
+    //           imageUrl:res
+    //        })
+    //       })
+    state.goods1 = newVal
+  },
+)
 </script>
 <style scoped>
 /* components/product/goods-item-card/goods-item-card.wxss */
@@ -228,12 +376,12 @@ watch(() => props.goods, (newVal, oldVal) => {
   margin-bottom: 20rpx;
 }
 .gm-small-two-goods-item {
-    float: left;
-    width: 256rpx;
-    height: auto;
-    min-height: 367rpx;
-    vertical-align: top;
-    margin-bottom: 20rpx;
+  float: left;
+  width: 256rpx;
+  height: auto;
+  min-height: 367rpx;
+  vertical-align: top;
+  margin-bottom: 20rpx;
 }
 .gm-small-goods-img-box {
   width: 258rpx;
@@ -257,18 +405,18 @@ watch(() => props.goods, (newVal, oldVal) => {
   height: 100%;
 }
 .gm-small-goods-img-box .has-member {
-    width: 78rpx;
-    height: 31rpx;
-    position: absolute;
-    top: 0;
-    right: 0;
-  }
+  width: 78rpx;
+  height: 31rpx;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
 .gm-small-goods-info {
   position: relative;
   width: 100%;
   min-height: 110rpx;
 }
-.gm-small-goods-info>text {
+.gm-small-goods-info > text {
   display: block;
   color: #999999;
 }
@@ -338,7 +486,7 @@ watch(() => props.goods, (newVal, oldVal) => {
 }
 .gm-small-goods-price .nowPrice {
   font-size: 30rpx;
-  color: #FE8661;
+  color: #fe8661;
   font-weight: 700;
 }
 .gm-small-goods-price .oldPrice {
@@ -355,7 +503,7 @@ watch(() => props.goods, (newVal, oldVal) => {
   position: relative;
   /* right: 10rpx; */
   /* bottom: -4rpx; */
-  background-color: #FF8425;
+  background-color: #ff8425;
 }
 .gm-small-goods-info .add-box button {
   width: 100%;
@@ -381,7 +529,7 @@ watch(() => props.goods, (newVal, oldVal) => {
   top: -6rpx;
   right: -6rpx;
   font-size: 18rpx;
-  background-color: #FF2000;
+  background-color: #ff2000;
   color: #fff;
   height: 24rpx;
   min-width: 13rpx;
@@ -477,6 +625,6 @@ button.button-hover {
   font-family: PingFang SC;
   font-weight: 400;
   font-size: 20rpx;
-  color: #A1A1A1;
+  color: #a1a1a1;
 }
 </style>

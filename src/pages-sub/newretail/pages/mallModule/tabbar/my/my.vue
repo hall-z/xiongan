@@ -249,7 +249,7 @@ import memberGrowth from '@/pages-sub/newretail/components/member-page/member-gr
 import orderTypeList from '@/pages-sub/newretail/components/member-page/order-type-list/order-type-list.vue'
 import myService from '@/pages-sub/newretail/components/member-page/my-service/my-service.vue'
 import subscribePopup from '@/pages-sub/newretail/components/subscribe-popup/subscribe-popup.vue'
-import banner from '@/pages-sub/newretail/components/home-page/banner/banner.vue'
+import banner from '@/pages-sub/newretail/components/home-page/banner2/banner2.vue'
 import popup from '@/pages-sub/newretail/components/popup/popup.vue'
 import welfarePromotion from '@/pages-sub/newretail/components/welfarePromotion/welfarePromotion.vue'
 import tabbar from '@/pages-sub/newretail/components/tabbar/tabbar.vue'
