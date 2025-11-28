@@ -2205,7 +2205,7 @@ function setUserProductsCount (productNum) {
     localProductCount = localProductCount > 0 ? localProductCount : 0;
   }
   let counts = String(localProductCount);
-  app.setTabBarBadge('shopping_cart', counts);
+  app.globalData.setTabBarBadge('shopping_cart', counts);
   uni.setStorageSync('wj_userProductsCount', localProductCount);
   bus.emit('userShopCartChange', "update");
 }
@@ -2918,6 +2918,7 @@ function handlePageLoad (refresh = true) {
   }
 }
 onLoad(async function (_options) {
+  console.log(app, 'adfakfasjdf')
   const self = this;
   // this.eventId = bus.on('userShopCartChange', () => {
   //   if (app.globalData.storeInfo) {
@@ -2929,10 +2930,10 @@ onLoad(async function (_options) {
   }
   console.log(app.globalData.tabBar.list, 'app.globalData.tabBar.list');
   if (app.globalData.openCustomTabbar) {
-    app.getTabbar();
+    app.globalData.getTabbar();
     state.navigationStyle = app.globalData.tabBar.list[0].navigationStyle;
-    if (app.editTabbar) {
-      app.editTabbar();
+    if (app.globalData.editTabbar) {
+      app.globalData.editTabbar();
     }
     app.globalData.tabBar.list.some(item => {
       if (item.linkModel === 'shopping_cart') {
@@ -2955,8 +2956,8 @@ onLoad(async function (_options) {
           } catch (e) {
             console.log('hideTabBar failed:', e);
           }
-          if (app.editTabbar) {
-            app.editTabbar();
+          if (app.globalData.editTabbar) {
+            app.globalData.editTabbar();
           }
           state.showTabbar = true;
         }
@@ -3364,7 +3365,7 @@ function updateLocalShopCart (postData) {
     // 设置购物车中商品总数量
     localProductCount = Number(localProductCount);
     localProductCount = localProductCount + count;
-    app.setTabBarBadge('shopping_cart', String(localProductCount));
+    app.globalData.setTabBarBadge('shopping_cart', String(localProductCount));
     if (localShopingCart) {
       // 如果存在本地购物车数据
       let shopCartGoodsId = localShopingCart.goodsId;
@@ -3398,7 +3399,7 @@ function updateLocalShopCart (postData) {
     uni.setStorageSync('wj_userProductsCount', localProductCount);
     let counts = String(localProductCount);
     if (counts) {
-      app.setTabBarBadge('shopping_cart', counts);
+      app.globalData.setTabBarBadge('shopping_cart', counts);
     }
   } catch (e) {
     // Do something when catch error
@@ -3459,7 +3460,7 @@ function setLocalShopCart (data) {
     let localProductCount = uni.getStorageSync('wj_userProductsCount');
     let counts = String(localProductCount);
     if (counts) {
-      app.setTabBarBadge('shopping_cart', counts);
+      app.globalData.setTabBarBadge('shopping_cart', counts);
     }
   }
   bus.emit('userShopCartChange', "update");

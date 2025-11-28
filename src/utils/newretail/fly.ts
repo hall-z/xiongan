@@ -4,7 +4,7 @@ import utils from './utils'
 const app = getApp()
 
 // 获取手机系统信息
-const systemInfo = app.globalData.systemInfo
+const systemInfo = app ? app.globalData?.systemInfo : {}
 // 导航数量
 let tabbarNum = 0
 // 购物车的坐标点

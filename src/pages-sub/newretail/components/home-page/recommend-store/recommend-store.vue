@@ -273,8 +273,8 @@ function getScorll(latitude, longitude) {
 function hadleStoreOrder(latitude, longitude, page) {
   const self = this
   state.loadingFlag = true
-  latitude = latitude || that.data.latitude || app.globalData.latitude
-  longitude = longitude || that.data.longitude || app.globalData.longitude
+  latitude = latitude || state.latitude || app.globalData.latitude
+  longitude = longitude || state.longitude || app.globalData.longitude
   if (state.page * state.pageSize >= state.total) {
     state.loadingFlag = false
     uni.hideLoading()

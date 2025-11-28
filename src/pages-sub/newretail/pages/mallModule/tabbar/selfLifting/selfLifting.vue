@@ -283,8 +283,8 @@ onLoad(function (_options) {
   }
   // new app.globalData.addToCart();
   if (app.globalData.openCustomTabbar) {
-    app.getTabbar()
-    app.editTabbar()
+    app.globalData.getTabbar()
+    app.globalData.editTabbar()
     state.openCustomTabbar = true
     state.showTabbar = true
   } else {
@@ -292,8 +292,8 @@ onLoad(function (_options) {
       app.globalData.tabBar.list.forEach((item) => {
         if (item.linkModel === 'sort') {
           uni.hideTabBar()
-          app.getTabbar()
-          app.editTabbar()
+          app.globalData.getTabbar()
+          app.globalData.editTabbar()
           state.showTabbar = true
         }
       })
@@ -339,8 +339,8 @@ onShow(function () {
   // 数组中索引最大的页面--当前页面
   const currentPage = pages[pages.length - 1]
   if (state.openCustomTabbar) {
-    app.getTabbar()
-    app.editTabbar()
+    app.globalData.getTabbar()
+    app.globalData.editTabbar()
   }
   const storeIdactive = uni.getStorageSync('storeIdactive')
   console.log('storeIdactive', storeIdactive)
@@ -841,12 +841,12 @@ function getShopCart(storeId) {
     const localProductCount = uni.getStorageSync('wj_userProductsCount')
     const counts = String(localProductCount)
     if (counts) {
-      app.setTabBarBadge('shopping_cart', counts)
+      app.globalData.setTabBarBadge('shopping_cart', counts)
     }
     shopcartService
       .getProductsCount()
       .then((res) => {
-        app.setTabBarBadge('shopping_cart', String(res))
+        app.globalData.setTabBarBadge('shopping_cart', String(res))
         try {
           uni.setStorageSync('wj_userProductsCount', res)
         } catch (e) {}
@@ -869,7 +869,7 @@ function addLocalGoods(id) {
     localProductCount = Number(localProductCount)
     localProductCount++
     localProductCount = String(localProductCount)
-    app.setTabBarBadge('shopping_cart', localProductCount)
+    app.globalData.setTabBarBadge('shopping_cart', localProductCount)
     if (localShopingCart) {
       // 如果存在本地购物车数据
       const shopCartGoodsId = localShopingCart.goodsId
@@ -917,7 +917,7 @@ function reduceLocalGoods(id) {
     localProductCount = Number(localProductCount)
     localProductCount--
     localProductCount = String(localProductCount)
-    app.setTabBarBadge('shopping_cart', localProductCount)
+    app.globalData.setTabBarBadge('shopping_cart', localProductCount)
     if (localShopingCart) {
       // 如果存在本地购物车数据
       const shopCartGoodsId = localShopingCart.goodsId

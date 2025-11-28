@@ -2189,7 +2189,7 @@ function addLocalGoods(id) {
     localProductCount = Number(localProductCount)
     localProductCount++
     localProductCount = String(localProductCount)
-    app.setTabBarBadge('shopping_cart', localProductCount)
+    app.globalData.setTabBarBadge('shopping_cart', localProductCount)
     if (localShopingCart) {
       // 如果存在本地购物车数据
       const shopCartGoodsId = localShopingCart.goodsId
@@ -2236,7 +2236,7 @@ function reduceLocalGoods(id) {
     localProductCount = Number(localProductCount)
     localProductCount--
     localProductCount = String(localProductCount)
-    app.setTabBarBadge('shopping_cart', localProductCount)
+    app.globalData.setTabBarBadge('shopping_cart', localProductCount)
     if (localShopingCart) {
       // 如果存在本地购物车数据
       const shopCartGoodsId = localShopingCart.goodsId

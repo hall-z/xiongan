@@ -56,7 +56,7 @@ import _apiMemberServiceJs from '@/service/api/newretail/memberService'
 import { reactive } from 'vue'
 const memberService = _apiMemberServiceJs
 const utils = _utilsUtilsJs
-const NavigationBar = _componentsNavigationBarNavigationBarJs
+
 const state = reactive({
   memberInfo: '',
   // 会员信息

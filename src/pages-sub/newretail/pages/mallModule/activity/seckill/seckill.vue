@@ -859,7 +859,7 @@ onLoad(async function (options) {
     app.globalData.tabBar.list.forEach(item => {
       if (item.linkModel === 'grab_activity') {
         uni.hideTabBar();
-        app.editTabbar();
+        app.globalData.editTabbar();
         state.showTabbar = true;
       }
     });
@@ -1337,11 +1337,11 @@ function getShopCart(storeId) {
     let localProductCount = uni.getStorageSync('wj_userProductsCount');
     let counts = String(localProductCount);
     if (counts) {
-      app.setTabBarBadge('shopping_cart', counts);
+      app.globalData.setTabBarBadge('shopping_cart', counts);
     }
     shopcartService.getProductsCount().then(res => {
       let count = String(res);
-      app.setTabBarBadge('shopping_cart', String(res));
+      app.globalData.setTabBarBadge('shopping_cart', String(res));
       state.cartCount = count;
       try {
         uni.setStorageSync('wj_userProductsCount', res);
@@ -1366,7 +1366,7 @@ function addLocalGoods(id) {
     localProductCount = Number(localProductCount);
     localProductCount++;
     localProductCount = String(localProductCount);
-    app.setTabBarBadge('shopping_cart', localProductCount);
+    app.globalData.setTabBarBadge('shopping_cart', localProductCount);
     handleLocalGoods(localShopingCart);
     handleLocalGoods(distributionLocalShopingCart, "distribution");
     function handleLocalGoods(localShopingCart, type = "normal") {
@@ -1435,7 +1435,7 @@ function reduceLocalGoods(id) {
     localProductCount = Number(localProductCount);
     localProductCount--;
     localProductCount = String(localProductCount);
-    app.setTabBarBadge('shopping_cart', localProductCount);
+    app.globalData.setTabBarBadge('shopping_cart', localProductCount);
     handleLocalGoods(localShopingCart);
     handleLocalGoods(distributionLocalShopingCart, "distribution");
     function handleLocalGoods(localShopingCart, type = "normal") {

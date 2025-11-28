@@ -59,8 +59,8 @@ const state = reactive({
 onLoad(function (_options) {
   // 检查当前页面是否tabbar
   if (app.globalData.openCustomTabbar) {
-    app.getTabbar();
-    app.editTabbar();
+    app.globalData.getTabbar();
+    app.globalData.editTabbar();
     state.openCustomTabbar = true;
     state.showTabbar = true;
   } else {
@@ -68,8 +68,8 @@ onLoad(function (_options) {
       app.globalData.tabBar.list.forEach(item => {
         if (item.linkModel === 'sort') {
           uni.hideTabBar();
-          app.getTabbar();
-          app.editTabbar();
+          app.globalData.getTabbar();
+          app.globalData.editTabbar();
           state.showTabbar = true;
         }
       });
@@ -118,8 +118,8 @@ onLoad(function (_options) {
 onReady(function () {});
 onShow(function () {
   if (state.openCustomTabbar) {
-    app.getTabbar();
-    app.editTabbar();
+    app.globalData.getTabbar();
+    app.globalData.editTabbar();
   }
   if (app.globalData.storeInfo && app.globalData.storeInfo.id !== state.storeId) {
     state.store = app.globalData.storeInfo.name;

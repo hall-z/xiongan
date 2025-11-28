@@ -1,6 +1,6 @@
 <template>
   <!--components/home-page/mall-recommend/mall-recommend.wxml-->
-  <view class="mall-recommend-loading" v-if="!loaded || !state.isShow">
+  <view class="mall-recommend-loading" v-if="!state.loaded || !state.isShow">
     <view class="item-box">
       <view class="img-box"></view>
       <view class="info-box">
@@ -12,51 +12,51 @@
   </view>
   <view
     class="store-title"
-    :style="hotTitleImgUrl ? 'width: 750rpx;padding: 0' : ''"
-    v-if="fineQualityGoodsList.length > 0 && isShowProductAreaTitle"
+    :style="props.hotTitleImgUrl ? 'width: 750rpx;padding: 0' : ''"
+    v-if="state.fineQualityGoodsList.length > 0 && props.isShowProductAreaTitle"
   >
-    <image v-if="hotTitleImgUrl" :src="hotTitleImgUrl" mode="widthFix"></image>
+    <image v-if="props.hotTitleImgUrl" :src="props.hotTitleImgUrl" mode="widthFix"></image>
     <text v-else>热门推荐</text>
     <!-- <text wx:else>商城精选</text> -->
   </view>
   <view
     class="goods-box mall-recommend-good"
-    :style="'display: ' + (displayStyle === 'two' || displayStyle === 'TWO' ? 'flex' : '')"
+    :style="
+      'display: ' + (props.displayStyle === 'two' || props.displayStyle === 'TWO' ? 'flex' : '')
+    "
   >
-    <view
-      v-if="displayStyle === 'one' || displayStyle === 'ONE'"
-      v-for="(item, index) in fineQualityGoodsList"
-      :key="idx"
-    >
-      <goods-item
-        :recommed="true"
-        :goods="item"
-        :idx="index"
-        :shopCart="shopCart"
-        :hasUserInfo="hasUserInfo"
-        @onClickGoods="onClickGoods"
-        @addToCart="addToCart"
-        @noop="noop"
-        @getUserInfo="onGetUserInfo"
-      ></goods-item>
-    </view>
-    <view
-      v-if="displayStyle === 'two' || displayStyle === 'TWO'"
-      v-for="(item, index) in fineQualityGoodsList"
-      :key="idx"
-    >
-      <goods-store-hot
-        :recommed="true"
-        :goods="item"
-        :idx="index"
-        :shopCart="shopCart"
-        :hasUserInfo="hasUserInfo"
-        @onClickGoods="onClickGoods"
-        @addToCart="addToCart"
-        @noop="noop"
-        @getUserInfo="onGetUserInfo"
-      ></goods-store-hot>
-    </view>
+    <block v-for="(item, index) in state.fineQualityGoodsList" :key="index">
+      <view v-if="props.displayStyle === 'one' || props.displayStyle === 'ONE'">
+        <goods-item
+          :recommed="true"
+          :goods="item"
+          :idx="index"
+          :shopCart="props.shopCart"
+          :hasUserInfo="props.hasUserInfo"
+          @onClickGoods="onClickGoods"
+          @addToCart="addToCart"
+          @noop="noop"
+          @getUserInfo="onGetUserInfo"
+        ></goods-item>
+      </view>
+    </block>
+
+    <block v-for="(item, index) in state.fineQualityGoodsList" :key="index">
+      <view v-if="displayStyle === 'two' || displayStyle === 'TWO'">
+        {{ JSON.stringify(item) }}1233
+        <goods-store-hot
+          :recommed="true"
+          :goods="item"
+          :idx="index"
+          :shopCart="props.shopCart"
+          :hasUserInfo="props.hasUserInfo"
+          @onClickGoods="onClickGoods"
+          @addToCart="addToCart"
+          @noop="noop"
+          @getUserInfo="onGetUserInfo"
+        ></goods-store-hot>
+      </view>
+    </block>
   </view>
 </template>
 <script setup>
@@ -118,7 +118,7 @@ const state = reactive({
   theme: THEME,
   themeColor: THEME.color,
   loaded: false,
-  isShow: false,
+  isShow: true,
   fineQualityGoodsList: [],
   hasQuery: false,
 })
@@ -209,11 +209,11 @@ onBeforeMount(() => {
       ? app.globalData.uiconfig.themeColor
       : uni.getStorageSync('themeColor')
 })
-onMounted(() => {
-  on('addToCart', (event) => {
-    // console.log('Received customEvent with data:', event); // 打印事件数据
-  })
-})
+// onMounted(() => {
+//   on('addToCart', (event) => {
+//     // console.log('Received customEvent with data:', event); // 打印事件数据
+//   })
+// })
 function getScorll() {
   // let that = this;
   // const pages = getCurrentPages() || [];
@@ -258,32 +258,37 @@ function handleStore() {
     state.storeId = app.globalData.storeInfo.id
   }
 }
+let orderTimer = null
 function reload(refresh = false) {
+  state.loaded = true
+  let storeId = state.storeId
+  if (storeId == '') {
+    storeId = app.globalData.storeInfo ? app.globalData.storeInfo.id : ''
+  }
+  queryRecommendProduct(storeId)
   const that = this
   if (!state.loaded) {
-    clearTimeout(orderTimer)
-    let storeId = state.storeId
+    if (orderTimer) {
+      clearTimeout(orderTimer)
+    }
     lazyLoadBase
       .determineComponentInVisibleArea('.mall-recommend-loading', that)
       .then((res) => {
         if (res) {
-          if (storeId == '') {
-            storeId = app.globalData.storeInfo ? app.globalData.storeInfo.id : ''
-          }
           if (storeId) {
             state.loaded = true
             queryRecommendProduct(storeId)
           }
         } else {
-          let orderTimer = setTimeout(() => {
+          orderTimer = setTimeout(() => {
             console.log('查询是否进入显示区域')
             reload(refresh)
           }, 1000)
-          orderTimer = orderTimer
         }
         console.log(res)
       })
       .catch((err) => {
+        queryRecommendProduct(state.storeId)
         console.log(err)
       })
   } else if (refresh) {
@@ -293,7 +298,6 @@ function reload(refresh = false) {
   }
 }
 function queryRecommendProduct(storeId) {
-  const that = this
   if (storeId === '' || storeId == null) {
     return
   }
@@ -307,7 +311,6 @@ function queryRecommendProduct(storeId) {
 }
 function getStoreProduct(page) {
   state.loadingFlag = true
-  const that = this
   if (state.page * state.pageSize >= state.total) {
     state.loadingFlag = false
     uni.hideLoading()
@@ -448,18 +451,20 @@ watch(
     }
     reload(true)
   },
+  { immediate: true },
 )
 
 watch(
-  () => props.value,
+  () => props.pageScrollData,
   (newVal, oldVal) => {
     // 属性值变化时执行
     reload(false)
   },
+  { immediate: true },
 )
 
 watch(
-  () => props.value,
+  () => props.pageScrollData1,
   (newVal, oldVal) => {
     if (newVal && newVal != oldVal) {
       getScorll()
@@ -467,6 +472,7 @@ watch(
     // 属性值变化时执行
     // this.reload(false)
   },
+  { immediate: true },
 )
 
 watch(

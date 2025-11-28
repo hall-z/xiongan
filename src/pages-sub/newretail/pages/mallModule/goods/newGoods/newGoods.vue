@@ -197,11 +197,11 @@ function getShopCart(storeId) {
     let localProductCount = uni.getStorageSync('wj_userProductsCount');
     let counts = String(localProductCount);
     if (counts) {
-      app.setTabBarBadge('shopping_cart', counts);
+      app.globalData.setTabBarBadge('shopping_cart', counts);
     }
     shopcartService.getProductsCount().then(res => {
       let count = String(res);
-      app.setTabBarBadge('shopping_cart', String(res));
+      app.globalData.setTabBarBadge('shopping_cart', String(res));
       state.cartCount = count;
       try {
         uni.setStorageSync('wj_userProductsCount', res);

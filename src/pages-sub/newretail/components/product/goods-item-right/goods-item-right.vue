@@ -4,10 +4,11 @@
     class="wm-goods-item"
     :data-productId="state.goods1.id"
     :id="'products-' + state.goods1.id"
-    :data-type="goodsType"
+    :data-type="props.goodsType"
     :data-easyScene="state.goods1.easyScene != null ? state.goods1.easyScene : 'none'"
     @click="clickGoodsItem"
   >
+    {{ JSON.stringify(state.goods1) }}
     <view class="wm-goods-img-box">
       <image
         class="wm-goods-img"
@@ -57,7 +58,7 @@
           </view>
         </view>
         <view class="wm-goods-name label-text">
-          <view v-for="(item, index) in state.goods1.produtlabel" :key="index" v-if="index < 3">
+          <view v-for="(item, index) in state.goods1.produtlabel" :key="index" v-show="index < 3">
             <text
               v-if="item.type != 'PROMOTIONLABEL' && item.labelName && !item.imageUrl"
               :style="'background-color:rgb(' + item.color + ')'"
@@ -73,7 +74,7 @@
           </view>
         </view>
         <!-- <text class="wm-goods-sold">已售 {{state.goods1.soldCount}}</text> -->
-        <view class="wm-goods-labels" v-if="promotionsLabels">
+        <view class="wm-goods-labels" v-if="state.promotionsLabels">
           <view
             v-for="(item, index) in state.goods1.promotions"
             :key="index"
@@ -88,7 +89,7 @@
             </view>
           </view>
         </view>
-        <view class="labels-board" v-if="state.goods1.promotions.length > 0">
+        <view class="labels-board" v-if="state.goods1.promotions?.length > 0">
           <!-- <view class="labels-title">促销:</view> -->
           <view class="labels-content-board">
             <view v-for="(item, index) in state.goods1.promotions" :key="index">
@@ -304,7 +305,6 @@ function getUserInfo(e) {
 watch(
   () => props.goods,
   (newVal, oldVal) => {
-    conosle.log('newVal.imageUrl', newVal)
     //  await self.getTemporaryUrl(newVal.imageUrl)
     // .then (res=>{
 

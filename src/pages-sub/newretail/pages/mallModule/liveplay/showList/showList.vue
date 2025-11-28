@@ -182,7 +182,7 @@ onLoad(function (_options) {
     app.globalData.tabBar.list.forEach((item) => {
       if (item.linkModel === 'live_room') {
         uni.hideTabBar()
-        app.editTabbar()
+        app.globalData.editTabbar()
         state.showTabbar = true
       }
     })

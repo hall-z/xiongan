@@ -1,14 +1,15 @@
 <template>
   <!--components/popup/popup.wxml-->
   <view
-    v-if="overlay"
+    v-if="props.overlay"
     :class="'overlay-class popup__overlay ' + (show ? 'popup--show' : '')"
-    :style="overlayStyle"
+    :style="props.overlayStyle"
     @click="onClickOverlay"
   >
     <form v-if="show && form" @submit="onClickOverlay">
       <button form-type="submit" class="submitButton"></button>
     </form>
+    {{ state.navHeight }}
     <view
       :class="
         'custom-class popup ' +
@@ -16,7 +17,7 @@
         ' ' +
         (show ? 'popup--show' : '')
       "
-      :style="navHeight ? 'top:' + navHeight + 'px;' : ''"
+      :style="state.navHeight ? 'top:' + state.navHeight + 'px;' : ''"
     >
       <slot></slot>
     </view>
@@ -53,10 +54,12 @@ const UNTILS = _utilsUtilsJs
 const state = reactive({
   navHeight: 0,
 })
+const emit = defineEmits(['click-overlay', 'close'])
+
 function onClickOverlay(e) {
-  triggerEvent('click-overlay')
+  emit('click-overlay')
   if (state.closeOnClickOverlay) {
-    triggerEvent('close')
+    emit('close')
   }
 }
 

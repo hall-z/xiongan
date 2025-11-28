@@ -72,7 +72,11 @@ export default ({ command, mode }) => {
           'src/pages-sub/promotionCenter',
           'src/pages-sub/housingProvident',
           'src/pages-sub/map',
-          'src/pages-sub/newretail',
+          'src/pages-sub/newretail/pages/mallModule',
+          'src/pages-sub/newretail/pages/memberModule',
+          'src/pages-sub/newretail/pages/mall',
+          'src/pages-sub/newretail/pages/customerService',
+          'src/pages-sub/newretail/pages/wxfaceapp',
         ], // 是个数组，可以配置多个，但是不能为pages里面的目录
         dts: 'src/types/uni-pages.d.ts',
       }),
