@@ -122,9 +122,9 @@
                 <view class="goods-name">{{ item.productName }}</view>
                 <view class="goods-spec"></view>
                 <view class="goods-price">
-                  <view class="now-price">￥{{ filters.filtToFix(item.price) }}</view>
+                  <view class="now-price">￥{{ filtToFix(item.price) }}</view>
                   <view class="old-price" v-if="item.originalPrice !== 0">
-                    ￥{{ filters.filtToFix(item.originalPrice) }}
+                    ￥{{ filtToFix(item.originalPrice) }}
                   </view>
                 </view>
               </view>
@@ -217,7 +217,7 @@
               ></image>
               <view class="badge">{{ state.shopCart.productNum }}</view>
             </view>
-            <view class="menu-price">￥{{ filters.filtToFix(state.shopCart.allPrice) }}</view>
+            <view class="menu-price">￥{{ filtToFix(state.shopCart.allPrice) }}</view>
           </view>
           <view class="button-text small-button" v-if="state.shopCart.products.length > 0">
             {{ state.storeStatus === 'ON' ? '我要接龙' : '门店库存不足' }}
@@ -263,7 +263,7 @@
         <image class="menu-icon" src="{{state.imagesPath.solitareCar}}" mode="widthFix" lazy-load="false" ></image>
         <view class="badge">{{state.shopCart.productNum}}</view>
         </view>
-        <view class="menu-price">￥{{filters.filtToFix(state.shopCart.allPrice)}}</view>
+        <view class="menu-price">￥{{filtToFix(state.shopCart.allPrice)}}</view>
     </view>
     <view class="button-text small-button" wx:if="{{state.shopCart.products.length > 0}}">{{state.storeStatus === 'ON' ? "我要接龙" : "门店库存不足"}}</view>
     <view class="button-text" wx:else>{{state.storeStatus === 'ON' ? "我要接龙" : "门店库存不足"}}</view>
@@ -368,9 +368,9 @@
                 </view>
                 <view class="goods-spec" v-else></view>
                 <view class="goods-price">
-                  <view class="now-price">￥{{ filters.filtToFix(item.price) }}</view>
+                  <view class="now-price">￥{{ filtToFix(item.price) }}</view>
                   <view class="old-price" v-if="item.originalPrice !== 0">
-                    ￥{{ filters.filtToFix(item.originalPrice) }}
+                    ￥{{ filtToFix(item.originalPrice) }}
                   </view>
                 </view>
               </view>
@@ -443,9 +443,9 @@
               <!-- <view class="goods-spec" style="{{theme.mainColor}}" wx:if="{{item.selectSpecs !== ''}}" bindtap="toggleGoodsSpecPopup">{{item.selectSpecs}}</view> -->
               <view class="goods-spec"></view>
               <view class="goods-price">
-                <view class="now-price">￥{{ filters.filtToFix(item.price) }}</view>
+                <view class="now-price">￥{{ filtToFix(item.price) }}</view>
                 <view class="old-price" v-if="item.originalPrice !== 0">
-                  ￥{{ filters.filtToFix(item.originalPrice) }}
+                  ￥{{ filtToFix(item.originalPrice) }}
                 </view>
               </view>
             </view>

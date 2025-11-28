@@ -208,7 +208,7 @@
             <image :src="item.avatar || state.imagesPath.userPortrait" mode="widthFix"></image>
             <view class="member-info">
               <text>{{item.creatorName}}</text>
-              <text>{{filters.filtMobile(item.mobile)}}</text>
+              <text>{{filtMobile(item.mobile)}}</text>
             </view>
           </view>
           <text class="help-number">{{item.helpPoint}}助力点</text>
@@ -235,7 +235,7 @@
             <image :src="item.avatar || state.imagesPath.userPortrait" mode="widthFix"></image>
             <view class="member-info">
               <text>{{item.creatorName}}</text>
-              <text>{{filters.filtMobile(item.mobile)}}</text>
+              <text>{{filtMobile(item.mobile)}}</text>
             </view>
           </view>
           <text class="help-number">{{item.helpPoint}}助力点</text>

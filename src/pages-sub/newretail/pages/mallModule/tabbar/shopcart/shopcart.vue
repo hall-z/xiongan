@@ -306,7 +306,7 @@
                         <!-- <text class="old-price" wx:if="{{item.originalPrice && item.sellPrice < item.originalPrice}}">￥{{item.originalPrice}}</text> -->
                       </view>
                       <view class="vip-price" v-else-if="item.memberPrice">
-                        <text>￥{{ filters.filtToFix(item.memberPrice) }}</text>
+                        <text>￥{{ filtToFix(item.memberPrice) }}</text>
                         <view class="vip-label">
                           <image :src="state.imagesPath.iconVipLabel"></image>
                           <text>{{ state.vipGradeConfig.priceLabel }}</text>

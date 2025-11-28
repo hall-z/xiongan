@@ -92,7 +92,7 @@
       <view class="price-detail">
         <view v-for="(item , index) in refundPayments" :key="i">
           <text class="color-454545">{{item.payMethod}}</text>
-          <text class="color-ff7171">￥{{filters.toFix(item.refundTotal)}}</text>
+          <text class="color-ff7171">￥{{toFix(item.refundTotal)}}</text>
         </view>
       </view>
     </view>

@@ -28,7 +28,7 @@
             <text>
               {{
                 state.instance.creatorName == state.instance.mobile
-                  ? filters.filtMobile(item.mobile)
+                  ? filtMobile(item.mobile)
                   : state.instance.creatorName
               }}:
             </text>

@@ -88,11 +88,11 @@
               {{
                 goods.sellPrice && goods.sellPrice < goods.promotionPrice
                   ? goods.memberPrice && goods.memberPrice < goods.sellPrice
-                    ? filters.filtToFix(goods.memberPrice)
-                    : filters.filtToFix(goods.sellPrice)
+                    ? filtToFix(goods.memberPrice)
+                    : filtToFix(goods.sellPrice)
                   : goods.memberPrice && goods.memberPrice < goods.promotionPrice
-                    ? filters.filtToFix(goods.memberPrice)
-                    : filters.filtToFix(goods.promotionPrice)
+                    ? filtToFix(goods.memberPrice)
+                    : filtToFix(goods.promotionPrice)
               }}
               <text style="font-size: 20rpx" v-if="goods.style == 'SPEC_PARENT'">起</text>
             </text>
@@ -104,19 +104,19 @@
                 (!goods.sellPrice || goods.memberPrice < goods.sellPrice)
               "
             >
-              <!-- <text class="oldPrice">￥{{goods.originalPrice ? filters.filtToFix(goods.originalPrice): filters.filtToFix(goods.sellPrice)}}</text> -->
+              <!-- <text class="oldPrice">￥{{goods.originalPrice ? filtToFix(goods.originalPrice): filtToFix(goods.sellPrice)}}</text> -->
               <view class="vip-label">
                 <image :src="imagesPath.iconVipLabel"></image>
                 <text>{{ vipGradeConfig.priceLabel }}</text>
               </view>
             </view>
-            <!-- <text class="nowPrice"><text style="font-size: 24rpx;">￥</text>{{ goods.memberPrice && goods.memberPrice < goods.promotionPrice ? filters.filtToFix(goods.memberPrice) : filters.filtToFix(goods.promotionPrice)}}</text>  -->
+            <!-- <text class="nowPrice"><text style="font-size: 24rpx;">￥</text>{{ goods.memberPrice && goods.memberPrice < goods.promotionPrice ? filtToFix(goods.memberPrice) : filtToFix(goods.promotionPrice)}}</text>  -->
             <view v-if="underlinePriceShow != 'FALSE'" style="display: flex; align-items: center">
               <text style="text-decoration: line-through">
                 ￥{{
                   goods.originalPrice > goods.sellPrice
-                    ? filters.filtToFix(goods.originalPrice)
-                    : filters.filtToFix(goods.sellPrice)
+                    ? filtToFix(goods.originalPrice)
+                    : filtToFix(goods.sellPrice)
                 }}
               </text>
             </view>
@@ -125,10 +125,10 @@
             <text class="nowPrice" :style="'color: ' + activityColor">
               {{
                 goods.memberPrice && goods.memberPrice < goods.sellPrice
-                  ? filters.filtToFix(goods.memberPrice)
+                  ? filtToFix(goods.memberPrice)
                   : goods.sellPrice
-                    ? filters.filtToFix(goods.sellPrice)
-                    : filters.filtToFix(goods.originalPrice)
+                    ? filtToFix(goods.sellPrice)
+                    : filtToFix(goods.originalPrice)
               }}
               <text style="font-size: 20rpx" v-if="goods.style == 'SPEC_PARENT'">起</text>
             </text>
@@ -143,8 +143,8 @@
               >
                 ￥{{
                   goods.originalPrice
-                    ? filters.filtToFix(goods.originalPrice)
-                    : filters.filtToFix(goods.sellPrice)
+                    ? filtToFix(goods.originalPrice)
+                    : filtToFix(goods.sellPrice)
                 }}
               </text>
               <view class="vip-label">
@@ -160,10 +160,10 @@
                 underlinePriceShow != 'FALSE'
               "
             >
-              ￥{{ filters.filtToFix(goods.originalPrice) }}
+              ￥{{ filtToFix(goods.originalPrice) }}
             </text>
-            <!-- <view style="display: flex;"  wx:if="{{goods.memberPrice}}"><text class="nowPrice"><text style="font-size: 24rpx;">￥</text>{{filters.filtToFix(goods.memberPrice)}}</text><view wx:if="{{goods.memberPrice && isMember}}" style="display: flex; align-items: center;"> <view class="vipBtn">会员价</view><text style="text-decoration:line-through">￥{{filters.filtToFix(goods.sellPrice)}}</text></view></view> 
-       <view   style="display: flex;"  wx:else>  <text class="nowPrice"><text style="font-size: 24rpx;">￥</text>{{goods.sellPrice ? goods.sellPrice : ''}}</text><view wx:if="{{goods.memberPrice && isMember}}" style="display: flex; align-items: center;"><view class="vipBtn">会员价</view><text style="text-decoration:line-through">￥{{filters.filtToFix(goods.memberPrice)}}</text></view></view>  -->
+            <!-- <view style="display: flex;"  wx:if="{{goods.memberPrice}}"><text class="nowPrice"><text style="font-size: 24rpx;">￥</text>{{filtToFix(goods.memberPrice)}}</text><view wx:if="{{goods.memberPrice && isMember}}" style="display: flex; align-items: center;"> <view class="vipBtn">会员价</view><text style="text-decoration:line-through">￥{{filtToFix(goods.sellPrice)}}</text></view></view> 
+       <view   style="display: flex;"  wx:else>  <text class="nowPrice"><text style="font-size: 24rpx;">￥</text>{{goods.sellPrice ? goods.sellPrice : ''}}</text><view wx:if="{{goods.memberPrice && isMember}}" style="display: flex; align-items: center;"><view class="vipBtn">会员价</view><text style="text-decoration:line-through">￥{{filtToFix(goods.memberPrice)}}</text></view></view>  -->
           </view>
           <!-- <block wx:else>
         <text class="nowPrice">{{goods.memberPrice && goods.memberPrice < goods.sellPrice ? goods.memberPrice : goods.sellPrice ? goods.sellPrice : goods.originalPrice}}</text>

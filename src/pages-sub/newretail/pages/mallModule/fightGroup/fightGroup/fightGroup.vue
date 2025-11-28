@@ -36,8 +36,8 @@
         </view>
         <view class="price_btn_box">
           <view>
-            <text class="item-price-box" :hidden="!item.nowPrice">￥<text class="item-nowPrice">{{filters.filtToFix(item.nowPrice)}}</text>{{item.style == 'SPEC_PARENT' ? '起' : ''}}
-            <text class="item-oldPrice" v-if="item.oldPrice && item.nowPrice < item.oldPrice">￥{{filters.filtToFix(item.oldPrice)}}</text></text>
+            <text class="item-price-box" :hidden="!item.nowPrice">￥<text class="item-nowPrice">{{filtToFix(item.nowPrice)}}</text>{{item.style == 'SPEC_PARENT' ? '起' : ''}}
+            <text class="item-oldPrice" v-if="item.oldPrice && item.nowPrice < item.oldPrice">￥{{filtToFix(item.oldPrice)}}</text></text>
           </view>
           <button class="enable" :style="'background-color: ' + state.themeColor + ';'">去拼团
             <image :src="state.imagesPath.iconGroupRight"></image>

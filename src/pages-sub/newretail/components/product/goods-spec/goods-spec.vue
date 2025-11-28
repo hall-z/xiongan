@@ -22,11 +22,11 @@
         </view>
         <view class="price" :style="'color: ' + themeColor" v-else-if="isTeamPrice">拼团价￥<text>{{sellPrice}}</text></view>
         <view class="price" :style="'color: ' + themeColor" v-else-if="isGrabPrice">秒杀价￥<text>{{sellPrice}}</text></view>
-        <view class="price" :style="'color: ' + themeColor" v-else-if="isBargainPrice">最低可砍至￥<text>{{filters.filtToFix(sellPrice)}}</text></view>
-        <view class="price" :style="'color: ' + themeColor" v-else-if="isSolitairePrice">接龙价￥<text>{{filters.filtToFix(sellPrice)}}</text></view>
-        <view class="price" :style="'color: ' + themeColor" v-else-if="!type && promotionPrice && (!sellPrice || promotionPrice < sellPrice) && (!memberPrice || promotionPrice < memberPrice)">促销价￥<text>{{filters.filtToFix(promotionPrice)}}</text><text v-if="originalPrice && originalPrice > promotionPrice" class="old-price">￥{{originalPrice}}</text></view>
-        <view class="price" :style="'color: ' + themeColor" v-else-if="!type && memberPrice && memberPrice < sellPrice">{{vipGradeConfig.priceLabel}}￥<text>{{filters.filtToFix(memberPrice)}}</text><text v-if="originalPrice && originalPrice > memberPrice" class="old-price">￥{{originalPrice}}</text></view>
-        <view class="price" :style="'color: ' + themeColor" v-else>￥<text>{{filters.filtToFix(sellPrice)}}</text><text v-if="originalPrice && originalPrice > sellPrice" class="old-price">￥{{originalPrice}}</text></view>
+        <view class="price" :style="'color: ' + themeColor" v-else-if="isBargainPrice">最低可砍至￥<text>{{filtToFix(sellPrice)}}</text></view>
+        <view class="price" :style="'color: ' + themeColor" v-else-if="isSolitairePrice">接龙价￥<text>{{filtToFix(sellPrice)}}</text></view>
+        <view class="price" :style="'color: ' + themeColor" v-else-if="!type && promotionPrice && (!sellPrice || promotionPrice < sellPrice) && (!memberPrice || promotionPrice < memberPrice)">促销价￥<text>{{filtToFix(promotionPrice)}}</text><text v-if="originalPrice && originalPrice > promotionPrice" class="old-price">￥{{originalPrice}}</text></view>
+        <view class="price" :style="'color: ' + themeColor" v-else-if="!type && memberPrice && memberPrice < sellPrice">{{vipGradeConfig.priceLabel}}￥<text>{{filtToFix(memberPrice)}}</text><text v-if="originalPrice && originalPrice > memberPrice" class="old-price">￥{{originalPrice}}</text></view>
+        <view class="price" :style="'color: ' + themeColor" v-else>￥<text>{{filtToFix(sellPrice)}}</text><text v-if="originalPrice && originalPrice > sellPrice" class="old-price">￥{{originalPrice}}</text></view>
         <view>{{selectText}}</view>
       </view>
  </view>

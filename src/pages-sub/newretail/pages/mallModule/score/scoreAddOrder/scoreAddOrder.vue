@@ -142,7 +142,7 @@
   <view class="bill-details1">
     <view class="balance-accounts">
         商品小计：
-        <text>{{amount ? integral + '积分+￥' + amount + '元' : filters.toFix(integral) + '积分'}}</text>
+        <text>{{amount ? integral + '积分+￥' + amount + '元' : toFix(integral) + '积分'}}</text>
     </view>
   </view>
   <view class="section-box contact-store" @click="contactStore" v-if="!state.isDistributionOrder">
@@ -161,7 +161,7 @@
       <text>(余额：{{state.storedValueCard.balance}})</text>
     </view>
     <view class="right">
-      <view class="score-amount">-￥{{filters.toFix(state.storedValueCard.useAmount)}}</view>
+      <view class="score-amount">-￥{{toFix(state.storedValueCard.useAmount)}}</view>
       <!-- <view class="checkbox-icon {{useStoredValueCard ? 'active' : ''}}"></view> -->
       <view class="checkbox-icon" :style="'background-image: url(' + state.imagesPath.iconUnchecked + ')'">
         <view class="active" :style="'background-image: url(' + state.imagesPath.iconChecked1 + ')'" v-if="state.useStoredValueCard"></view>
@@ -181,9 +181,9 @@
 </view>
 <view class="bottom-box">
   <view class="order-price">
-    <text v-if="!goodsList[0].amount"> ￥{{filters.toFix(allPrice - state.totalDiscount + state.shipmentAmount - state.shipmentCouponDiscount - state.scoreDiscount - state.cardDeductTotal)}}</text>
-    <text v-else> ￥{{filters.toFix(goodsList[0].amount * state.quantity + state.shipmentAmount - state.shipmentCouponDiscount - state.cardDeductTotal)}}</text>
-    <text v-if="goodsList[0].product && goodsList[0].product.originalPrice && filters.toFix(goodsList[0].product.originalPrice * state.quantity - amount) > 0">优惠：{{filters.toFix(goodsList[0].product.originalPrice * state.quantity - amount)}}</text>
+    <text v-if="!goodsList[0].amount"> ￥{{toFix(allPrice - state.totalDiscount + state.shipmentAmount - state.shipmentCouponDiscount - state.scoreDiscount - state.cardDeductTotal)}}</text>
+    <text v-else> ￥{{toFix(goodsList[0].amount * state.quantity + state.shipmentAmount - state.shipmentCouponDiscount - state.cardDeductTotal)}}</text>
+    <text v-if="goodsList[0].product && goodsList[0].product.originalPrice && toFix(goodsList[0].product.originalPrice * state.quantity - amount) > 0">优惠：{{toFix(goodsList[0].product.originalPrice * state.quantity - amount)}}</text>
   </view>
   <form @submit="createOrder">
     <button class="btn usable" form-type="submit" :style="state.theme.mainBgColor" :hidden="state.canBuy ? false : true" :disabled="state.isPrizing">提交订单</button>

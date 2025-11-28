@@ -64,7 +64,7 @@
     </view>
     
     <button v-if="!state.hasUserInfo" :style="'background:' + state.themeColor + ';'" class="recharge-btn" @click="getUserInfo">立即支付 <text v-if="state.rechargeItem.amount">{{state.rechargeItem.amount}} 元</text></button>
-    <button v-else class="recharge-btn" :style="'background:' + state.themeColor + ';'" :disabled="disabled" @click="toPayRecharge">立即支付 <text v-if="state.rechargeItem.amount">{{filters.toFix(state.rechargeItem.amount - state.rechargeItem.discountAmount)}} 元</text> </button>
+    <button v-else class="recharge-btn" :style="'background:' + state.themeColor + ';'" :disabled="disabled" @click="toPayRecharge">立即支付 <text v-if="state.rechargeItem.amount">{{toFix(state.rechargeItem.amount - state.rechargeItem.discountAmount)}} 元</text> </button>
   </view>
   <view class="recharge-tips">
     <view>{{state.hintTitle}}</view>

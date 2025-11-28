@@ -18,7 +18,7 @@
     
     <view class="name-mobile">
       <text class="member-name">{{state.userInfo.nickName}}</text>
-      <text class="member-mobile" :hidden="!state.mobile">{{filters.filtMobile(state.mobile)}}</text>
+      <text class="member-mobile" :hidden="!state.mobile">{{filtMobile(state.mobile)}}</text>
     </view>
   </view>
   <view class="member-qr-box" @click="toMyCard">

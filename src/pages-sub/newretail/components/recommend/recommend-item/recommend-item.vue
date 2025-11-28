@@ -37,9 +37,9 @@
         <view class="activity-price" v-else>
           ￥
           <text v-if="goodsData.promotionPrice != null">
-            {{ filters.filtToFix(goodsData.promotionPrice) }}
+            {{ filtToFix(goodsData.promotionPrice) }}
           </text>
-          <text v-else>{{ filters.filtToFix(goodsData.sellPrice) }}</text>
+          <text v-else>{{ filtToFix(goodsData.sellPrice) }}</text>
         </view>
       </view>
     </view>

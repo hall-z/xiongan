@@ -124,7 +124,7 @@
                 :style="
                   'height: ' +
                   (dataList[activeMenu].close
-                    ? (filters.calcGoodsStyle(dataList[activeMenu].productsForPc.length, 2) +
+                    ? (calcGoodsStyle(dataList[activeMenu].productsForPc.length, 2) +
                         (showType && dataList[activeMenu].productsForPc.length % 2 == 0 ? 1 : 0)) *
                       (dataList[activeMenu].modelMargin
                         ? 450 +
@@ -133,7 +133,7 @@
                               (groupImageIsHide == 0 && imgHeight ? imgHeight : 0),
                           )
                         : 460)
-                    : (filters.calcGoodsStyle(dataList[activeMenu].productsForPc.length, 2) +
+                    : (calcGoodsStyle(dataList[activeMenu].productsForPc.length, 2) +
                         (showType && dataList[activeMenu].productsForPc.length % 2 == 0 ? 1 : 0)) *
                       (dataList[activeMenu].modelMargin
                         ? 570 +

@@ -74,13 +74,13 @@
             >
               ￥{{
                 goodsData.originalPrice > goodsData.sellPrice
-                  ? filters.filtToFix(goodsData.originalPrice)
-                  : filters.filtToFix(goodsData.sellPrice)
+                  ? filtToFix(goodsData.originalPrice)
+                  : filtToFix(goodsData.sellPrice)
               }}
             </text>
           </view>
           <view v-else>
-            <!-- <text class="nowPrice" style="color: {{activityColor}}"><text style="font-size: 20rpx;">￥</text>{{goodsData.sellPrice ? filters.filtToFix(goodsData.sellPrice) : goodsData.price ? goodsData.price : '0'}}</text>
+            <!-- <text class="nowPrice" style="color: {{activityColor}}"><text style="font-size: 20rpx;">￥</text>{{goodsData.sellPrice ? filtToFix(goodsData.sellPrice) : goodsData.price ? goodsData.price : '0'}}</text>
         <text class="oldPrice" wx:if="{{goodsData.originalPrice != null && goodsData.sellPrice < goodsData.originalPrice && underlinePriceShow != 'FALSE'}}">￥{{goodsData.originalPrice}}</text> -->
             <view
               style="
@@ -95,7 +95,7 @@
                   <text style="font-size: 20rpx">￥</text>
                   {{
                     goodsData.sellPrice
-                      ? filters.filtToFix(goodsData.sellPrice)
+                      ? filtToFix(goodsData.sellPrice)
                       : goodsData.price
                         ? goodsData.price
                         : '0'

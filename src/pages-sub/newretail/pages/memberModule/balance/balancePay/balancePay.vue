@@ -5,7 +5,7 @@
 <view class="content">
   <view class="title">向商家付款</view>
   <!--<template is="barcode"></template>-->
-  <text class="number">{{filters.filtQRNumber(state.payNumber)}}</text>
+  <text class="number">{{filtQRNumber(state.payNumber)}}</text>
   <view class="qrcode-box">
     <canvas canvas-id="qrcode">
   </canvas></view>

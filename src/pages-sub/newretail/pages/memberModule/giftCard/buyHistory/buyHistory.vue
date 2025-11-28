@@ -8,9 +8,9 @@
     <view class="name-box">
       <text class="card-name">{{item.name}}</text>
       <text class="card-no">{{item.cardNo}}</text>
-      <text v-if="item.state === 'ACTIVED'" style="color:#2BB842">{{filters.filtCardState(item.state)}}</text>
-      <text v-if="item.state === 'UNACTIVATED'" style="color:#FF3333">{{filters.filtCardState(item.state)}}</text>
-      <text v-if="item.state !== 'ACTIVED' && item.state !== 'UNACTIVATED'" style="color:#999999">{{filters.filtCardState(item.state)}}</text>
+      <text v-if="item.state === 'ACTIVED'" style="color:#2BB842">{{filtCardState(item.state)}}</text>
+      <text v-if="item.state === 'UNACTIVATED'" style="color:#FF3333">{{filtCardState(item.state)}}</text>
+      <text v-if="item.state !== 'ACTIVED' && item.state !== 'UNACTIVATED'" style="color:#999999">{{filtCardState(item.state)}}</text>
     </view>
     <view class="price-box">
       余额：

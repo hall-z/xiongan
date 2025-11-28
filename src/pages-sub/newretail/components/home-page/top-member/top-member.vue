@@ -91,8 +91,8 @@
       <view class="top-member-card">
         <view class="member-num">
           <!-- <text>{{showMemberCode ? "会员码" : "付款码"}}</text>
-      <text wx:if="{{showMemberCode}}">{{member.id ? filters.formatMobile(member.mobile) : "xxxx xxxx xxxx xxxx"}}</text>
-      <text wx:else>{{payCode !== "" ? filters.filtQRNumber(payCode) : "xxxx xxxx xxxx xxxx"}}</text> -->
+      <text wx:if="{{showMemberCode}}">{{member.id ? formatMobile(member.mobile) : "xxxx xxxx xxxx xxxx"}}</text>
+      <text wx:else>{{payCode !== "" ? filtQRNumber(payCode) : "xxxx xxxx xxxx xxxx"}}</text> -->
         </view>
         <view v-if="isMember">
           <view class="member-code-box">
@@ -255,10 +255,10 @@
               </view>
               <view class="phone">
                 <text v-if="showMemberCode">
-                  {{ member.id ? filters.formatMobile(member.mobile) : 'xxxx xxxx xxxx xxxx' }}
+                  {{ member.id ? formatMobile(member.mobile) : 'xxxx xxxx xxxx xxxx' }}
                 </text>
                 <text v-else>
-                  {{ payCode !== '' ? filters.filtQRNumber(payCode) : 'xxxx xxxx xxxx xxxx' }}
+                  {{ payCode !== '' ? filtQRNumber(payCode) : 'xxxx xxxx xxxx xxxx' }}
                 </text>
               </view>
             </view>

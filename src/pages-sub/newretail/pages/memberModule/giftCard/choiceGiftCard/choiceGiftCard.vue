@@ -29,11 +29,11 @@
            <view class="payment-amount">
                <view class="payment-price">
                    <text>合计：</text>
-                   <text>¥ {{filters.filtToFix(state.totalPrice)}}</text>
+                   <text>¥ {{filtToFix(state.totalPrice)}}</text>
                </view>
                <view class="card-payment">
                     <text>礼品卡支付：</text>
-                    <text>¥{{filters.filtToFix(state.giftPaymentNum)}}</text>
+                    <text>¥{{filtToFix(state.giftPaymentNum)}}</text>
                </view>
            </view>
             <view class="card-list">
@@ -45,13 +45,13 @@
                             <view class="card-info">
                                 <view class="card-price">
                                     <text class="price-font">面值：</text>
-                                    <text class="price-num">¥{{filters.filtToFix(item.faceAmount)}}</text>
+                                    <text class="price-num">¥{{filtToFix(item.faceAmount)}}</text>
                                 </view>
                                 <text class="card-time">{{item.endDate}}到期</text>
                             </view>
                         </view>
                         <view class="card-bd">
-                            <view class="balance"><text class="balance-font">余额：</text><view class="balance-num"><text>¥</text>{{filters.filtToFix(item.balance)}}</view><text></text></view>
+                            <view class="balance"><text class="balance-font">余额：</text><view class="balance-num"><text>¥</text>{{filtToFix(item.balance)}}</view><text></text></view>
                             <!-- 激活操作 -->
                             <view v-if="item.state === 'UNACTIVATED' && item.cardType === 'OnlineGiftCard'" @click="operateCard" :data-state="item.state" :data-cardNo="item.cardNo" :class="item.state == 'UNACTIVATED' ? 'operate-btn activation' : 'operate-btn unbind'">
                                 <text>激活</text>
@@ -93,13 +93,13 @@
                             <view class="card-info">
                                 <view class="card-price">
                                     <text class="price-font">面值：</text>
-                                    <text class="price-num">¥{{filters.filtToFix(item.faceAmount)}}</text>
+                                    <text class="price-num">¥{{filtToFix(item.faceAmount)}}</text>
                                 </view>
                                 <text class="card-time">{{item.endDate}}到期</text>
                             </view>
                         </view>
                         <view class="card-bd">
-                            <view class="balance"><text class="balance-font">余额：</text><text class="balance-num">¥{{filters.filtToFix(item.balance)}}</text><text></text></view>
+                            <view class="balance"><text class="balance-font">余额：</text><text class="balance-num">¥{{filtToFix(item.balance)}}</text><text></text></view>
                             <view class="chose-box"></view>
                         </view>
                     </view>

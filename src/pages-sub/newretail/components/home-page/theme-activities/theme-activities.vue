@@ -417,8 +417,8 @@
                 :style="
                   'height: ' +
                   (item.close
-                    ? filters.calcGoodsStyle(item.products.length, 2) * 430 - 20
-                    : filters.calcGoodsStyle(item.products.length, 2) * 470 - 20) +
+                    ? calcGoodsStyle(item.products.length, 2) * 430 - 20
+                    : calcGoodsStyle(item.products.length, 2) * 470 - 20) +
                   'rpx;'
                 "
               >
@@ -449,8 +449,8 @@
                 :style="
                   'height: ' +
                   (item.close
-                    ? filters.calcGoodsStyle(item.products.length, 3) * 340 - 20
-                    : filters.calcGoodsStyle(item.products.length, 3) * 380 - 20) +
+                    ? calcGoodsStyle(item.products.length, 3) * 340 - 20
+                    : calcGoodsStyle(item.products.length, 3) * 380 - 20) +
                   'rpx;'
                 "
               >
@@ -479,8 +479,8 @@
                 :style="
                   'height: ' +
                   (item.close
-                    ? filters.calcGoodsStyle(item.products.length, 3) * 340 - 20
-                    : filters.calcGoodsStyle(item.products.length, 3) * 380 - 20) +
+                    ? calcGoodsStyle(item.products.length, 3) * 340 - 20
+                    : calcGoodsStyle(item.products.length, 3) * 380 - 20) +
                   'rpx;'
                 "
               >

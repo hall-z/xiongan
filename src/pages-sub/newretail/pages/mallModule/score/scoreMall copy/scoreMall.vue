@@ -266,8 +266,8 @@
           <view class="coupon-item-bottom">
             <image class="coupon-time-icon" :src="state.imagesPath.pass_clock"></image>
             <text class="time">
-              兑券时间：{{ filters.filtDateHead(item.couponActivity.startDate) }}~{{
-                filters.filtDateHead(item.couponActivity.endDate)
+              兑券时间：{{ filtDateHead(item.couponActivity.startDate) }}~{{
+                filtDateHead(item.couponActivity.endDate)
               }}
             </text>
             <!-- <text class="condition">{{item.couponActivity.condition}}</text> -->
@@ -310,8 +310,8 @@
             <!-- <image src="{{imagesPath.iconLogo}}" ></image> -->
             <view class="name">{{ item.name }}</view>
             <text class="time">
-              活动有效期：{{ filters.filtDateHead(item.beginTime) }}~{{
-                filters.filtDateHead(item.endTime)
+              活动有效期：{{ filtDateHead(item.beginTime) }}~{{
+                filtDateHead(item.endTime)
               }}
             </text>
           </view>

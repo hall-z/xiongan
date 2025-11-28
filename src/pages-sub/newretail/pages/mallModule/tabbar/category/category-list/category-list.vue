@@ -105,7 +105,7 @@
                   ';'
                 "
               >
-                {{ filters.filterCategoryName(item.menuName) }}
+                {{ filterCategoryName(item.menuName) }}
               </view>
             </view>
           </view>
@@ -165,7 +165,7 @@
                   ';'
                 "
               >
-                {{ filters.filterCategoryName(item.menuName) }}
+                {{ filterCategoryName(item.menuName) }}
               </view>
             </view>
           </view>

@@ -117,11 +117,11 @@
                 {{
                   item.sellPrice && item.sellPrice < item.promotionPrice
                     ? item.memberPrice && item.memberPrice < item.sellPrice
-                      ? filters.filtToFix(item.memberPrice)
-                      : filters.filtToFix(item.sellPrice)
+                      ? filtToFix(item.memberPrice)
+                      : filtToFix(item.sellPrice)
                     : item.memberPrice && item.memberPrice < item.promotionPrice
-                      ? filters.filtToFix(item.memberPrice)
-                      : filters.filtToFix(item.promotionPrice)
+                      ? filtToFix(item.memberPrice)
+                      : filtToFix(item.promotionPrice)
                 }}
               </text>
               {{ item.style == 'SPEC_PARENT' ? '起' : '' }}
@@ -133,7 +133,7 @@
                   (!item.sellPrice || item.memberPrice < item.sellPrice)
                 "
               >
-                <!-- <text class="oldPrice">￥{{item.originalPrice ? filters.filtToFix(item.originalPrice): filters.filtToFix(item.sellPrice)}}</text> -->
+                <!-- <text class="oldPrice">￥{{item.originalPrice ? filtToFix(item.originalPrice): filtToFix(item.sellPrice)}}</text> -->
                 <view class="vip-label">
                   <image :src="state.imagesPath.iconVipLabel"></image>
                   <text>{{ state.vipGradeConfig.priceLabel }}</text>
@@ -142,8 +142,8 @@
               <text class="oldPrice">
                 ￥{{
                   item.originalPrice > item.sellPrice
-                    ? filters.filtToFix(item.originalPrice)
-                    : filters.filtToFix(item.sellPrice)
+                    ? filtToFix(item.originalPrice)
+                    : filtToFix(item.sellPrice)
                 }}
               </text>
             </view>
@@ -151,10 +151,10 @@
               <text class="nowPrice">
                 {{
                   item.memberPrice && item.memberPrice < item.sellPrice
-                    ? filters.filtToFix(item.memberPrice)
+                    ? filtToFix(item.memberPrice)
                     : item.sellPrice
-                      ? filters.filtToFix(item.sellPrice)
-                      : filters.filtToFix(item.originalPrice)
+                      ? filtToFix(item.sellPrice)
+                      : filtToFix(item.originalPrice)
                 }}
               </text>
               {{ item.style == 'SPEC_PARENT' ? '起' : '' }}
@@ -163,7 +163,7 @@
                   class="oldPrice"
                   v-if="item.originalPrice && item.memberPrice < item.originalPrice"
                 >
-                  ￥{{ filters.filtToFix(item.originalPrice) }}
+                  ￥{{ filtToFix(item.originalPrice) }}
                 </text>
                 <view class="vip-label">
                   <image :src="state.imagesPath.iconVipLabel"></image>
@@ -174,7 +174,7 @@
                 class="oldPrice"
                 v-else-if="item.originalPrice && item.sellPrice < item.originalPrice"
               >
-                ￥{{ filters.filtToFix(item.originalPrice) }}
+                ￥{{ filtToFix(item.originalPrice) }}
               </text>
             </view>
           </view>

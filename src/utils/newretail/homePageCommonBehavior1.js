@@ -1422,6 +1422,11 @@ export default {
       NAVPAGE.toGoodsDetails(opts)
     },
     onClickGoods: function (val) {
+      if (!val.detail) {
+        val.detail = {
+          ...val,
+        }
+      }
       const e = {
         productId: val.detail.productid,
         type: val.detail.type,
@@ -1553,6 +1558,7 @@ export default {
     handleAddShopCart: function (val) {
       const that = this
       const productId = val.detail.target.dataset.id
+      let storeId = val.detail.target.dataset.storeid
       const business = val.detail.target.dataset.business
       let balance = val.detail.target.dataset.balance
       const grabActivityId = val.detail.target.dataset.grabactivityid
@@ -1564,7 +1570,6 @@ export default {
       const style = val.detail.target.dataset.style
       let hasSharingPersonId = false
       const mode = val.detail.target.dataset.type
-      let storeId = ''
       const loginStatus = this.checkAuth()
       if (style !== 'SPEC_PARENT' && style !== 'MEALS2') {
         if (loginStatus) {
@@ -1816,7 +1821,7 @@ export default {
       } else {
         canAddToCart = true
         // 多规格商品跳转商品详情 可选组合商品跳转详情
-        let opts = '?productId=' + productId + '&storeId=' + this.storeId + '&source=addshopcart'
+        let opts = '?productId=' + productId + '&storeId=' + storeId + '&source=addshopcart'
         if (grabActivityId != null && this.grabData.grabStatus !== 'started') {
           opts = opts + '&type=secondkill'
         } else {
@@ -3370,6 +3375,227 @@ export default {
     },
     toBenefits: function () {
       NAVPAGE.toBenefits()
+    },
+    filtQRNumber(val) {
+      if (val) {
+        val = val.toString()
+        op = ''
+        for (i = 0; i < val.length; i++) {
+          if (i % 4 === 0 && i > 0) {
+            op += ' ' + val.charAt(i)
+          } else {
+            op += val.charAt(i)
+          }
+        }
+        return op
+      } else {
+        return ''
+      }
+    },
+
+    filtNickname(val) {
+      if (!val) {
+        return '点击头像授权登录'
+      } else {
+        return val
+      }
+    },
+    filtMobile(val) {
+      if (val) {
+        return val.substring(0, 3) + '****' + val.substring(7)
+      } else {
+        return ''
+      }
+    },
+
+    filtDateHead(val) {
+      if (val) {
+        return val.split(' ')[0]
+      } else {
+        return ''
+      }
+    },
+
+    filtToFix(value) {
+      value = Number(value)
+      if (value >= 0) {
+        let formattedNum = 0
+        formattedNum = value.toFixed(2) // 此处2为保留两位小数
+        // 如果小数部分为00，去掉小数部分
+        if (formattedNum.indexOf('.00') !== -1) {
+          return formattedNum.substring(0, formattedNum.indexOf('.'))
+        }
+
+        // 如果小数部分只有一位，展示一位
+        if (formattedNum.indexOf('.') !== -1 && formattedNum[formattedNum.length - 1] === '0') {
+          return formattedNum.substring(0, formattedNum.length - 1)
+        }
+        return formattedNum
+      } else {
+        return 0
+      }
+    },
+
+    filtdistributionCompany(value) {
+      if (value === 'MT') {
+        return '美团'
+      } else if (value === 'FN') {
+        return '蜂鸟'
+      } else {
+        return ''
+      }
+    },
+
+    filtTrackingCompany(val) {
+      if (val === 'KUAIFUWU') {
+        return '快服务'
+      } else if (val === 'SHUNFENG') {
+        return '顺丰'
+      } else if (val === 'SHENTONG') {
+        return '申通'
+      } else if (val === 'YUANTONG') {
+        return '圆通'
+      } else if (val === 'ZHONGTONG') {
+        return '中通'
+      } else if (val === 'HUITONGKUAIDI') {
+        return '汇通快递'
+      } else if (val === 'YUNDA') {
+        return '韵达'
+      } else if (val === 'ZHAIJISONG') {
+        return '宅急送'
+      } else if (val === 'DEBANGWULIU') {
+        return '德邦物流'
+      } else if (val === 'OTHER') {
+        return '其他'
+      } else {
+        return '其他'
+      }
+    },
+
+    filtInt(value) {
+      if (value >= 0) {
+        return parseInt(value) // 处理为整数
+      } else {
+        return 0
+      }
+    },
+    formatMobile(phoneNumber) {
+      tel = phoneNumber
+      if (isPhone(tel)) {
+        tel = tel.substring(0, 3) + ' ' + tel.substring(3, 7) + ' ' + tel.substring(7, 11)
+      }
+      return tel
+      // 判断是否是手机号码格式
+      function isPhone(str) {
+        reg = getRegExp('^1(3|4|5|6|7|8|9)\d{9}$', 'g')
+        return reg.test(str)
+      }
+    },
+
+    toFix(value) {
+      if (value != null && value !== '' && value >= 0) {
+        return parseFloat(value).toFixed(2) // 此处2为保留两位小数
+      } else {
+        return 0
+      }
+    },
+
+    // 计算商品行数
+    calcGoodsStyle(value, num) {
+      return Math.ceil(value / num)
+    },
+    /**
+     * px转rpx
+     */
+    pxToRpx(px) {
+      // const app = getApp();
+      // const screenWidth = app && app.globalData.systemInfo && app.globalData.systemInfo.screenWidth;
+      return (750 * parseFloat(px)) / 375
+    },
+    /**
+     * rpx转px
+     */
+    rpxToPx(rpx) {
+      const app = getApp()
+      const screenWidth = app && app.globalData.systemInfo && app.globalData.systemInfo.screenWidth
+      return ((screenWidth || 375) * parseFloat(rpx)) / 750
+    },
+
+    // 在wxs中定义样式逻辑
+    getStyle(selectedTopicIds, itemId, themeColor) {
+      return selectedTopicIds.indexOf(itemId) > -1
+        ? 'color:' + themeColor + ';border-color:' + themeColor
+        : ''
+    },
+
+    // 判断是否选中
+    isChecked(selectedTopicIds, itemId) {
+      return selectedTopicIds.indexOf(itemId) > -1
+    },
+
+    // 封装转换时间格式的方法
+    filterTime(dateTime) {
+      // 通过空格分隔日期和时间部分
+      // const [date, time] = ;
+
+      // 返回年月日格式
+      return dateTime.split(' ')[0]
+    },
+    // 格式化分类中的名称
+    filterCategoryName(val) {
+      if (val.length > 4) {
+        return val.substring(0, 4)
+      }
+      return val
+    },
+    // 判断是否是视频
+    isMp4(val) {
+      if (val.indexOf('.mp4') > -1) {
+        return true
+      } else {
+        return false
+      }
+    },
+
+    filtRefundStatus(val) {
+      if (val === 'CREATED') {
+        return '退款中'
+      } else if (val === 'REJECTED') {
+        return '已拒绝'
+      } else if (val === 'FINISHED') {
+        return '已退款'
+      } else if (val === 'CANCELED') {
+        return '已取消'
+      } else {
+        return ''
+      }
+    },
+    /**
+     * 过滤砍价状态
+     */
+    filtBargainStatus(val) {
+      if (val === 'CREATE') {
+        return '进行中'
+      } else if (val === 'SUCCESS') {
+        return '砍价成功'
+      } else if (val === 'FAILED') {
+        return '砍价失败'
+      } else {
+        return '其他'
+      }
+    },
+
+    // 获取绝对值
+    filterAbs(val) {
+      return Math.abs(val)
+    },
+
+    // 格式化积分商城商品兑换数量
+    filterProductNum(sellNum, totalNum) {
+      if (sellNum > totalNum) {
+        return totalNum
+      }
+      return sellNum
     },
   },
 }

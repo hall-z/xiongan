@@ -8,7 +8,7 @@
       <image :src="item.avatar ? item.avatar : state.imagesPath.userPortrait"></image>
       <view>
         <!-- <text class='name'>{{item.name}}</text> -->
-        <text class="name">{{item.name == item.mobile ? filters.filtMobile(item.name) : item.name}}  {{item.name == item.mobile ? '' : filters.filtMobile(item.mobile)}}</text>
+        <text class="name">{{item.name == item.mobile ? filtMobile(item.name) : item.name}}  {{item.name == item.mobile ? '' : filtMobile(item.mobile)}}</text>
         <text class="time">{{item.area}}</text>
       </view>
     </view>

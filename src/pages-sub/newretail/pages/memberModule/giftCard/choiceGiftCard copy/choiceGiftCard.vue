@@ -13,7 +13,7 @@
       <text>￥{{item.balance}}</text>
     </view>
     <view class="buy-time" v-if="item.useable">
-      本单最大可用金额：￥{{filters.filtToFix(item.maxUseTotal)}}
+      本单最大可用金额：￥{{filtToFix(item.maxUseTotal)}}
     </view>
     <view class="buy-time" v-else>
       {{item.reason}}

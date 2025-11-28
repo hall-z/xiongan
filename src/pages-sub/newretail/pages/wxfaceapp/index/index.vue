@@ -11,7 +11,7 @@
           <view class="name-mobile">
             <text>{{ state.hasUserInfo ? state.userInfo.nickName : '请点击头像登录' }}</text>
             <text>
-              {{ state.member.id ? filters.filtMobile(state.member.mobile) : 'xxx xxxx xxxx' }}
+              {{ state.member.id ? filtMobile(state.member.mobile) : 'xxx xxxx xxxx' }}
             </text>
           </view>
         </view>
@@ -69,7 +69,7 @@
         </view>
         <view class="right">
           最多可抵
-          <view class="score-amount">-￥{{ filters.filtToFix(state.scoreAmount) }}</view>
+          <view class="score-amount">-￥{{ filtToFix(state.scoreAmount) }}</view>
           <view :class="'checkbox-icon ' + (state.useScore ? 'active' : '')"></view>
         </view>
       </view>
@@ -172,7 +172,7 @@
         :disabled="state.disabled"
         @click="toPay"
       >
-        确认支付￥{{ filters.filtToFix(allPrice - state.totalDiscount - state.scoreDiscount) }}
+        确认支付￥{{ filtToFix(allPrice - state.totalDiscount - state.scoreDiscount) }}
       </button>
     </view>
     <!-- 付款超时弹窗 -->
