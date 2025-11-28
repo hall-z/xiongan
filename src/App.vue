@@ -280,7 +280,7 @@ const globalData = {
             success: (res) => {
               const latitude = res.latitude
               const longitude = res.longitude
-              appInstance.globalData.location = {
+              getApp().globalData.location = {
                 latitude: res.latitude,
                 longitude: res.longitude,
               }
@@ -308,11 +308,11 @@ const globalData = {
                   }
                   if (!noUpdateFlag) {
                     // globalData.storeId = newAllStores && newAllStores[0] ? newAllStores[0].id : globalData.storeId;
-                    appInstance.globalData.storeInfo =
+                    getApp().globalData.storeInfo =
                       newAllStores && newAllStores[0]
                         ? newAllStores[0]
-                        : appInstance.globalData.storeInfo
-                    uni.setStorageSync('storeIdactive', appInstance.globalData.storeInfo)
+                        : getApp().globalData.storeInfo
+                    uni.setStorageSync('storeIdactive', getApp().globalData.storeInfo)
                     uni.setStorageSync('updatePage', 1)
                   } else {
                     uni.setStorageSync('setTip', true)
@@ -343,7 +343,7 @@ const globalData = {
         .memberIsGuide(memberId)
         .then((res) => {
           console.log('查询是否是导购员：', res)
-          appInstance.globalData.isShoppingGuide = res
+          getApp().globalData.isShoppingGuide = res
         })
         .catch((err) => {
           uni.showToast({
@@ -362,7 +362,7 @@ const globalData = {
     const user = auth.getUser()
     const tokens = auth.getTokens()
     if (!tokens || !tokens.expiresTo) {
-      appInstance.globalData.userInfo = null
+      getApp().globalData.userInfo = null
       console.log('当前用户未登录，请先登录')
       return
     }
@@ -374,26 +374,26 @@ const globalData = {
         wxaUserService
           .login()
           .then((res) => {
-            appInstance.globalData.userInfo = res
+            getApp().globalData.userInfo = res
           })
           .catch((err) => {
             console.log('自动登录失败：', err)
-            appInstance.globalData.userInfo = null
+            getApp().globalData.userInfo = null
             console.log('刷新令牌已经过期，请重新登录')
           })
         return
       }
-      appInstance.globalData.userInfo = null
+      getApp().globalData.userInfo = null
       console.log('刷新令牌已经过期，请重新登录')
       return
     }
-    if (appInstance.globalData.userInfo.member) {
+    if (getApp().globalData.userInfo.member) {
       mbrService
         .getLoginMember()
         .then((res) => {
-          if (appInstance.globalData.userInfo && appInstance.globalData.userInfo.member) {
-            appInstance.globalData.userInfo.member = {
-              ...appInstance.globalData.userInfo.member,
+          if (getApp().globalData.userInfo && getApp().globalData.userInfo.member) {
+            getApp().globalData.userInfo.member = {
+              ...getApp().globalData.userInfo.member,
               ...res,
             }
           }
@@ -425,7 +425,7 @@ const globalData = {
     try {
       const sharePictures = uni.getStorageSync('wj_sharePictures')
       if (sharePictures) {
-        appInstance.globalData.sharePictures = sharePictures
+        getApp().globalData.sharePictures = sharePictures
       }
     } catch (error) {
       console.log('CatchClause', error)
@@ -435,7 +435,7 @@ const globalData = {
       .getByModelType('DEFAULT')
       .then((res) => {
         if (res) {
-          appInstance.globalData.sharePictures = res.pictureUrl
+          getApp().globalData.sharePictures = res.pictureUrl
           try {
             uni.setStorageSync('wj_sharePictures', res.pictureUrl)
           } catch (error) {
@@ -464,7 +464,7 @@ const globalData = {
         handleSystemOption(configureInfo)
       }
       console.log('----------------------配置信息')
-      console.log(appInstance.globalData.systemConfigure)
+      console.log(getApp().globalData.systemConfigure)
       const keyArr = [
         'producrisStoreCode',
         // 分享带门店id
@@ -538,23 +538,23 @@ const globalData = {
           console.log('getSystemOptions end', util.formatTime(new Date()).replace(/\//g, '-'))
           handleSystemOption(res)
           console.log('----------------查询配置信息')
-          console.log(appInstance.globalData.systemConfigure)
-          if (appInstance.globalData.systemConfigure.openDistribution) {
-            appInstance.globalData.getDistributionUser()
+          console.log(getApp().globalData.systemConfigure)
+          if (getApp().globalData.systemConfigure.openDistribution) {
+            getApp().globalData.getDistributionUser()
           }
           if (
             options.query.shareId != null &&
             options.query.shareId !== '' &&
-            appInstance.globalData.systemConfigure.openDistributionAccountShareProduct &&
-            appInstance.globalData.systemConfigure.openDistribution
+            getApp().globalData.systemConfigure.openDistributionAccountShareProduct &&
+            getApp().globalData.systemConfigure.openDistribution
           ) {
-            appInstance.globalData.bindDistribution(options.query.shareId)
+            getApp().globalData.bindDistribution(options.query.shareId)
           } else {
             pageOnLaunch = false
           }
           if (util.isDeliveryProduct()) {
             // console.log('是不是进入到了这里是不是')
-            appInstance.globalData.getDistributionStore()
+            getApp().globalData.getDistributionStore()
           }
         })
         .catch((err) => {
@@ -568,107 +568,105 @@ const globalData = {
       console.log(e)
     }
     function handleSystemOption(res) {
-      appInstance.globalData.configureInfo = res
+      getApp().globalData.configureInfo = res
       if (res && res.length > 0) {
         res.forEach((item) => {
           if (item.key === 'app.mall.distributionStoreId' && item.value != null) {
-            appInstance.globalData.systemConfigure.distributionStoreId = item.value
+            getApp().globalData.systemConfigure.distributionStoreId = item.value
             uni.setStorageSync('distributionStoreId', item.value)
           } else if (item.key === 'titlebarBackgroundColour' && item.value != null) {
-            appInstance.globalData.systemConfigure.titlebarBackgroundColour = item.value
+            getApp().globalData.systemConfigure.titlebarBackgroundColour = item.value
           } else if (item.key === 'titlebarFotColour' && item.value != null) {
-            appInstance.globalData.systemConfigure.titlebarFotColour = item.value
+            getApp().globalData.systemConfigure.titlebarFotColour = item.value
           } else if (item.key === 'homeBackgroundColour' && item.value != null) {
-            appInstance.globalData.systemConfigure.homeBackgroundColour = item.value
+            getApp().globalData.systemConfigure.homeBackgroundColour = item.value
           } else if (item.key === 'homeBackgroundImage' && item.value != null) {
-            appInstance.globalData.systemConfigure.homeBackgroundImage = item.value
+            getApp().globalData.systemConfigure.homeBackgroundImage = item.value
           } else if (item.key === 'bgMarginTop' && item.value != null) {
-            appInstance.globalData.systemConfigure.bgMarginTop = item.value
+            getApp().globalData.systemConfigure.bgMarginTop = item.value
           } else if (item.key === 'liveRoomLogoUrl' && item.value != null) {
-            appInstance.globalData.systemConfigure.liveRoomLogoUrl = item.value
+            getApp().globalData.systemConfigure.liveRoomLogoUrl = item.value
           } else if (item.key === 'memberAscriptionStoreDistance' && item.value != null) {
-            appInstance.globalData.systemConfigure.memberAscriptionStoreDistance = Number(
-              item.value,
-            )
+            getApp().globalData.systemConfigure.memberAscriptionStoreDistance = Number(item.value)
           } else if (item.key === 'appContactMobile' && item.value != null) {
-            appInstance.globalData.servicePhone = item.value
+            getApp().globalData.servicePhone = item.value
           } else if (item.key === 'storeProductBalanceIsZeroShow' && item.value != null) {
             // 库存为0的商品显示，默认1显示为“已售完” ,2不显示"
             if (item.value === '1') {
-              appInstance.globalData.systemConfigure.storeProductBalanceIsZeroShow = true
+              getApp().globalData.systemConfigure.storeProductBalanceIsZeroShow = true
             } else if (item.value === '2') {
-              appInstance.globalData.systemConfigure.storeProductBalanceIsZeroShow = false
+              getApp().globalData.systemConfigure.storeProductBalanceIsZeroShow = false
             } else {
-              appInstance.globalData.systemConfigure.storeProductBalanceIsZeroShow = true
+              getApp().globalData.systemConfigure.storeProductBalanceIsZeroShow = true
             }
           } else if (item.key === 'isUseExternalCoupon' && item.value != null) {
-            appInstance.globalData.systemConfigure.isUseExternalCoupon = item.value === 'TRUE'
+            getApp().globalData.systemConfigure.isUseExternalCoupon = item.value === 'TRUE'
           } else if (item.key === 'openDistributionAccountShareProduct' && item.value != null) {
-            appInstance.globalData.systemConfigure.openDistributionAccountShareProduct =
+            getApp().globalData.systemConfigure.openDistributionAccountShareProduct =
               item.value === 'TRUE'
           } else if (
             item.key === 'externalCouponPrefix' &&
             item.value != null &&
             item.value !== ''
           ) {
-            appInstance.globalData.systemConfigure.externalCouponPrefix = item.value
+            getApp().globalData.systemConfigure.externalCouponPrefix = item.value
           } else if (item.key === 'userCostPrice' && item.value != null) {
-            appInstance.globalData.systemConfigure.userCostPrice = item.value === 'TRUE'
+            getApp().globalData.systemConfigure.userCostPrice = item.value === 'TRUE'
           } else if (
             item.key === 'fictitiousProductId' &&
             item.value != null &&
             item.value !== ''
           ) {
-            appInstance.globalData.systemConfigure.fictitiousProductId = item.value
+            getApp().globalData.systemConfigure.fictitiousProductId = item.value
           } else if (item.key === 'memberCodeDisplayPayMethod' && item.value != null) {
-            appInstance.globalData.systemConfigure.memberCodeDisplayPayMethod = item.value
+            getApp().globalData.systemConfigure.memberCodeDisplayPayMethod = item.value
           } else if (item.key === 'showScorePayCode' && item.value != null) {
-            appInstance.globalData.systemConfigure.showScorePayCode = item.value === 'TRUE'
+            getApp().globalData.systemConfigure.showScorePayCode = item.value === 'TRUE'
           } else if (item.key === 'openDistribution' && item.value != null) {
-            appInstance.globalData.systemConfigure.openDistribution = item.value === 'TRUE'
+            getApp().globalData.systemConfigure.openDistribution = item.value === 'TRUE'
           } else if (item.key === 'showVipMemberModule' && item.value != null) {
-            appInstance.globalData.systemConfigure.showVipMemberModule = item.value === 'TRUE'
+            getApp().globalData.systemConfigure.showVipMemberModule = item.value === 'TRUE'
           } else if (item.key === 'showCenterMbrModule' && item.value != null) {
-            appInstance.globalData.systemConfigure.showCenterMbrModule = item.value === 'TRUE'
+            getApp().globalData.systemConfigure.showCenterMbrModule = item.value === 'TRUE'
           } else if (item.key === 'enableRecordVisitStore' && item.value != null) {
-            appInstance.globalData.systemConfigure.enableRecordVisitStore = item.value === 'TRUE'
+            getApp().globalData.systemConfigure.enableRecordVisitStore = item.value === 'TRUE'
           } else if (item.key === 'showCartModule' && item.value != null) {
-            appInstance.globalData.systemConfigure.showCartModule = item.value === 'TRUE'
+            getApp().globalData.systemConfigure.showCartModule = item.value === 'TRUE'
           } else if (item.key === 'showHotGoods' && item.value != null) {
-            appInstance.globalData.systemConfigure.showHotGoods = item.value === 'TRUE'
+            getApp().globalData.systemConfigure.showHotGoods = item.value === 'TRUE'
           } else if (item.key === 'showUnreadCoupons' && item.value != null) {
-            appInstance.globalData.systemConfigure.showUnreadCoupons = item.value === 'TRUE'
+            getApp().globalData.systemConfigure.showUnreadCoupons = item.value === 'TRUE'
           } else if (item.key === 'showStorePrize' && item.value != null) {
-            appInstance.globalData.systemConfigure.showStorePrize = item.value === 'TRUE'
+            getApp().globalData.systemConfigure.showStorePrize = item.value === 'TRUE'
           } else if (item.key === 'liveRoomShowCenter' && item.value != null) {
-            appInstance.globalData.systemConfigure.liveRoomShowCenter = item.value === 'TRUE'
+            getApp().globalData.systemConfigure.liveRoomShowCenter = item.value === 'TRUE'
           } else if (item.key === 'wisdom_source' && item.value != null) {
-            appInstance.globalData.systemConfigure.wisdomSource = item.value
+            getApp().globalData.systemConfigure.wisdomSource = item.value
           } else if (item.key === 'customizedPicture' && item.value != null) {
-            appInstance.globalData.systemConfigure.customizedPicture = item.value
+            getApp().globalData.systemConfigure.customizedPicture = item.value
           } else if (item.key === 'isRechargePasswordEnabled' && item.value != null) {
-            appInstance.globalData.systemConfigure.isRechargePasswordEnabled = item.value === 'TRUE'
+            getApp().globalData.systemConfigure.isRechargePasswordEnabled = item.value === 'TRUE'
           } else if (item.key === 'isRechargePasswordShow' && item.value != null) {
-            appInstance.globalData.systemConfigure.isRechargePasswordShow = item.value === 'TRUE'
+            getApp().globalData.systemConfigure.isRechargePasswordShow = item.value === 'TRUE'
           } else if (item.key === 'deliveryDistanceThirdMap' && item.value != null) {
-            appInstance.globalData.systemConfigure.deliveryDistanceThirdMap = item.value
+            getApp().globalData.systemConfigure.deliveryDistanceThirdMap = item.value
           } else if (item.key === 'lbs_tianditu_appkey' && item.value != null) {
-            appInstance.globalData.systemConfigure.lbsTiandituAppkey = item.value
+            getApp().globalData.systemConfigure.lbsTiandituAppkey = item.value
           } else if (item.key === 'customizedPage' && item.value != null) {
-            appInstance.globalData.systemConfigure.customizedPage = item.value
+            getApp().globalData.systemConfigure.customizedPage = item.value
           } else if (item.key === 'miniprogramSharingName' && item.value != null) {
-            appInstance.globalData.systemConfigure.miniprogramSharingName = item.value
+            getApp().globalData.systemConfigure.miniprogramSharingName = item.value
           } else if (item.key === 'app.mall.order.trace.type' && item.value != null) {
-            appInstance.globalData.systemConfigure.orderTraceType = item.value
+            getApp().globalData.systemConfigure.orderTraceType = item.value
             uni.setStorageSync('orderTraceType', item.value)
           } else if (item.key === 'app.mall.order.cash-payment' && item.value != null) {
-            appInstance.globalData.multiplePayment = item.value === 'TRUE'
+            getApp().globalData.multiplePayment = item.value === 'TRUE'
           } else if (item.key === 'productPlacedAtTheTop' && item.value != null) {
-            appInstance.globalData.productPlacedAtTheTop = item.value === 'TRUE'
+            getApp().globalData.productPlacedAtTheTop = item.value === 'TRUE'
           } else if (item.key === 'isOpenStoreOrder' && item.value != null) {
-            appInstance.globalData.isOpenStoreOrder = item.value === 'TRUE'
+            getApp().globalData.isOpenStoreOrder = item.value === 'TRUE'
           } else if (item.key === 'producrisStoreCode' && item.value != null) {
-            appInstance.globalData.systemConfigure.producrisStoreCode = item.value
+            getApp().globalData.systemConfigure.producrisStoreCode = item.value
           } else if (
             item.key === 'dfs_qcloudPrefix' ||
             item.key === 'dfs_qcloudDomain' ||
@@ -679,7 +677,7 @@ const globalData = {
             item.key === 'dfs_huaweiPrefix' ||
             item.key === 'dfs_type'
           ) {
-            appInstance.globalData.dfsObj[item.key] = item.value
+            getApp().globalData.dfsObj[item.key] = item.value
           }
         })
         try {
@@ -700,10 +698,10 @@ const globalData = {
     // 判断是否开启分销员分享商品创建上下级关系
     console.log(
       '是否开启绑定',
-      appInstance.globalData.systemConfigure.openDistributionAccountShareProduct,
+      getApp().globalData.systemConfigure.openDistributionAccountShareProduct,
     )
-    if (appInstance.globalData.systemConfigure.openDistributionAccountShareProduct) {
-      if (appInstance.globalData.userInfo && appInstance.globalData.userInfo.member) {
+    if (getApp().globalData.systemConfigure.openDistributionAccountShareProduct) {
+      if (getApp().globalData.userInfo && getApp().globalData.userInfo.member) {
         const postData = {
           memberId,
         }
@@ -717,12 +715,12 @@ const globalData = {
           .catch((err) => {
             console.log('------------绑定分销员上下级关系失败')
             console.log(err.message)
-            appInstance.globalData.distributionAccountShareId = memberId
+            getApp().globalData.distributionAccountShareId = memberId
             pageOnLaunch = false
           })
       } else {
         // 用户未登录或不是会员，缓存分销员信息，等登陆后绑定关系
-        appInstance.globalData.distributionAccountShareId = memberId
+        getApp().globalData.distributionAccountShareId = memberId
         console.log('未登录或不是会员')
         pageOnLaunch = false
       }
@@ -736,21 +734,21 @@ const globalData = {
    * 查询VIP会员配置
    */
   getVipMemberConfig: function () {
-    console.log('是否付费会员配置：', appInstance.globalData.systemConfigure.isEnableVipMember)
+    console.log('是否付费会员配置：', getApp().globalData.systemConfigure.isEnableVipMember)
     try {
       const config = uni.getStorageSync('wj_vipMemberConfig')
       if (config) {
-        appInstance.globalData.systemConfigure.vipGradeConfig = config
+        getApp().globalData.systemConfigure.vipGradeConfig = config
       }
       mbrService
         .getVipMemberGradeConfig()
         .then((res) => {
           if (res) {
-            appInstance.globalData.systemConfigure.isEnableVipMember = res.enable
-            appInstance.globalData.systemConfigure.vipGradeConfig = res
+            getApp().globalData.systemConfigure.isEnableVipMember = res.enable
+            getApp().globalData.systemConfigure.vipGradeConfig = res
             uni.setStorageSync('wj_vipMemberConfig', res)
           } else {
-            appInstance.globalData.systemConfigure.isEnableVipMember = false
+            getApp().globalData.systemConfigure.isEnableVipMember = false
           }
         })
         .catch((err) => {
@@ -767,12 +765,12 @@ const globalData = {
    */
   getTabbar() {
     try {
-      if (appInstance.globalData.queryTabbar === 0) {
+      if (getApp().globalData.queryTabbar === 0) {
         const tabBar = uni.getStorageSync('wj_tabBar')
         if (tabBar) {
-          appInstance.globalData.tabBar.list = tabBar
+          getApp().globalData.tabBar.list = tabBar
         }
-        appInstance.globalData.queryTabbar = 1
+        getApp().globalData.queryTabbar = 1
         hmoeService
           .query('UNDER_MENU')
           .then((res) => {
@@ -807,17 +805,17 @@ const globalData = {
                 console.log('CatchClause', error)
                 console.log('CatchClause', error)
               }
-              appInstance.globalData.tabBar.list = tabBar
+              getApp().globalData.tabBar.list = tabBar
               // 获取用户购物车商品数量
               if (
-                appInstance.globalData.userInfo &&
-                appInstance.globalData.userInfo.member &&
-                appInstance.globalData.systemConfigure.showCartModule
+                getApp().globalData.userInfo &&
+                getApp().globalData.userInfo.member &&
+                getApp().globalData.systemConfigure.showCartModule
               ) {
-                appInstance.globalData.getUserProductsCount()
+                getApp().globalData.getUserProductsCount()
               }
               // 处理tabbar不对的情况
-              appInstance.globalData.editTabbar()
+              getApp().globalData.editTabbar()
             }
           })
           .catch((err) => {
@@ -867,8 +865,8 @@ const globalData = {
    */
   editTabbar: function () {
     // wx.hideTabBar();
-    const tabbar = appInstance.globalData.tabBar
-    console.log('tabbar', appInstance?.globalData, globalData)
+    const tabbar = getApp().globalData.tabBar
+    console.log('tabbar', getApp()?.globalData, globalData)
     const currentPages = getCurrentPages()
     const _this = currentPages[currentPages.length - 1]
     if (_this == null) {
@@ -893,7 +891,7 @@ const globalData = {
    * 获取用户购物车商品数量
    */
   getUserProductsCount() {
-    const tabBar = appInstance.globalData.tabBar
+    const tabBar = getApp().globalData.tabBar
     try {
       const count = uni.getStorageSync('wj_userProductsCount')
       if (count) {
@@ -904,7 +902,7 @@ const globalData = {
             }
           })
         }
-        appInstance.globalData.tabBar = tabBar
+        getApp().globalData.tabBar = tabBar
       }
     } catch (error) {
       console.log('CatchClause', error)
@@ -913,7 +911,7 @@ const globalData = {
     shopcartService
       .getProductsCount()
       .then((res) => {
-        const tabBar = appInstance.globalData.tabBar
+        const tabBar = getApp().globalData.tabBar
         if (tabBar.list && tabBar.list.length > 0) {
           tabBar.list.forEach((item) => {
             if (item.pagePath === '/pages/mallModule/tabbar/shopcart/shopcart') {
@@ -921,8 +919,8 @@ const globalData = {
             }
           })
         }
-        appInstance.globalData.tabBar = tabBar
-        appInstance.globalData.editTabbar()
+        getApp().globalData.tabBar = tabBar
+        getApp().globalData.editTabbar()
         try {
           uni.setStorageSync('wj_userProductsCount', res)
         } catch (error) {
@@ -945,14 +943,14 @@ const globalData = {
    * @param text	string 显示的文本，超过 4 个字符则显示成 ...
    */
   setTabBarBadge: function (linkModel, text) {
-    const tabbar = appInstance.globalData.tabBar
+    const tabbar = getApp().globalData.tabBar
     tabbar.list.forEach((item) => {
       if (item.linkModel === linkModel) {
         item.badge = text
       }
     })
-    appInstance.globalData.tabBar = tabbar
-    appInstance.globalData.editTabbar()
+    getApp().globalData.tabBar = tabbar
+    getApp().globalData.editTabbar()
   },
 
   // 获取门店逻辑
@@ -960,7 +958,7 @@ const globalData = {
   //   if (!globalData.storeInfo || !globalData.storeInfo.id) {
   //     // 获取到当前的地理位置，查找出最近的门店
   //     await ADDRESS.getAllStore1(this)
-  //     await appInstance.globalData.getUiConfig(options)
+  //     await getApp().globalData.getUiConfig(options)
   //   }
   // },
   /**
@@ -991,41 +989,43 @@ const globalData = {
       console.log('CatchClause', e)
       console.log('CatchClause', e)
       // Do something when catch error
-      console.log('获取UIConfig配置信息出错：', appInstance.globalData)
+      console.log(getApp().globalData, getApp(), 'afasfklasjfldjf')
+      console.log('获取UIConfig配置信息出错：', getApp().globalData)
     }
     pageOnLaunch = true
-    appInstance.globalData.getSystemOptions(options)
-    if (appInstance.globalData.systemConfigure.showVipMemberModule) {
-      appInstance.globalData.getVipMemberConfig()
+    console.log(getApp().globalData, getApp(), 'afasfklasjfldjf')
+    getApp().globalData.getSystemOptions(options)
+    if (getApp().globalData.systemConfigure.showVipMemberModule) {
+      getApp().globalData.getVipMemberConfig()
     }
-    appInstance.globalData.getTabbar()
+    getApp().globalData.getTabbar()
     function handleUIConfigData(res) {
       if (res == null) {
         return
       }
-      appInstance.globalData.uiconfig = util.handleUIConfig(res)
+      getApp().globalData.uiconfig = util.handleUIConfig(res)
       console.log('ui配置')
-      console.log(appInstance.globalData.uiconfig)
+      console.log(getApp().globalData.uiconfig)
       if (
-        appInstance &&
-        appInstance.globalData &&
-        appInstance.globalData.uiconfig &&
-        appInstance.globalData.uiconfig.themeColor
+        getApp() &&
+        getApp().globalData &&
+        getApp().globalData.uiconfig &&
+        getApp().globalData.uiconfig.themeColor
       ) {
-        uni.setStorageSync('themeColor', appInstance.globalData.uiconfig.themeColor)
+        uni.setStorageSync('themeColor', getApp().globalData.uiconfig.themeColor)
       }
-      appInstance.globalData.systemConfigure.hasDistributionCenter = res.isShowDistribution
+      getApp().globalData.systemConfigure.hasDistributionCenter = res.isShowDistribution
       // 前端分享定位逻辑增加选项控制
       if (res.shareStoreType && res.shareStoreType === 'OWN_STORE') {
-        appInstance.globalData.systemConfigure.shareStoreType = res.shareStoreType
-        appInstance.globalData.getShareStoreId(options)
+        getApp().globalData.systemConfigure.shareStoreType = res.shareStoreType
+        getApp().globalData.getShareStoreId(options)
       }
 
       // 前端普通订单未到时间是否隐藏自提码，默认不隐藏
-      appInstance.globalData.systemConfigure.orderHiddenLadingCode = !!res.orderHiddenLadingCode
+      getApp().globalData.systemConfigure.orderHiddenLadingCode = !!res.orderHiddenLadingCode
       // 前端是否开启极速登录的配置，默认不开启
-      appInstance.globalData.systemConfigure.isMiNiAppMustAccredit = !!res.isMiNiAppMustAccredit
-      appInstance.globalData.systemConfigure.showOfflineOrders = !!res.showOfflineOrders
+      getApp().globalData.systemConfigure.isMiNiAppMustAccredit = !!res.isMiNiAppMustAccredit
+      getApp().globalData.systemConfigure.showOfflineOrders = !!res.showOfflineOrders
     }
   },
 
@@ -1041,8 +1041,8 @@ const globalData = {
       const reg = /^\d+$/ // 正则校验表达式，判断是否为纯数字
       // 如果是纯数字，说明是门店id，保存门店id，获取缓存门店如果有门店数据，将该门店设为默认门店
       if (reg.test(storeId)) {
-        appInstance.globalData.storeId = JSON.stringify(storeId)
-        appInstance.globalData.shareStoreId = JSON.stringify(storeId)
+        getApp().globalData.storeId = JSON.stringify(storeId)
+        getApp().globalData.shareStoreId = JSON.stringify(storeId)
       }
       console.log('分享门店：', JSON.stringify(storeId))
     }
@@ -1055,7 +1055,7 @@ const globalData = {
     uni.getStorage({
       key: 'wj_templateIds',
       success: (res) => {
-        appInstance.globalData.templateIds = res
+        getApp().globalData.templateIds = res
         getTemplateIds()
       },
       fail: () => {
@@ -1063,7 +1063,7 @@ const globalData = {
       },
     })
     function getTemplateIds() {
-      if (!(appInstance.globalData.userInfo && appInstance.globalData.userInfo.member)) {
+      if (!(getApp().globalData.userInfo && getApp().globalData.userInfo.member)) {
         log.info('查询模板id报错：当前用户未登录')
         return
       }
@@ -1071,8 +1071,8 @@ const globalData = {
         .getTemplateIds()
         .then((res) => {
           if (res) {
-            appInstance.globalData.templateIdsQuery = 1
-            appInstance.globalData.templateIds = res
+            getApp().globalData.templateIdsQuery = 1
+            getApp().globalData.templateIds = res
           }
           uni.setStorage({
             key: 'wj_templateIds',
@@ -1080,7 +1080,7 @@ const globalData = {
           })
         })
         .catch((err) => {
-          appInstance.globalData.templateIdsQuery = 1
+          getApp().globalData.templateIdsQuery = 1
           log.info('查询模板id报错：', err.message)
         })
     }
@@ -1094,11 +1094,11 @@ const globalData = {
       .queryMerchantCenter()
       .then((res) => {
         if (res && res.length > 0) {
-          appInstance.globalData.merchantCenter = res[0]
+          getApp().globalData.merchantCenter = res[0]
         }
       })
       .catch((err) => {
-        appInstance.globalData.merchantCenter = null
+        getApp().globalData.merchantCenter = null
         log.info('查询商户资料报错：', err.message)
       })
   },
@@ -1108,15 +1108,15 @@ const globalData = {
     try {
       const distributor = uni.getStorageSync('__distributor__') // 获取缓存的分销员信息
       if (distributor && distributor != null && distributor.status === 'AUDITED') {
-        appInstance.globalData.distributorInfo = distributor
+        getApp().globalData.distributorInfo = distributor
       } else {
-        if (appInstance.globalData.userInfo && appInstance.globalData.userInfo.member) {
+        if (getApp().globalData.userInfo && getApp().globalData.userInfo.member) {
           distributionService
             .getDistributionUser()
             .then((res) => {
               if (res) {
                 if (res.status === 'AUDITED') {
-                  appInstance.globalData.distributorInfo = res
+                  getApp().globalData.distributorInfo = res
                 }
                 // 保存分销员信息
                 auth.setDistributor(res)
@@ -1138,13 +1138,13 @@ const globalData = {
   getDistributionStore: function () {
     const distributionStore = uni.getStorageSync('wj_distributionStore')
     if (distributionStore && distributionStore != null) {
-      appInstance.globalData.distributionStore = distributionStore
+      getApp().globalData.distributionStore = distributionStore
     } else {
       storeService
         .getDistributionStore()
         .then((res) => {
           if (res) {
-            appInstance.globalData.distributionStore = res
+            getApp().globalData.distributionStore = res
             uni.setStorageSync('wj_distributionStore', res)
           }
         })
@@ -1189,7 +1189,7 @@ const globalData = {
   },
 
   updateStoreInfo: function (newValue) {
-    appInstance.globalData.storeInfo = newValue
+    getApp().globalData.storeInfo = newValue
   },
 
   multiplePayment: '',
@@ -1268,14 +1268,14 @@ onLaunch((options) => {
     getApp().globalData = globalData
     getApp().globalData.authorizeSkip = 0
 
+    // 取当前用户
     uni.setStorageSync('updatePage', 0)
     console.log('场景值', options)
     // 存在渠道扫码进入
     if (options.query.scene && options.query.scene.indexOf('channel') >= 0) {
       const str = decodeURIComponent(options.query.scene)
-
-      if (appInstance) {
-        appInstance.globalData.channel = str.split('=')[1]
+      if (getApp()) {
+        getApp().globalData.channel = str.split('=')[1]
       } else {
         globalData.channel = str.split('=')[1]
       }
@@ -1302,8 +1302,8 @@ onLaunch((options) => {
         .query('paymentMethod')
         .then((res) => {
           if (res && res.length > 0 && res[0].value) {
-            if (appInstance) {
-              appInstance.globalData.paymentMethod = res[0].value
+            if (getApp()) {
+              getApp().globalData.paymentMethod = res[0].value
             } else {
               globalData.paymentMethod = res[0].value
             }
@@ -1335,23 +1335,23 @@ onLaunch((options) => {
       // ...uni.getAppBaseInfo(),
     }.SDKVersion
     if (compareVersion(version, '2.5.0') >= 0) {
-      if (appInstance) {
-        appInstance.globalData.openCustomTabbar = true
+      if (getApp()) {
+        getApp().globalData.openCustomTabbar = true
       } else {
         globalData.openCustomTabbar = true
       }
     } else {
-      if (appInstance) {
-        appInstance.globalData.openCustomTabbar = false
+      if (getApp()) {
+        getApp().globalData.openCustomTabbar = false
       } else {
         globalData.openCustomTabbar = false
       }
       uni.hideTabBar()
     }
 
-    if (appInstance) {
-      appInstance.globalData.getUiConfig(options)
-      appInstance.globalData.getMerchantCenter()
+    if (getApp()) {
+      getApp().globalData.getUiConfig(options)
+      getApp().globalData.getMerchantCenter()
     } else {
       globalData.getUiConfig(options)
       globalData.getMerchantCenter()
@@ -1406,21 +1406,17 @@ onLaunch((options) => {
     // }
 
     // 取当前用户
-    if (appInstance) {
-      appInstance.globalData.userInfo = auth.getUser()
-    } else {
-      globalData.userInfo = auth.getUser()
-    }
-    if (globalData.userInfo && globalData.userInfo.member) {
-      if (appInstance) {
-        appInstance.globalData.memberIsGuide(appInstance.globalData.userInfo.member.id)
+    getApp().globalData.userInfo = auth.getUser()
+    if (getApp().globalData.userInfo && getApp().globalData.userInfo.member) {
+      if (getApp()) {
+        getApp().globalData.memberIsGuide(getApp().globalData.userInfo.member.id)
       } else {
         globalData.memberIsGuide(globalData.userInfo.member.id)
       }
     }
-    if (appInstance) {
-      appInstance.globalData.refreshAccessToken()
-      appInstance.globalData.getTemplateIds()
+    if (getApp()) {
+      getApp().globalData.refreshAccessToken()
+      getApp().globalData.getTemplateIds()
     } else {
       globalData.refreshAccessToken()
       globalData.getTemplateIds()
@@ -1435,8 +1431,8 @@ onLaunch((options) => {
               (!options.query.storeId &&
                 (!options.query.scene || options.query.scene.indexOf('gmparam') == -1))
             ) {
-              if (appInstance) {
-                appInstance.globalData.getRecentlyStore(options)
+              if (getApp()) {
+                getApp().globalData.getRecentlyStore(options)
               } else {
                 globalData.getRecentlyStore(options)
               }
@@ -1459,8 +1455,8 @@ onLaunch((options) => {
         // ...uni.getWindowInfo(),
         // ...uni.getAppBaseInfo(),
       }
-      if (appInstance) {
-        appInstance.globalData.systemInfo = res || {}
+      if (getApp()) {
+        getApp().globalData.systemInfo = res || {}
       } else {
         globalData.systemInfo = res || {}
       }
@@ -1469,15 +1465,15 @@ onLaunch((options) => {
       const noFlag = noModelArr.some((ele) => model.search(ele) != -1)
       console.log(model.search('iPhone') != -1, !noFlag, 'noflag')
       if (model.search('iPhone') != -1 && !noFlag) {
-        if (appInstance) {
-          appInstance.globalData.isIphoneX = true
+        if (getApp()) {
+          getApp().globalData.isIphoneX = true
         } else {
           globalData.isIphoneX = true
         }
         return
       }
-      if (appInstance) {
-        appInstance.globalData.navHeight = res.statusBarHeight + 44
+      if (getApp()) {
+        getApp().globalData.navHeight = res.statusBarHeight + 44
       } else {
         globalData.navHeight = res.statusBarHeight + 44
       }
@@ -1487,8 +1483,8 @@ onLaunch((options) => {
       console.log('CatchClause', e)
       console.log(e)
     }
-    if (appInstance) {
-      appInstance.globalData.getDefaultSharePictures()
+    if (getApp()) {
+      getApp().globalData.getDefaultSharePictures()
     } else {
       globalData.getDefaultSharePictures()
     }
@@ -1521,9 +1517,9 @@ onLaunch((options) => {
 // 定时器ID存储
 const cleanupTimer = null
 onShow(async (options) => {
-  if (appInstance && appInstance.globalData) {
-    appInstance.globalData.storeInfo =
-      appInstance.globalData.storeInfo && appInstance.globalData.storeInfo.id
+  if (getApp() && getApp().globalData) {
+    getApp().globalData.storeInfo =
+      getApp().globalData.storeInfo && getApp().globalData.storeInfo.id
         ? globalData.storeInfo
         : uni.getStorageSync('storeIdactive')
   } else {
@@ -1532,12 +1528,12 @@ onShow(async (options) => {
         ? globalData.storeInfo
         : uni.getStorageSync('storeIdactive')
   }
-  if (appInstance && !appInstance.globalData.storeInfo) {
+  if (getApp() && !getApp().globalData.storeInfo) {
     storeService.queryList().then((res) => {
       if (res && res.length > 0) {
         res.some((item) => {
           if (item.status == 'OPEN') {
-            appInstance.globalData.storeInfo = item
+            getApp().globalData.storeInfo = item
             uni.setStorageSync('storeIdactive', item)
           }
           return item.status == 'OPEN'
@@ -1548,34 +1544,31 @@ onShow(async (options) => {
   console.log('onShowOptions', options)
   // 前端分享定位逻辑增加选项控制
   if (
-    appInstance &&
-    appInstance.globalData &&
-    appInstance.globalData.systemConfigure.shareStoreType === 'OWN_STORE'
+    getApp() &&
+    getApp().globalData &&
+    getApp().globalData.systemConfigure.shareStoreType === 'OWN_STORE'
   ) {
-    appInstance.globalData.getShareStoreId(options)
+    getApp().globalData.getShareStoreId(options)
   }
   uni.setStorage({
     key: '_scene_',
     data: options.scene,
   })
-  if (appInstance) {
-    appInstance.globalData.sceneInfo = options.scene
+  if (getApp()) {
+    getApp().globalData.sceneInfo = options.scene
   } else {
     globalData.sceneInfo = options.scene
   }
   if (options.query.scene) {
     var scene = decodeURIComponent(options.query.scene)
     if (scene && scene === 'isfromQR') {
-      if (appInstance) {
-        appInstance.globalData.scene = scene
+      if (getApp()) {
+        getApp().globalData.scene = scene
       } else {
         globalData.scene = scene
       }
       try {
-        uni.setStorageSync(
-          'wj_sceneForm',
-          appInstance ? appInstance.globalData.scene : globalData.scene,
-        )
+        uni.setStorageSync('wj_sceneForm', getApp() ? getApp().globalData.scene : globalData.scene)
       } catch (e) {
         console.log('CatchClause', e)
         console.log('CatchClause', e)
@@ -1585,8 +1578,8 @@ onShow(async (options) => {
         var scene = uni.getStorageSync('wj_sceneForm')
         if (scene && scene === 'isfromQR') {
           // Do something with return value
-          if (appInstance) {
-            appInstance.globalData.scene = scene
+          if (getApp()) {
+            getApp().globalData.scene = scene
           } else {
             globalData.scene = scene
           }
@@ -1599,21 +1592,21 @@ onShow(async (options) => {
   } else {
     // 默认不搜集信息
     const scene = 'isfromQR'
-    if (appInstance) {
-      appInstance.globalData.scene = scene
+    if (getApp()) {
+      getApp().globalData.scene = scene
     } else {
       globalData.scene = scene
     }
   }
   if (
-    appInstance &&
+    getApp() &&
     options.query.shareId != null &&
     options.query.shareId !== '' &&
-    appInstance.globalData.systemConfigure.openDistributionAccountShareProduct &&
+    getApp().globalData.systemConfigure.openDistributionAccountShareProduct &&
     !pageOnLaunch &&
-    appInstance.globalData.systemConfigure.openDistribution
+    getApp().globalData.systemConfigure.openDistribution
   ) {
-    appInstance.globalData.bindDistribution(options.query.shareId)
+    getApp().globalData.bindDistribution(options.query.shareId)
   }
   appLoad()
   startTokenCleanup()
