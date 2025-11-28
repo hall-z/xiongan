@@ -468,7 +468,7 @@ function toAdPage(pageInfo, pageType, data) {
 function setListData() {
   const that = this
   console.log(app.globalData.goodsList)
-  state.showLoading = true
+  state.showLoading = false
   const goodsList = app.globalData.goodsList
   console.log(goodsList, 'goodsListgoodsListgoodsList')
   state.goodsList = goodsList
@@ -496,7 +496,8 @@ function readyEnd(val) {
 }
 function addToCart(e) {
   emit('addToCart', {
-    dataset: e.currentTarget.dataset,
+    dataset: e.detail.target.dataset,
+    // dataset: e.currentTarget.dataset,
     context: this,
     detail: e.detail,
   })

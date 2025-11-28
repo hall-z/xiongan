@@ -44,7 +44,7 @@
       :remainingTime="state.remainingTime"
       @Hide="hidePageImage"
     ></custom-loading-page>
-    <custom-loading v-if="state.showLoading" :loadingImage="state.loadingImage"></custom-loading>
+    <custom-loading v-if="state.showLoading"></custom-loading>
     <scroll-view
       :scroll-y="true"
       @scroll="handleScroll"
@@ -96,7 +96,7 @@
     >
       <!-- <image src="{{imagesPath.shopping_icon_list}}" ></image> -->
       <image :src="state.imagesPath.newGouwucheIcon"></image>
-      <view class="red-hint" :hidden="!(cartCount > 0)">{{ cartCount }}</view>
+      <view class="red-hint" v-if="state.cartCount > 0">{{ state.cartCount }}</view>
     </view>
     <navigator
       :url="'plugin-private://wx2b03c6e691cd7370/pages/live-player-plugin?room_id=' + state.roomId"
@@ -499,7 +499,7 @@ import _utilsAuthorizeJs from '@/utils/newretail/authorize'
 import _utilsThemeManagerJs from '@/utils/newretail/themeManager'
 import _utilsAnalysisJs from '@/utils/newretail/analysis'
 import _libsMta_analysisJs from '@/libs/mta_analysis'
-import _utilsImagesPathJs from '@/utils/newretail/imagesPath'
+import IMGAGESPATH from '@/utils/newretail/imagesPath'
 import _utilsAddressJs from '@/utils/newretail/address'
 import _utilsNavPageJs from '@/utils/newretail/navPage'
 import _utilsUtilsJs from '@/utils/newretail/utils'
@@ -522,7 +522,7 @@ import bus from 'iny-bus'
 
 import CustomLoadingPage from '@/pages-sub/newretail/components/customLoadingPage/customLoadingPage.vue'
 import lazyLoadPage from '@/pages-sub/newretail/components/lazy-load-page/lazy-load-page.vue'
-import CustomLoading from '@/pages-sub/newretail/components/loading/loading.vue'
+import CustomLoading from '@/pages-sub/newretail/components/customLoading/customLoading.vue'
 import Popup from '@/pages-sub/newretail/components/popup/popup.vue'
 import WelfarePromotion from '@/pages-sub/newretail/components/welfarePromotion/welfarePromotion.vue'
 import SetMeal from '@/pages-sub/newretail/components/setMeal/setMeal.vue'
@@ -546,7 +546,6 @@ const selfA = _utilsSelfJs
 const util = _utilsUtilsJs
 const NAVPAGE = _utilsNavPageJs
 const ADDRESS = _utilsAddressJs
-const IMGAGESPATH = _utilsImagesPathJs
 const mta = _libsMta_analysisJs
 const ANALYSIS = _utilsAnalysisJs
 const themeManager = _utilsThemeManagerJs
@@ -1126,7 +1125,6 @@ onLoad(async function (_options) {
   state.showLoading = true
   state.latitude = app.globalData.latitude
   state.longitude = app.globalData.longitude
-  const self = this
   eventId = bus.on('userShopCartChange', () => {
     if (app.globalData.storeInfo) {
       getLocalShopCart(app.globalData.storeInfo.id)
@@ -1244,7 +1242,6 @@ onLoad(async function (_options) {
         console.log(err)
         state.roomId = -1
       })
-    const that = this
     uni.getSystemInfo({
       success: function (res) {
         const x = res.windowWidth - 70
@@ -1277,7 +1274,6 @@ onLoad(async function (_options) {
       })
     }
   }
-
   // 设置当前设备是否iPhone X
   state.isIphoneX = app.globalData.isIphoneX
   updateStore()
@@ -1292,56 +1288,10 @@ onLoad(async function (_options) {
     state.afterShareToDraw = afterShareToDraw
   }
   console.log('index onLoad', util.formatTime(new util.ResponseDate()))
-  // if (!app.globalData.storeInfo || app.globalData.storeId !== '') {
-  //   app.globalData.storeInfo = wx.getStorageSync('storeIdactive')
-  // }
+
   initPage()
   if (!app.globalData.storeInfo) {
     checkLocationAuth()
-    // 获取到当前的地理位置，查找出最近的门店
-    // ADDRESS.getLocation().then(res => {
-    //   console.log("index getLocation res", util.formatTime(new util.ResponseDate()))
-    //   console.log(res)
-    //   // 更新全局的当前门店信息参数，此时为最近门店
-    //   app.globalData.storeInfo = res;
-    //   var tempAllStores = wx.getStorageSync('wj_allStores'); // 获取缓存的所有门店
-
-    //   // 只要是进入首页，都会查询是否有抽奖活动，如果有抽奖活动，弹出抽奖活动
-    //   // 判断options.scene中是否有值,如果有值，说明是扫码进来
-    //   if (options.scene) {
-    //     var scene = decodeURIComponent(options.scene);
-    //     // let actqr = "ACTQR";
-
-    //     // 判断options.scene是否全部是数字
-    //     var reg = /^\d+$/; // 正则校验表达式，判断是否为纯数字
-    //     // 如果是纯数字，说明是门店id，从当前缓存的所有门店选出对应的门店
-    //     if (reg.test(scene)) {
-    //       if (tempAllStores) {
-    //         // 如果匹配到一样的门店，使用匹配到的门店，如果没有匹配到，则使用最近的门店
-    //         tempAllStores.forEach(item => {
-    //           if (item.id === scene) {
-    //             let tempStore = {
-    //               ...item,
-    //               userLatitude: res.userLatitude,
-    //               userLongitude: res.userLongitude
-    //             };
-    //             // 更新当前全局的门店参数
-    //             app.globalData.storeInfo = tempStore;
-    //           }
-    //         })
-    //       }
-    //     }
-    //   }
-
-    //   // 初始化页面内容
-    //   this.initPage();
-    // }).catch(err => {
-    //   console.log("index getLocation", util.formatTime(new util.ResponseDate()))
-    //   self.setData({
-    //     hasaAuthorization: false,
-    //     showTabbar: false
-    //   })
-    // })
   } else {
     // console.log('进入到了祥和里吗？')
     console.log('index getStoreDistance', util.formatTime(new util.ResponseDate()))
@@ -2146,6 +2096,7 @@ onPullDownRefresh(function () {
   }, 1000)
 })
 function getPageConfig(data) {
+  state.showLoading = false
   if (data && data.detail) {
     const conventionConfig = data.detail
     const keys = Object.keys(conventionConfig)

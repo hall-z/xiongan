@@ -117,7 +117,7 @@ function reload() {
     state.loaded = true
     getHomeFunctionEntry()
     lazyLoadBase
-      .determineComponentInVisibleArea('.column-box-loading', that)
+      .determineComponentInVisibleArea('.column-box-loading', this)
       .then((res) => {
         if (res) {
           state.loaded = true
@@ -132,6 +132,7 @@ function reload() {
     getHomeFunctionEntry()
   }
 }
+let hasQuery = false
 function getHomeFunctionEntry() {
   if (state.refreshType !== 'ALL') {
     if (hasQuery) {

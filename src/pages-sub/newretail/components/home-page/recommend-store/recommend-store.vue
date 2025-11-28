@@ -75,16 +75,16 @@
           scroll-x="true"
           style="width: 100%; display: flex"
         >
-          <view v-for="(item1, index) in item.productList" class="scroll-product">
+          <view v-for="(item1, index) in item.productList" :key="index" class="scroll-product">
             <view class="product-img">
               <image :src="item1.imageUrl" mode="widthFix"></image>
             </view>
             <view class="product-name">
               {{ item1.name }}
             </view>
-            <view class="gm-goods-price" :hidden="item1.sellPrice != null ? false : true">
+            <view class="gm-goods-price" v-if="item1.sellPrice != null">
               <view>
-                <text class="nowPrice" :style="'color: ' + activityColor">
+                <text class="nowPrice">
                   <text style="font-size: 20rpx">￥</text>
                   {{
                     item1.memberPrice && item1.memberPrice < item1.sellPrice
@@ -167,12 +167,13 @@ const colorRgba = (sHex, alpha = 1) => {
 // 获取应用实例
 const state = reactive({
   storeList: [],
-  loadingFlag: false,
+  loadingFlag: true,
   imagesPath: IMGAGESPATH,
   theme: THEME,
   themeColor: THEME.color,
   loaded: false,
   isShow: false,
+  orderTimer: null,
 })
 const props = defineProps({
   show: {
@@ -255,9 +256,8 @@ onBeforeMount(() => {
       : uni.getStorageSync('themeColor')
 })
 function getScorll(latitude, longitude) {
-  const that = this
   lazyLoadBase
-    .determineComponentInVisibleArea(`.recommend-store-end`, that, 500)
+    .determineComponentInVisibleArea(`.recommend-store-end`, this, 500)
     .then((res) => {
       if (state.loadingFlag) return false
       if (res) {
@@ -271,7 +271,6 @@ function getScorll(latitude, longitude) {
     .catch((err) => {})
 }
 function hadleStoreOrder(latitude, longitude, page) {
-  const self = this
   state.loadingFlag = true
   latitude = latitude || state.latitude || app.globalData.latitude
   longitude = longitude || state.longitude || app.globalData.longitude
@@ -377,22 +376,26 @@ function goDetail(e) {
   NAVPAGE.toStoreDetail('?id=' + id)
 }
 function reload(refresh = false) {
-  const that = this
   if (!state.loaded) {
     lazyLoadBase
-      .determineComponentInVisibleArea('.recommend-store-end', that)
+      .determineComponentInVisibleArea('.recommend-store-end', this)
       .then((res) => {
         if (res) {
+          if (state.orderTimer) {
+            clearTimeout(state.orderTimer)
+          }
           state.loaded = true
           hadleStoreOrder(app.globalData.latitude, app.globalData.longitude)
           state.latitude = app.globalData.latitude
           state.longitude = app.globalData.longitude
         } else {
-          let orderTimer = setTimeout(() => {
+          if (state.orderTimer) {
+            clearTimeout(state.orderTimer)
+          }
+          state.orderTimer = setTimeout(() => {
             console.log('查询是否进入显示区域')
             reload(refresh)
           }, 1000)
-          orderTimer = orderTimer
         }
         console.log(res)
       })
@@ -430,21 +433,13 @@ watch(
   (newVal, oldVal) => {
     reload(true)
   },
+  { immediate: true },
 )
 
 watch(
   () => props.value,
   (newVal, oldVal) => {
     // 属性值变化时执行
-    reload(false)
-  },
-)
-
-watch(
-  () => props.value,
-  (newVal, oldVal) => {
-    // 1、获取当前位置坐标
-    const that = this
     if (newVal && newVal != oldVal) {
       if (state.latitude && state.longitude) {
         getScorll(state.latitude, state.longitude)
@@ -453,6 +448,7 @@ watch(
       }
     }
   },
+  { immediate: true },
 )
 
 watch(
@@ -464,6 +460,7 @@ watch(
       hadleStoreOrder(app.globalData.latitude, app.globalData.longitude, 1)
     }
   },
+  { immediate: true },
 )
 
 watch(

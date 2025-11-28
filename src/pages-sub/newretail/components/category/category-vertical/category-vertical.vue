@@ -5,8 +5,8 @@
       class="content"
       v-if="
         props.category.length > 0 ||
-        productCategoryStyle === '风格2' ||
-        productCategoryStyle === '风格3'
+        props.productCategoryStyle === '风格2' ||
+        props.productCategoryStyle === '风格3'
       "
     >
       <scroll-view
@@ -15,8 +15,10 @@
         scroll-y=""
         :style="
           'height: ' +
-          (windowHeight -
-            (productCategoryStyle == '风格2' || productCategoryStyle == '风格3' ? 20 : 0)) +
+          (state.windowHeight -
+            (props.productCategoryStyle == '风格2' || props.productCategoryStyle == '风格3'
+              ? 20
+              : 0)) +
           'px;'
         "
         :scrollTop="offsetTop"
@@ -25,13 +27,13 @@
         <view
           :class="
             'category-item ' +
-            (currentCategory == item.categoryId
+            (props.currentCategory == item.categoryId
               ? item.children.length > 0
                 ? 'category-item-active'
                 : 'category-item-children-active'
               : '') +
             ' ' +
-            (productCategoryStyle === '风格3' ? 'category-item-three' : '')
+            (props.productCategoryStyle === '风格3' ? 'category-item-three' : '')
           "
           @click="clickCategory"
           v-for="(item, idx) in category"
@@ -41,34 +43,36 @@
           :data-index="idx"
         >
           <view class="top-semicircle parent">
-            <view :style="productCategoryStyle == '风格3' ? '' : ''"></view>
+            <view :style="props.productCategoryStyle == '风格3' ? '' : ''"></view>
           </view>
           <view
             :class="
               'category-item-title ' +
-              (productCategoryStyle === '风格3' ? 'category-item-title-three' : '') +
+              (props.productCategoryStyle === '风格3' ? 'category-item-title-three' : '') +
               ' ' +
-              (productCategoryStyle === '风格3' &&
+              (props.productCategoryStyle === '风格3' &&
               item.pictureUrl &&
-              currentCategory == item.categoryId
+              props.currentCategory == item.categoryId
                 ? 'category-item-title-three-pic'
                 : '')
             "
-            :style="currentCategory == item.categoryId ? 'color: ' + state.themeColor : ''"
+            :style="props.currentCategory == item.categoryId ? 'color: ' + state.themeColor : ''"
           >
             <view
               class="category-item_icon"
-              v-if="productCategoryStyle !== '风格3'"
+              v-if="props.productCategoryStyle !== '风格3'"
               :style="
-                currentCategory == item.categoryId ? 'background-color: ' + state.themeColor : ''
+                props.currentCategory == item.categoryId
+                  ? 'background-color: ' + state.themeColor
+                  : ''
               "
             ></view>
             <view
               style="display: flex; align-items: center; justify-content: center; width: 100%"
               v-if="
-                productCategoryStyle === '风格3' &&
+                props.productCategoryStyle === '风格3' &&
                 item.pictureUrl &&
-                currentCategory == item.categoryId
+                props.currentCategory == item.categoryId
               "
             >
               <image :src="item.pictureUrl" mode="heightFix"></image>
@@ -78,26 +82,28 @@
               class="iconfont icon-jiantouyou"
               :style="
                 'font-size: 22rpx;color: ' +
-                (currentCategory === item.categoryId ? 'transparent' : '') +
+                (props.currentCategory === item.categoryId ? 'transparent' : '') +
                 ';height:36rpx;line-height: 36rpx;'
               "
-              v-if="productCategoryStyle === '风格3'"
+              v-if="props.productCategoryStyle === '风格3'"
             ></view>
             <view
               class="iconfont icon-xiajiantouxia"
               v-if="
-                currentCategory == item.categoryId &&
-                productCategoryStyle === '风格3' &&
+                props.currentCategory == item.categoryId &&
+                props.productCategoryStyle === '风格3' &&
                 item.children.length > 0
               "
               :style="
                 'text-align: center;font-size: 22rpx;color: ' +
-                (currentCategory === item.categoryId ? transparent : 'transparent') +
+                (props.currentCategory === item.categoryId ? transparent : 'transparent') +
                 ';width: 100%;height: 20rpx;line-height: 20rpx;margin-left:-20rpx;' +
-                (item.pictureUrl && currentCategory == item.categoryId ? '' : 'margin-top:-36rpx')
+                (item.pictureUrl && props.currentCategory == item.categoryId
+                  ? ''
+                  : 'margin-top:-36rpx')
               "
             ></view>
-            <view class="parent-line" v-if="productCategoryStyle === '风格3'"></view>
+            <view class="parent-line" v-if="props.productCategoryStyle === '风格3'"></view>
           </view>
           <view
             :class="
@@ -110,11 +116,11 @@
                 ? 'category-children-active'
                 : '') +
               ' ' +
-              (productCategoryStyle === '风格3' ? 'category-children-three' : '')
+              (props.productCategoryStyle === '风格3' ? 'category-children-three' : '')
             "
             v-for="(cate, index) in item.children"
             :key="index"
-            :hidden="currentCategory !== item.categoryId"
+            v-show="props.currentCategory == item.categoryId"
             @click.stop="clickCategoryItem"
             :data-id="cate.categoryId"
             :style="
@@ -127,7 +133,7 @@
           >
             <view
               class="children_icon"
-              v-if="productCategoryStyle !== '风格3'"
+              v-if="props.productCategoryStyle !== '风格3'"
               :style="
                 selectedSecondId == cate.categoryId || props.childrenSelect == cate.categoryId
                   ? 'background-color: ' + state.themeColor
@@ -140,7 +146,7 @@
             <view
               style="display: flex; align-items: center; justify-content: center; width: 100%"
               v-if="
-                productCategoryStyle === '风格3' &&
+                props.productCategoryStyle === '风格3' &&
                 cate.pictureUrl &&
                 (selectedSecondId == cate.categoryId || props.childrenSelect == cate.categoryId)
               "
@@ -151,7 +157,7 @@
             <view class="bottom-semicircle">
               <view></view>
             </view>
-            <view class="children-line" v-if="productCategoryStyle === '风格3'"></view>
+            <view class="children-line" v-if="props.productCategoryStyle === '风格3'"></view>
           </view>
           <view class="bottom-semicircle parent">
             <view></view>
@@ -161,13 +167,17 @@
       <view
         class="category-swiper"
         :style="
-          'height: ' + windowHeight + 'px; width:' + (state.storeIdActive ? '100%' : '589rpx') + ';'
+          'height: ' +
+          state.windowHeight +
+          'px; width:' +
+          (state.storeIdActive ? '100%' : '589rpx') +
+          ';'
         "
       >
         <view class="category-box">
           <view
             class="top-navigation-box"
-            v-if="level > 2 && !state.storeIdActive && productCategoryStyle === '风格1'"
+            v-if="level > 2 && !state.storeIdActive && props.productCategoryStyle === '风格1'"
           >
             <scroll-view
               class="right-category-box"
@@ -208,7 +218,7 @@
             </view>
             <view
               class="category-list-popup"
-              :style="'height: ' + windowHeight + 'px;'"
+              :style="'height: ' + state.windowHeight + 'px;'"
               :hidden="!showScroll"
               @click="clickPopup"
             >
@@ -665,7 +675,7 @@ onBeforeMount(() => {
   const navHeight = app.globalData.navHeight
   const searchBarHeight = (92 * systemInfo.screenWidth) / 750
   const topCategory =
-    state.productCategoryStyle === '风格1' ? 0 : (136 * systemInfo.screenWidth) / 750
+    props.productCategoryStyle === '风格1' ? 0 : (136 * systemInfo.screenWidth) / 750
   state.theme = {
     color:
       app.globalData.uiconfig && app.globalData.uiconfig.themeColor != null

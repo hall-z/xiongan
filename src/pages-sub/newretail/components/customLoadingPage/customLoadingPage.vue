@@ -1,38 +1,42 @@
 <template>
-<!--components/customLoadingPage/customLoadingPage.wxml-->
-<view class="custom-loading-page">
-  <image :src="pageImage" mode="widthFix" style="width: 100%;"></image>
-  <view @click="toEndTime" class="skip">{{remainingTime}}s 跳过</view>
-</view>
+  <!--components/customLoadingPage/customLoadingPage.wxml-->
+  <view class="custom-loading-page">
+    <image :src="props.pageImage" mode="widthFix" style="width: 100%"></image>
+    <view @click="toEndTime" class="skip">{{ remainingTime1 }}s 跳过</view>
+  </view>
 </template>
 <script setup>
-import _apiSystemServiceJs from "@/service/api/newretail/systemService";
-import { reactive , watch} from "vue";
+import _apiSystemServiceJs from '@/service/api/newretail/systemService'
+import { reactive, watch } from 'vue'
 // components/customLoadingPage/customLoadingPage.js
-const sysService = _apiSystemServiceJs;
-const state = reactive({});
+const sysService = _apiSystemServiceJs
+const state = reactive({})
 const props = defineProps({
   pageImage: String,
   remainingTime: {
     type: Number,
-    value: 0
-  }
-});
+    value: 0,
+  },
+})
+let remainingTime1 = props.remainingTime
+const emit = defineEmits(['Hide'])
 function attached() {}
 function moved() {}
 function detached() {}
 function toEndTime() {
-  triggerEvent('Hide');
+  emit('Hide')
 }
 
 // Watch listeners converted from observers
-watch(() => props.remainingTime, (newVal, oldVal) => {
-  console.log(newVal, 'newVal');
-        if (newVal === 0) {
-          triggerEvent('Hide');
-        }
-});
-
+watch(
+  () => props.remainingTime,
+  (newVal, oldVal) => {
+    remainingTime1 = newVal
+    if (newVal === 0) {
+      emit('Hide')
+    }
+  },
+)
 </script>
 <style scoped>
 /* components/customLoadingPage/customLoadingPage.wxss */
@@ -52,7 +56,7 @@ watch(() => props.remainingTime, (newVal, oldVal) => {
   right: 40rpx;
   bottom: 100rpx;
   padding: 4rpx 10rpx;
-  background-color: rgba(0,0,0,0.3);
+  background-color: rgba(0, 0, 0, 0.3);
   color: #fff;
   border-radius: 30rpx;
 }

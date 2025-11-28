@@ -99,7 +99,7 @@ export const ProductService = {
   /**
    * 查询门店商品
    */
-  queryStoreProduct: (postData?: QueryParams): Promise<any> => {
+  queryStoreProduct: (postData?: any): Promise<any> => {
     const params = {
       ...postData,
       isApp: true
@@ -134,15 +134,15 @@ export const ProductService = {
   /**
    * 搜索门店商品
    */
-  getSearchProduct: (params: SearchProductParams): Promise<any> => {
+  getSearchProduct: (storeIdIn, page, pageSize, keywordLikes, searchCount, business, nameLikes) => {
     const requestParams = {
-      storeIdIn: params.storeIdIn,
-      page: params.page || 1,
-      pageSize: params.pageSize || 20,
-      keywordLikes: params.keywordLikes,
-      nameLikes: params.nameLikes,
-      searchCount: params.searchCount,
-      business: params.business,
+      storeIdIn: storeIdIn,
+      page: page,
+      pageSize: pageSize,
+      keywordLikes: keywordLikes,
+      nameLikes: nameLikes,
+      searchCount: searchCount,
+      business: business,
       isApp: true
     }
     return request.get('/newretail/api/mall/product/shareBalance/query', requestParams)
