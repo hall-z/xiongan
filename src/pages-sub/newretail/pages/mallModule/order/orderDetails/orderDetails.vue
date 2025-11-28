@@ -1150,7 +1150,7 @@ const app = getApp();
 // pages/orderDetails/orderDetails.js
 const orderService = _apiOrderServiceJs;
 const request = _apiRequestJs;
-const NavigationBar = _componentsNavigationBarNavigationBarJs;
+;
 const wxbarcode = _utilsSelfJs;
 const util = _utilsUtilsJs;
 const NAVPAGE = _utilsNavPageJs;

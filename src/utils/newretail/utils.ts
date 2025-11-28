@@ -1714,12 +1714,14 @@ function isObjectValueEqual(a, b) {
 function isDeliveryProduct() {
   const app = getApp()
   let isDeliveryProduct = false
-  for (let i = 0; i < app.globalData.configureInfo.length; i++) {
-    const item = app.globalData.configureInfo[i];
-    // 是否包含统配商品:TRUE是、FALSE否
-    if (item.key === 'isDeliveryProduct' && item.value !== '') {
-      isDeliveryProduct = item.value === "TRUE" ? true : false;
-      break;
+  if(app) {
+    for (let i = 0; i < app.globalData.configureInfo.length; i++) {
+      const item = app.globalData.configureInfo[i];
+      // 是否包含统配商品:TRUE是、FALSE否
+      if (item.key === 'isDeliveryProduct' && item.value !== '') {
+        isDeliveryProduct = item.value === "TRUE" ? true : false;
+        break;
+      }
     }
   }
   return isDeliveryProduct

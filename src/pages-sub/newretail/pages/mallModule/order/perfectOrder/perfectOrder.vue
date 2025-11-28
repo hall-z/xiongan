@@ -1412,7 +1412,7 @@ const memberService = _apiMemberServiceJs;
 const cycleService = _apiCycleServiceJs;
 const auth = _utilsAuthJs;
 const Notify = _componentsNotifyNotifyJs;
-const NavigationBar = _componentsNavigationBarNavigationBarJs;
+;
 const CustomLoading = _componentsCustomLoadingCustomLoadingJs;
 const Popup = _componentsPopupPopupJs;
 const IMGAGESPATH = _utilsImagesPathJs;

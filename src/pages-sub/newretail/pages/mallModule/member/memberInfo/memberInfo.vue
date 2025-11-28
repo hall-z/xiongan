@@ -345,7 +345,7 @@ const app = getApp()
 // pages/my/my.js
 const wxaUserService = _apiWxaUserServiceJs
 const memberService = _apiMemberServiceJs
-const NavigationBar = _componentsNavigationBarNavigationBarJs
+
 const auth = _utilsAuthJs
 const utils = _utilsUtilsJs
 const NAVPAGE = _utilsNavPageJs

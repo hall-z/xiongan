@@ -1,316 +1,339 @@
+<route lang="json5" type="page">
+{
+  layout: 'default-newretail',
+  style: {
+    navigationStyle: 'custom',
+    'mp-alipay': {
+      transparentTitle: 'always',
+      titlePenetrate: 'YES',
+      defaultTitle: '',
+      titlePenetrate: 'NO',
+    },
+  },
+}
+</route>
 <template>
-  <!-- pages/mallModule/member/authorize/authorize.wxml -->
-  <navigationBar :title="state.navigationBarTitle"></navigationBar>
-  <view class="top-info">
-    <image
-      class="logo"
-      :src="state.logoLoading ? '' : state.avatarUrl || state.imagesPath.logo"
-    ></image>
-    <!-- <text>线上商城</text> -->
-  </view>
-  <view v-if="!state.hasUserInfo">
-    <text class="auth-tips">请完成授权以继续使用</text>
-    <button class="auth btn" @click="getUserInfo" :style="'background:' + state.themeColor">
-      获取用户信息
-    </button>
-  </view>
-  <view v-else>
-    <button
-      v-if="state.agreement && state.enterFlag"
-      open-type="getPhoneNumber"
-      class="register btn"
-      @getphonenumber="getPhoneNumber"
-      :disabled="!state.canBindMobile"
-      :style="'background:' + state.themeColor + ' !important'"
-    >
-      <!-- <image src="{{imagesPath.iconAuthMobile}}" ></image> -->
-      手机号快捷登录
-    </button>
-    <button
-      class="register btn"
-      v-else
-      @click="goAgreementHandle"
-      :style="'background:' + state.themeColor"
-    >
-      <!-- <image src="{{imagesPath.iconAuthMobile}}" ></image> -->
-      手机号快捷登录
-    </button>
-    <button
-      class="default register btn"
-      @click="toBindMobile"
-      :style="'color:' + state.themeColor + ';border-color:' + state.themeColor"
-    >
-      <!-- <image src="{{imagesPath.iconAuthMobile}}" ></image> -->
-      手机号登录/注册
-    </button>
-    <view class="agreement" @click="agreeAgreement">
-      <view :class="state.agreement ? 'agreement-btn active' : 'agreement-btn'">
-        <image
-          :hidden="state.agreement ? false : true"
-          src="https://gomore-dshx.oss-cn-hangzhou.aliyuncs.com/image/true.png"
-        ></image>
-      </view>
-      <view class="agreement-text">
-        我已认真阅读并同意
-        <text
-          class="go-agreement"
-          :style="'color: ' + state.themeColor + '  !important;'"
-          @click.stop="goAgreement"
-        >
-          《用户服务协议》
-        </text>
-      </view>
+  <view>
+    <!-- pages/mallModule/member/authorize/authorize.wxml -->
+    <navigationBar :title="state.navigationBarTitle"></navigationBar>
+    <view class="top-info">
+      <image
+        class="logo"
+        :src="state.logoLoading ? '' : state.avatarUrl || state.imagesPath.logo"
+      ></image>
+      <!-- <text>线上商城</text> -->
     </view>
-  </view>
-
-  <!-- 同意协议通告 -->
-  <popup :show="state.show.agreementLayer" position="middle" custom-class="middle">
-    <view class="popup-box popup-agreement-box">
-      <view class="popup-title">温馨提示</view>
-      <view class="popup-agreement">
-        <text>已阅读并同意下方</text>
-        <text
-          class="go-agreement"
-          :style="'color: ' + state.themeColor + '  !important;'"
-          @click.stop="goAgreement"
-        >
-          《用户服务协议》
-        </text>
-      </view>
-      <view class="popup-group">
-        <button class="share-left" @click="closeAgreement">不同意</button>
-        <button
-          v-if="state.bindFlag === 'toBindMobile'"
-          class="share-right"
-          :style="'color: ' + state.themeColor + '  !important;'"
-          @click="agreementBindMobile"
-        >
-          同意
-        </button>
-        <button
-          v-else
-          open-type="getPhoneNumber"
-          class="share-right"
-          @getphonenumber="getPhoneNumber"
-          :disabled="!state.canBindMobile"
-          :style="'color: ' + state.themeColor + '  !important;'"
-        >
-          <!-- <image src="{{imagesPath.iconAuthMobile}}" ></image> -->
-          同意
-        </button>
-      </view>
+    <view v-if="!state.hasUserInfo">
+      <text class="auth-tips">请完成授权以继续使用</text>
+      <button class="auth btn" @click="getUserInfo" :style="'background:' + state.themeColor">
+        获取用户信息
+      </button>
     </view>
-  </popup>
-
-  <popup
-    :show="state.show.promotion"
-    position="middle"
-    custom-class="middle"
-    @close="togglePromotionPopup"
-  >
-    <view class="popup-box">
-      <view class="popup-title">温馨提示</view>
-      <view class="popup-content">
-        <text>恭喜您获得</text>
-        <text class="popup-text" v-for="(item, index) in couponPromotions" :key="key">
-          {{ item.coupon.name }}
-        </text>
-      </view>
-      <view class="popup-button">
-        <text>优惠券已放入您的券包</text>
-        <button class="share-btn" @click="foundPromotion">查看我的优惠券</button>
-      </view>
-    </view>
-  </popup>
-
-  <!-- <popup show="{{ show.configInfo }}" position="middle" custom-class="middle" bind:close="toggleConfigInfoPopup"> -->
-  <popup
-    :show="state.show.configInfo"
-    position="bottom"
-    custom-class="bottom"
-    @close="toggleConfigInfoPopup"
-  >
-    <view class="popup-box config-box">
-      <view class="config-title">
-        <view class="left-icon" @click="jumpHandler">
-          <image :src="state.imagesPath.upIcon"></image>
+    <view v-else>
+      <button
+        v-if="state.agreement && state.enterFlag"
+        open-type="getPhoneNumber"
+        class="register btn"
+        @getphonenumber="getPhoneNumber"
+        :disabled="!state.canBindMobile"
+        :style="'background:' + state.themeColor + ' !important'"
+      >
+        <!-- <image src="{{imagesPath.iconAuthMobile}}" ></image> -->
+        手机号快捷登录
+      </button>
+      <button
+        class="register btn"
+        v-else
+        @click="goAgreementHandle"
+        :style="'background:' + state.themeColor"
+      >
+        <!-- <image src="{{imagesPath.iconAuthMobile}}" ></image> -->
+        手机号快捷登录
+      </button>
+      <button
+        class="default register btn"
+        @click="toBindMobile"
+        :style="'color:' + state.themeColor + ';border-color:' + state.themeColor"
+      >
+        <!-- <image src="{{imagesPath.iconAuthMobile}}" ></image> -->
+        手机号登录/注册
+      </button>
+      <view class="agreement" @click="agreeAgreement">
+        <view :class="state.agreement ? 'agreement-btn active' : 'agreement-btn'">
+          <image
+            v-if="state.agreement"
+            src="https://gomore-dshx.oss-cn-hangzhou.aliyuncs.com/image/true.png"
+          ></image>
         </view>
-        <text class="title-font">完善资料</text>
-        <view class="jump-btn" @click="jumpHandler">跳过</view>
-      </view>
-      <form @submit="handleSave">
-        <view class="section" v-if="state.configInfoSet.name">
-          <view class="section-title">
-            姓名
-            <text v-if="state.configInfoSet.name.hasMust">*</text>
-          </view>
-          <view :class="!state.configInfoSet.name.canUpdate ? 'right ' : 'right'">
-            <input
-              type="text"
-              class="nickName"
-              placeholder="请输入姓名"
-              name="nickName"
-              :value="state.nickName"
-              @input="inputNiceName"
-            />
-          </view>
-        </view>
-        <view class="section" v-if="state.configInfoSet.mobile">
-          <view class="section-title">
-            手机号
-            <text v-if="state.configInfoSet.mobile.hasMust">*</text>
-          </view>
-          <view :class="!state.configInfoSet.mobile.canUpdate ? 'right gray' : 'right'">
-            <input
-              maxlength="11"
-              :disabled="!state.configInfoSet.mobile.canUpdate"
-              type="number"
-              name="mobile"
-              @input="handlePhone"
-              :value="state.mobile"
-              placeholder="请输入手机号"
-            />
-          </view>
-        </view>
-        <view class="section" v-if="state.configInfoSet.birthday">
-          <view class="section-title">
-            生日
-            <text v-if="state.configInfoSet.birthday.hasMust">*</text>
-          </view>
-          <view :class="!state.configInfoSet.birthday.canUpdate ? 'right ' : 'right'">
-            <picker
-              mode="date"
-              name="birthday"
-              start="1900-01-01"
-              :end="state.endDate"
-              :value="state.birthday"
-              @change="bindDateChange"
-            >
-              <view class="picker">
-                {{ state.birthday === '未填写' ? '只能填写一次，请谨慎填写' : state.birthday }}
-              </view>
-            </picker>
-          </view>
-        </view>
-        <view class="section" v-if="state.configInfoSet.idCard">
-          <view class="section-title">
-            身份证号
-            <text v-if="state.configInfoSet.idCard.hasMust">*</text>
-          </view>
-          <view class="right">
-            <input
-              type="text"
-              name="idNum"
-              @input="handelIdNumInput"
-              placeholder="请输入身份证号"
-            />
-          </view>
-        </view>
-        <view class="section" v-if="state.configInfoSet.gender">
-          <view class="section-title">
-            性别
-            <text v-if="state.configInfoSet.gender.hasMust">*</text>
-          </view>
-          <view class="lable-box">
-            <text
-              :class="'lable-item ' + (state.gender == index ? 'active' : '')"
-              :style="
-                'color: ' +
-                (state.gender == index ? '#fff' : '#8b8b8c') +
-                ';border: 1px solid ' +
-                (state.gender == index ? state.themeColor : '#dddddd') +
-                ';'
-              "
-              v-for="(item, index) in state.genders"
-              :key="index"
-              :data-id="item.id"
-              :data-index="index"
-              @click="genderClick"
-            >
-              {{ item.name }}
-            </text>
-          </view>
-        </view>
-        <view class="section" v-if="state.configInfoSet.plateNumber">
-          <view class="section-title">
-            车牌号
-            <text v-if="state.configInfoSet.plateNumber.hasMust">*</text>
-          </view>
-          <view class="right">
-            <picker
-              class="city-box"
-              @change="cityChange"
-              :value="state.cityIndex"
-              :range="state.cityArray"
-            >
-              <view class="picker">
-                {{ state.cityArray[cityIndex] }}
-                <!-- <image src="../../../../image/san.png"></image> -->
-              </view>
-            </picker>
-            <input
-              type="text"
-              name="plateNumber"
-              maxlength="14"
-              @input="handelPlateNumberInput"
-              placeholder="请填写"
-            />
-            <!-- <vehicle-keyboard vehicleNo="{{vehicleNo}}" bind:confirm="confirmVehicle"></vehicle-keyboard> -->
-          </view>
-        </view>
-        <view class="section" v-if="state.configInfoSet.email">
-          <view class="section-title">
-            邮箱
-            <text v-if="state.configInfoSet.email.hasMust">*</text>
-          </view>
-          <view class="right">
-            <input type="email" name="email" @input="handelEmailInput" placeholder="请输入邮箱" />
-          </view>
-        </view>
-        <view class="section" v-if="state.configInfoSet.address">
-          <view class="section-title">
-            地址
-            <text v-if="state.configInfoSet.address.hasMust">*</text>
-          </view>
-          <picker
-            mode="region"
-            class="right"
-            @change="bindRegionChange"
-            :value="state.region"
-            name="region"
+        <view class="agreement-text">
+          我已认真阅读并同意
+          <text
+            class="go-agreement"
+            :style="'color: ' + state.themeColor + '  !important;'"
+            @click.stop="goAgreement"
           >
-            <view class="address-picker">
-              {{ state.region[0] }} {{ state.region[1] }} {{ state.region[2] }}
-            </view>
-          </picker>
+            《用户服务协议》
+          </text>
         </view>
-        <view class="section section-address" v-if="state.configInfoSet.baseAddress">
-          <view class="section-title">
-            详细地址
-            <text v-if="state.configInfoSet.baseAddress.hasMust">*</text>
-          </view>
-          <view class="right">
-            <textarea
-              class="address-text"
-              type="text"
-              placeholder="如道路、门牌号、小区、楼栋号、单元室等"
-              maxlength="50"
-              name="address"
-              :value="state.address"
-              @input="handleDetails"
-              @blur="handleBlur"
-              @focus="handleFocus"
-            ></textarea>
-            <view class="address" @click="chooseAddress">
-              <image class="address-img" :src="state.imagesPath.iconPositionActive"></image>
-              <text>定位</text>
-            </view>
-          </view>
-        </view>
-        <button class="btn" formType="submit">提交</button>
-      </form>
+      </view>
     </view>
-  </popup>
+
+    <!-- 同意协议通告 -->
+    <popup
+      v-if="state.show.agreementLayer"
+      :show="state.show.agreementLayer"
+      position="middle"
+      custom-class="middle"
+    >
+      <view class="popup-box popup-agreement-box">
+        <view class="popup-title">温馨提示</view>
+        <view class="popup-agreement">
+          <text>已阅读并同意下方</text>
+          <text
+            class="go-agreement"
+            :style="'color: ' + state.themeColor + '  !important;'"
+            @click.stop="goAgreement"
+          >
+            《用户服务协议》
+          </text>
+        </view>
+        <view class="popup-group">
+          <button class="share-left" @click="closeAgreement">不同意</button>
+          <button
+            v-if="state.bindFlag === 'toBindMobile'"
+            class="share-right"
+            :style="'color: ' + state.themeColor + '  !important;'"
+            @click="agreementBindMobile"
+          >
+            同意
+          </button>
+          <button
+            v-else
+            open-type="getPhoneNumber"
+            class="share-right"
+            @getphonenumber="getPhoneNumber"
+            :disabled="!state.canBindMobile"
+            :style="'color: ' + state.themeColor + '  !important;'"
+          >
+            <!-- <image src="{{imagesPath.iconAuthMobile}}" ></image> -->
+            同意
+          </button>
+        </view>
+      </view>
+    </popup>
+
+    <popup
+      v-if="state.show.promotion"
+      :show="state.show.promotion"
+      position="middle"
+      custom-class="middle"
+      @close="togglePromotionPopup"
+    >
+      <view class="popup-box">
+        <view class="popup-title">温馨提示</view>
+        <view class="popup-content">
+          <text>恭喜您获得</text>
+          <text class="popup-text" v-for="(item, index) in state.couponPromotions" :key="index">
+            {{ item.coupon.name }}
+          </text>
+        </view>
+        <view class="popup-button">
+          <text>优惠券已放入您的券包</text>
+          <button class="share-btn" @click="foundPromotion">查看我的优惠券</button>
+        </view>
+      </view>
+    </popup>
+
+    <!-- <popup show="{{ show.configInfo }}" position="middle" custom-class="middle" bind:close="toggleConfigInfoPopup"> -->
+    <popup
+      v-if="state.show.configInfo"
+      :show="state.show.configInfo"
+      position="bottom"
+      custom-class="bottom"
+      @close="toggleConfigInfoPopup"
+    >
+      <view class="popup-box config-box">
+        <view class="config-title">
+          <view class="left-icon" @click="jumpHandler">
+            <image :src="state.imagesPath.upIcon"></image>
+          </view>
+          <text class="title-font">完善资料</text>
+          <view class="jump-btn" @click="jumpHandler">跳过</view>
+        </view>
+        <form @submit="handleSave">
+          <view class="section" v-if="state.configInfoSet.name">
+            <view class="section-title">
+              姓名
+              <text v-if="state.configInfoSet.name.hasMust">*</text>
+            </view>
+            <view :class="!state.configInfoSet.name.canUpdate ? 'right ' : 'right'">
+              <input
+                type="text"
+                class="nickName"
+                placeholder="请输入姓名"
+                name="nickName"
+                :value="state.nickName"
+                @input="inputNiceName"
+              />
+            </view>
+          </view>
+          <view class="section" v-if="state.configInfoSet.mobile">
+            <view class="section-title">
+              手机号
+              <text v-if="state.configInfoSet.mobile.hasMust">*</text>
+            </view>
+            <view :class="!state.configInfoSet.mobile.canUpdate ? 'right gray' : 'right'">
+              <input
+                maxlength="11"
+                :disabled="!state.configInfoSet.mobile.canUpdate"
+                type="number"
+                name="mobile"
+                @input="handlePhone"
+                :value="state.mobile"
+                placeholder="请输入手机号"
+              />
+            </view>
+          </view>
+          <view class="section" v-if="state.configInfoSet.birthday">
+            <view class="section-title">
+              生日
+              <text v-if="state.configInfoSet.birthday.hasMust">*</text>
+            </view>
+            <view :class="!state.configInfoSet.birthday.canUpdate ? 'right ' : 'right'">
+              <picker
+                mode="date"
+                name="birthday"
+                start="1900-01-01"
+                :end="state.endDate"
+                :value="state.birthday"
+                @change="bindDateChange"
+              >
+                <view class="picker">
+                  {{ state.birthday === '未填写' ? '只能填写一次，请谨慎填写' : state.birthday }}
+                </view>
+              </picker>
+            </view>
+          </view>
+          <view class="section" v-if="state.configInfoSet.idCard">
+            <view class="section-title">
+              身份证号
+              <text v-if="state.configInfoSet.idCard.hasMust">*</text>
+            </view>
+            <view class="right">
+              <input
+                type="text"
+                name="idNum"
+                @input="handelIdNumInput"
+                placeholder="请输入身份证号"
+              />
+            </view>
+          </view>
+          <view class="section" v-if="state.configInfoSet.gender">
+            <view class="section-title">
+              性别
+              <text v-if="state.configInfoSet.gender.hasMust">*</text>
+            </view>
+            <view class="lable-box">
+              <text
+                :class="'lable-item ' + (state.gender == index ? 'active' : '')"
+                :style="
+                  'color: ' +
+                  (state.gender == index ? '#fff' : '#8b8b8c') +
+                  ';border: 1px solid ' +
+                  (state.gender == index ? state.themeColor : '#dddddd') +
+                  ';'
+                "
+                v-for="(item, index) in state.genders"
+                :key="index"
+                :data-id="item.id"
+                :data-index="index"
+                @click="genderClick"
+              >
+                {{ item.name }}
+              </text>
+            </view>
+          </view>
+          <view class="section" v-if="state.configInfoSet.plateNumber">
+            <view class="section-title">
+              车牌号
+              <text v-if="state.configInfoSet.plateNumber.hasMust">*</text>
+            </view>
+            <view class="right">
+              <picker
+                class="city-box"
+                @change="cityChange"
+                :value="state.cityIndex"
+                :range="state.cityArray"
+              >
+                <view class="picker">
+                  {{ state.cityArray[cityIndex] }}
+                  <!-- <image src="../../../../image/san.png"></image> -->
+                </view>
+              </picker>
+              <input
+                type="text"
+                name="plateNumber"
+                maxlength="14"
+                @input="handelPlateNumberInput"
+                placeholder="请填写"
+              />
+              <!-- <vehicle-keyboard vehicleNo="{{vehicleNo}}" bind:confirm="confirmVehicle"></vehicle-keyboard> -->
+            </view>
+          </view>
+          <view class="section" v-if="state.configInfoSet.email">
+            <view class="section-title">
+              邮箱
+              <text v-if="state.configInfoSet.email.hasMust">*</text>
+            </view>
+            <view class="right">
+              <input type="email" name="email" @input="handelEmailInput" placeholder="请输入邮箱" />
+            </view>
+          </view>
+          <view class="section" v-if="state.configInfoSet.address">
+            <view class="section-title">
+              地址
+              <text v-if="state.configInfoSet.address.hasMust">*</text>
+            </view>
+            <picker
+              mode="region"
+              class="right"
+              @change="bindRegionChange"
+              :value="state.region"
+              name="region"
+            >
+              <view class="address-picker">
+                {{ state.region[0] }} {{ state.region[1] }} {{ state.region[2] }}
+              </view>
+            </picker>
+          </view>
+          <view class="section section-address" v-if="state.configInfoSet.baseAddress">
+            <view class="section-title">
+              详细地址
+              <text v-if="state.configInfoSet.baseAddress.hasMust">*</text>
+            </view>
+            <view class="right">
+              <textarea
+                class="address-text"
+                type="text"
+                placeholder="如道路、门牌号、小区、楼栋号、单元室等"
+                maxlength="50"
+                name="address"
+                :value="state.address"
+                @input="handleDetails"
+                @blur="handleBlur"
+                @focus="handleFocus"
+              ></textarea>
+              <view class="address" @click="chooseAddress">
+                <image class="address-img" :src="state.imagesPath.iconPositionActive"></image>
+                <text>定位</text>
+              </view>
+            </view>
+          </view>
+          <button class="btn" formType="submit">提交</button>
+        </form>
+      </view>
+    </popup>
+  </view>
 </template>
 <script setup>
 import _libsQqmapWxJssdkMinJs from '@/libs/qqmap-wx-jssdk'
@@ -333,7 +356,7 @@ const app = getApp()
 let toIndex = false
 // pages/mallModule/member/authorize/authorize.js
 const wxaUserService = _apiWxaUserServiceJs
-const NavigationBar = _componentsNavigationBarNavigationBarJs
+
 const auth = _utilsAuthJs
 const util = _utilsUtilsJs
 const ADDRESS = _utilsAddressJs

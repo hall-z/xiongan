@@ -181,7 +181,7 @@ const app = getApp()
 // pages/addAddress/addAddress.js
 const addressService = _apiAddressServiceJs
 const sysService = _apiSystemServiceJs
-const NavigationBar = _componentsNavigationBarNavigationBarJs
+
 const QQMapWX = _libsQqmapWxJssdkMinJs
 let qqmapsdk
 const IMGAGESPATH = _utilsImagesPathJs

@@ -1,13 +1,13 @@
 <template>
   <!--components/home-page/home-function/home-function.wxml-->
   <view class="column-box-loading" v-if="state.functionEntryList.length == 0 || !state.loaded">
-    <view class="column-img" v-for="(item, index) in 5" :key="i"></view>
+    <view class="column-img" v-for="(item, index) in 5" :key="index"></view>
   </view>
   <view
-    :class="'column-box column-box' + (columnsNumber || 5)"
+    :class="'column-box column-box' + (props.columnsNumber || 5)"
     :style="
       'margin: ' +
-      moduleSpacing +
+      props.moduleSpacing +
       'px 0;' +
       (state.functionEntryList.length > 5 ? 'justify-content: flex-start;' : '')
     "
@@ -113,8 +113,9 @@ onBeforeMount(() => {
   checkUserInfo()
 })
 function reload() {
-  const that = this
   if (!state.loaded) {
+    state.loaded = true
+    getHomeFunctionEntry()
     lazyLoadBase
       .determineComponentInVisibleArea('.column-box-loading', that)
       .then((res) => {
@@ -132,7 +133,6 @@ function reload() {
   }
 }
 function getHomeFunctionEntry() {
-  const self = this
   if (state.refreshType !== 'ALL') {
     if (hasQuery) {
       return
@@ -347,6 +347,7 @@ watch(
       checkUserInfo()
     }
   },
+  { immediate: true },
 )
 
 watch(
@@ -355,6 +356,7 @@ watch(
     // 属性值变化时执行
     reload()
   },
+  { immediate: true },
 )
 
 watch(
@@ -368,13 +370,13 @@ watch(
       checkUserInfo()
     }
   },
+  { immediate: true },
 )
 
 watch(
   () => props.itemData,
   (newVal, oldVal) => {
     const arr = JSON.parse(JSON.stringify(newVal))
-    const that = this
     arr.forEach((item) => {
       if (item.imageUrl) {
         // selfA.getTemporaryUrl(item.imageUrl).then((res)=>{
@@ -388,6 +390,7 @@ watch(
     })
     state.functionEntryList = arr || []
   },
+  { immediate: true },
 )
 </script>
 <style scoped>

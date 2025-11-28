@@ -22,7 +22,7 @@ const DEF_APP_CONFIG = {
   // baseUrl: "http://newretail.ngrok.gomoretech.com",
 
   // 测试环境82
-  appId: 'wxa1c984e15fcefd9a',
+  appId: 'wx968d71a3d8e5558b',
   // baseUrl: "http://192.168.1.3:8085",
   // 演示环境
   // appId: "wx4211d71800f38996",

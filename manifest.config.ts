@@ -128,7 +128,7 @@ export default defineManifestConfig({
         },
         share: {
           weixin: {
-            appid: 'wxa1c984e15fcefd9a',
+            appid: 'wx968d71a3d8e5558b',
             UniversalLinks: '',
           },
         },

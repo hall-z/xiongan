@@ -1612,12 +1612,12 @@ function getShopCart(storeId) {
       const localProductCount = uni.getStorageSync('wj_userProductsCount')
       const counts = String(localProductCount)
       if (counts) {
-        app.setTabBarBadge('shopping_cart', counts)
+        app.globalData.setTabBarBadge('shopping_cart', counts)
       }
       shopcartService
         .getProductsCount()
         .then((res) => {
-          app.setTabBarBadge('shopping_cart', String(res))
+          app.globalData.setTabBarBadge('shopping_cart', String(res))
           try {
             uni.setStorageSync('wj_userProductsCount', res)
           } catch (e) {}
@@ -1643,7 +1643,7 @@ function addLocalGoods(id) {
     localProductCount = Number(localProductCount)
     localProductCount++
     localProductCount = String(localProductCount)
-    app.setTabBarBadge('shopping_cart', localProductCount)
+    app.globalData.setTabBarBadge('shopping_cart', localProductCount)
     if (localShopingCart) {
       // 如果存在本地购物车数据
       const shopCartGoodsId = localShopingCart.goodsId
@@ -1701,7 +1701,7 @@ function reduceLocalGoods(id) {
     localProductCount = Number(localProductCount)
     localProductCount--
     localProductCount = String(localProductCount)
-    app.setTabBarBadge('shopping_cart', localProductCount)
+    app.globalData.setTabBarBadge('shopping_cart', localProductCount)
     if (localShopingCart) {
       // 如果存在本地购物车数据
       const shopCartGoodsId = localShopingCart.goodsId

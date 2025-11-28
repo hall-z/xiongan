@@ -1,6 +1,6 @@
 <template>
   <!--components/goods-item-small/goods-item-small.wxml-->
-  <view>
+  <view v-if="state.goodsData">
     <view
       :class="
         'gm-small-goods-item gm-small-goods-item' + (props.idx === 0 || props.idx ? props.idx : '')
@@ -14,14 +14,14 @@
     >
       <view class="gm-small-goods-img-box">
         <image
-          :src="imageUrl"
+          :src="state.imageUrl"
           mode="aspectFit"
           class="gm-small-goods-img"
-          :data-img-url="imageUrl"
+          :data-img-url="state.imageUrl"
         ></image>
         <image
           class="no-balance"
-          :src="imagesPath.soldOutIcon"
+          :src="state.imagesPath.soldOutIcon"
           v-if="state.goodsData.balance <= 0 && state.goodsData.business !== 'DISTRIBUTION'"
           mode="widthFix"
         ></image>
@@ -259,10 +259,15 @@ const props = defineProps({
 watch(
   () => props.goods,
   (newVal, oldVal) => {
-    state.goodsData = newVal
+    state.goodsData = {
+      ...newVal,
+    }
     if (newVal != null) {
       state.imageUrl = newVal.categoryImageUrl ? newVal.categoryImageUrl : newVal.imageUrl
     }
+  },
+  {
+    immediate: true,
   },
 )
 

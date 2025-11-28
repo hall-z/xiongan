@@ -24,9 +24,15 @@ interface NavigateToOptions {
        "/pages/shop/classify" |
        "/pages/shop/index" |
        "/pages/shop/shopSearch" |
-       "/pages-sub/serveMain/OcrCamera" |
-       "/pages-sub/serveMain/OcrCameraApp" |
-       "/pages-sub/serveMain/SocCertFacSucess" |
+       "/pages/template/barcode" |
+       "/pages/template/bindMobile" |
+       "/pages/template/commentItem" |
+       "/pages/template/groupKillIcon" |
+       "/pages/template/searchAddress" |
+       "/pages/template/searchTemplate" |
+       "/pages/template/searchTemplate2" |
+       "/pages/template/teamItem" |
+       "/pages/template/addCart/addCart" |
        "/pages-sub/serveMain/cardApplyFromType" |
        "/pages-sub/serveMain/cardApplyType" |
        "/pages-sub/serveMain/cardFromType" |
@@ -162,7 +168,6 @@ interface NavigateToOptions {
        "/pages-sub/housingProvident/index" |
        "/pages-sub/housingProvident/loanRepayment" |
        "/pages-sub/map/index" |
-       "/pages-sub/newretail/pages/customerService/customerService/customerService" |
        "/pages-sub/newretail/pages/mallModule/advertising/advertising" |
        "/pages-sub/newretail/pages/mallModule/creditCard/creditCard" |
        "/pages-sub/newretail/pages/mallModule/invite/invite" |
@@ -170,16 +175,6 @@ interface NavigateToOptions {
        "/pages-sub/newretail/pages/mallModule/qiyu/index" |
        "/pages-sub/newretail/pages/mallModule/shareShopcart/shareShopcart" |
        "/pages-sub/newretail/pages/mallModule/sysNotice/sysNotice" |
-       "/pages-sub/newretail/pages/memberModule/bindMobile/bindMobile" |
-       "/pages-sub/newretail/pages/memberModule/index/index" |
-       "/pages-sub/newretail/pages/memberModule/myCard/myCard" |
-       "/pages-sub/newretail/pages/memberModule/qiyu/index" |
-       "/pages-sub/newretail/pages/memberModule/score/score" |
-       "/pages-sub/newretail/pages/memberModule/selectStore/selectStore" |
-       "/pages-sub/newretail/pages/wxfaceapp/index/index" |
-       "/pages-sub/newretail/pages/wxfaceapp/payment/payment" |
-       "/pages-sub/newretail/pages/mall/solitaire/solitaireDetails/solitaireDetails" |
-       "/pages-sub/newretail/pages/mall/solitaire/solitaireList/solitaireList" |
        "/pages-sub/newretail/pages/mallModule/activity/advanceSell/advanceSell" |
        "/pages-sub/newretail/pages/mallModule/activity/assistanceCoupon/assistanceCoupon" |
        "/pages-sub/newretail/pages/mallModule/activity/cycle/cycle" |
@@ -294,6 +289,28 @@ interface NavigateToOptions {
        "/pages-sub/newretail/pages/mallModule/template/addCart/addCart" |
        "/pages-sub/newretail/pages/mallModule/treaty/clause/clause" |
        "/pages-sub/newretail/pages/mallModule/treaty/policy/policy" |
+       "/pages-sub/newretail/pages/mallModule/activity/lottery/helpLottery/helpLottery" |
+       "/pages-sub/newretail/pages/mallModule/activity/lottery/lotteryIndex/lotteryIndex" |
+       "/pages-sub/newretail/pages/mallModule/activity/lottery/myLottery/myLottery" |
+       "/pages-sub/newretail/pages/mallModule/activity/penny/goodsDetail/goodsDetail" |
+       "/pages-sub/newretail/pages/mallModule/activity/penny/helpPenny/helpPenny" |
+       "/pages-sub/newretail/pages/mallModule/activity/penny/pennyList/pennyList" |
+       "/pages-sub/newretail/pages/mallModule/member/address/addAddress/addAddress" |
+       "/pages-sub/newretail/pages/mallModule/member/address/addAddressOrder/addAddress" |
+       "/pages-sub/newretail/pages/mallModule/member/address/addressList/addressList" |
+       "/pages-sub/newretail/pages/mallModule/member/authorize/authorize/authorize" |
+       "/pages-sub/newretail/pages/mallModule/member/shoppingGuide/applyInfo/applyInfo" |
+       "/pages-sub/newretail/pages/mallModule/member/shoppingGuide/cashout/cashout" |
+       "/pages-sub/newretail/pages/mallModule/member/shoppingGuide/goods/goods" |
+       "/pages-sub/newretail/pages/mallModule/member/shoppingGuide/task/task" |
+       "/pages-sub/newretail/pages/mallModule/tabbar/category/category-list/category-list" |
+       "/pages-sub/newretail/pages/mallModule/tabbar/category/category-main/category-main" |
+       "/pages-sub/newretail/pages/memberModule/bindMobile/bindMobile" |
+       "/pages-sub/newretail/pages/memberModule/index/index" |
+       "/pages-sub/newretail/pages/memberModule/myCard/myCard" |
+       "/pages-sub/newretail/pages/memberModule/qiyu/index" |
+       "/pages-sub/newretail/pages/memberModule/score/score" |
+       "/pages-sub/newretail/pages/memberModule/selectStore/selectStore" |
        "/pages-sub/newretail/pages/memberModule/balance/balancePay/balancePay" |
        "/pages-sub/newretail/pages/memberModule/balance/balancePayList/balancePayList" |
        "/pages-sub/newretail/pages/memberModule/balance/changeBalancePass/changeBalancePass" |
@@ -312,22 +329,11 @@ interface NavigateToOptions {
        "/pages-sub/newretail/pages/memberModule/giftCard/myGiftCard/myGiftCard" |
        "/pages-sub/newretail/pages/memberModule/giftCard/storeList/storeList" |
        "/pages-sub/newretail/pages/memberModule/giftCard/useNeedKnow/useNeedKnow" |
-       "/pages-sub/newretail/pages/mallModule/activity/lottery/helpLottery/helpLottery" |
-       "/pages-sub/newretail/pages/mallModule/activity/lottery/lotteryIndex/lotteryIndex" |
-       "/pages-sub/newretail/pages/mallModule/activity/lottery/myLottery/myLottery" |
-       "/pages-sub/newretail/pages/mallModule/activity/penny/goodsDetail/goodsDetail" |
-       "/pages-sub/newretail/pages/mallModule/activity/penny/helpPenny/helpPenny" |
-       "/pages-sub/newretail/pages/mallModule/activity/penny/pennyList/pennyList" |
-       "/pages-sub/newretail/pages/mallModule/member/address/addAddress/addAddress" |
-       "/pages-sub/newretail/pages/mallModule/member/address/addAddressOrder/addAddress" |
-       "/pages-sub/newretail/pages/mallModule/member/address/addressList/addressList" |
-       "/pages-sub/newretail/pages/mallModule/member/authorize/authorize/authorize" |
-       "/pages-sub/newretail/pages/mallModule/member/shoppingGuide/applyInfo/applyInfo" |
-       "/pages-sub/newretail/pages/mallModule/member/shoppingGuide/cashout/cashout" |
-       "/pages-sub/newretail/pages/mallModule/member/shoppingGuide/goods/goods" |
-       "/pages-sub/newretail/pages/mallModule/member/shoppingGuide/task/task" |
-       "/pages-sub/newretail/pages/mallModule/tabbar/category/category-list/category-list" |
-       "/pages-sub/newretail/pages/mallModule/tabbar/category/category-main/category-main";
+       "/pages-sub/newretail/pages/mall/solitaire/solitaireDetails/solitaireDetails" |
+       "/pages-sub/newretail/pages/mall/solitaire/solitaireList/solitaireList" |
+       "/pages-sub/newretail/pages/customerService/customerService/customerService" |
+       "/pages-sub/newretail/pages/wxfaceapp/index/index" |
+       "/pages-sub/newretail/pages/wxfaceapp/payment/payment";
 }
 interface RedirectToOptions extends NavigateToOptions {}
 

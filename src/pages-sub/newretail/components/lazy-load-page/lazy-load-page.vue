@@ -1,8 +1,5 @@
 <template>
   <!-- components/lazy-load-page/lazy-load-page.wxml -->
-  <!-- <view class="loading-box" hidden="{{show}}">
-  <loading></loading>
-</view> -->
   <!-- v-if="showFlag" -->
   <view style="position: relative; padding-bottom: 60rpx">
     <view class="search_bar" v-if="state.isHomeShowTopSearch && state.topSearchStyle === '2'">

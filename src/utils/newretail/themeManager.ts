@@ -92,6 +92,9 @@ const themeManager: ThemeManager = {
   
   getImgType(): string {
     // 判断是否存在文件存储配置
+    if(!app) {
+      return this.BASE_URL
+    }
     if (projectConfig && app.globalData.dfsObj?.dfs_type) {
       dfsType.dfs_type = app.globalData.dfsObj.dfs_type
       
@@ -118,7 +121,7 @@ const themeManager: ThemeManager = {
   // 获取图片oss路径
   ossUrl(): string {
     // 判断是否存在文件存储配置
-    if (projectConfig && app.globalData.dfsObj?.dfs_type) {
+    if (projectConfig && app && app.globalData && app.globalData.dfsObj?.dfs_type) {
       return this.BASE_URL
     } else {
       // 基础地址
@@ -130,39 +133,39 @@ const themeManager: ThemeManager = {
   /**
    * 主题色
    */
-  color: app.globalData.uiconfig && app.globalData.uiconfig.themeColor != null 
+  color: app && app.globalData && app.globalData.uiconfig && app.globalData.uiconfig.themeColor != null 
     ? app.globalData.uiconfig.themeColor 
     : (uni.getStorageSync('themeColor') || '#FF9F43'),
     
-  mainColor: app.globalData.uiconfig && app.globalData.uiconfig.themeColor != null 
+  mainColor: app && app.globalData && app.globalData.uiconfig && app.globalData.uiconfig.themeColor != null 
     ? 'color: ' + app.globalData.uiconfig.themeColor + ';' 
     : 'color: ' + (uni.getStorageSync('themeColor') || '#FF9F43'),
     
-  mainBgColor: app.globalData.uiconfig && app.globalData.uiconfig.themeColor != null 
+  mainBgColor: app && app.globalData && app.globalData.uiconfig && app.globalData.uiconfig.themeColor != null 
     ? 'background: ' + app.globalData.uiconfig.themeColor + ';' 
     : 'background: ' + (uni.getStorageSync('themeColor') || '#FF9F43'),
     
-  borderColor: app.globalData.uiconfig && app.globalData.uiconfig.themeColor != null 
+  borderColor: app && app.globalData && app.globalData.uiconfig && app.globalData.uiconfig.themeColor != null 
     ? 'border-color: ' + app.globalData.uiconfig.themeColor + ';' 
     : 'border-color: ' + (uni.getStorageSync('themeColor') || '#FF9F43'),
     
-  mainBgGradient: app.globalData.uiconfig && app.globalData.uiconfig.themeColor != null && app.globalData.uiconfig.themeColor !== "#FF9F43" 
+  mainBgGradient: app && app.globalData && app.globalData.uiconfig && app.globalData.uiconfig.themeColor != null && app.globalData.uiconfig.themeColor !== "#FF9F43" 
     ? 'background: linear-gradient(-270deg, ' + app.globalData.uiconfig.themeColor + ', ' + app.globalData.uiconfig.themeColor + ');' 
     : "background: linear-gradient(-270deg, #FF9F43, #F13327);",
     
-  mainColorRgb: app.globalData.uiconfig && app.globalData.uiconfig.themeColor != null 
+  mainColorRgb: app && app.globalData && app.globalData.uiconfig && app.globalData.uiconfig.themeColor != null 
     ? 'color: ' + colorRgba(app.globalData.uiconfig.themeColor, 0.4) + ';' 
     : 'color:rgba(255,159,67, 0.4);',
     
-  borderColorRgb: app.globalData.uiconfig && app.globalData.uiconfig.themeColor != null 
+  borderColorRgb: app && app.globalData && app.globalData.uiconfig && app.globalData.uiconfig.themeColor != null 
     ? 'border-color: ' + colorRgba(app.globalData.uiconfig.themeColor, 0.4) + ';' 
     : "border-color:rgba(255,159,67, 0.4);",
     
-  mainColorRgb02: app.globalData.uiconfig && app.globalData.uiconfig.themeColor != null 
+  mainColorRgb02: app && app.globalData && app.globalData.uiconfig && app.globalData.uiconfig.themeColor != null 
     ? colorRgba(app.globalData.uiconfig.themeColor, 0.4) 
     : 'rgba(255,159,67, 0.2)',
     
-  BgColorRgb01: app.globalData.uiconfig && app.globalData.uiconfig.themeColor != null 
+  BgColorRgb01: app && app.globalData && app.globalData.uiconfig && app.globalData.uiconfig.themeColor != null 
     ? 'background-color: ' + colorRgba(app.globalData.uiconfig.themeColor, 0.1) + ';' 
     : "background-color:rgba(255,159,67, 0.1);"
 }

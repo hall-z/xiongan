@@ -687,7 +687,7 @@ function getProductsCount() {
     .getProductsCount()
     .then((res) => {
       const count = String(res)
-      app.setTabBarBadge('shopping_cart', count)
+      app.globalData.setTabBarBadge('shopping_cart', count)
       state.cartCount = count
       try {
         uni.setStorageSync('wj_userProductsCount', res)

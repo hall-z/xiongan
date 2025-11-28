@@ -1,7 +1,6 @@
 <route lang="json5" type="page">
 {
-  needLogin: true,
-  layout: 'default',
+  layout: 'default-newretail',
   style: {
     navigationStyle: 'custom',
     'mp-alipay': {
@@ -1262,8 +1261,8 @@ onLoad(async function (_options) {
     })
   }
   if (app.globalData.openCustomTabbar) {
-    // app.getTabbar()
-    // app.editTabbar()
+    app.globalData.getTabbar()
+    app.globalData.editTabbar()
     state.openCustomTabbar = true
     state.showTabbar = true
   } else {
@@ -1271,8 +1270,8 @@ onLoad(async function (_options) {
       app.globalData.tabBar.list.forEach((item) => {
         if (item.linkModel === 'home') {
           // uni.hideTabBar()
-          // app.getTabbar()
-          // app.editTabbar()
+          app.globalData.getTabbar()
+          app.globalData.editTabbar()
           state.showTabbar = true
         }
       })
@@ -3025,12 +3024,12 @@ function getShopCart(storeId) {
     const localProductCount = uni.getStorageSync('wj_userProductsCount')
     const counts = String(localProductCount)
     if (counts) {
-      app.setTabBarBadge('shopping_cart', counts)
+      app.globalData.setTabBarBadge('shopping_cart', counts)
     }
     shopcartService
       .getProductsCount()
       .then((res) => {
-        app.setTabBarBadge('shopping_cart', String(res))
+        app.globalData.setTabBarBadge('shopping_cart', String(res))
         try {
           uni.setStorageSync('wj_userProductsCount', res)
         } catch (e) {}
@@ -3054,12 +3053,12 @@ function getLocalShopCart(storeId) {
     const localProductCount = uni.getStorageSync('wj_userProductsCount')
     const counts = String(localProductCount)
     if (counts) {
-      app.setTabBarBadge('shopping_cart', counts)
+      app.globalData.setTabBarBadge('shopping_cart', counts)
     }
     shopcartService
       .getProductsCount()
       .then((res) => {
-        app.setTabBarBadge('shopping_cart', String(res))
+        app.globalData.setTabBarBadge('shopping_cart', String(res))
         try {
           uni.setStorageSync('wj_userProductsCount', res)
         } catch (e) {}

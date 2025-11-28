@@ -1,42 +1,42 @@
 <template>
-<!--pages/wxfaceapp/payment/payment.wxml-->
-<goodsDetail-bar :title="state.navigationBarTitle" color="#ffffff"></goodsDetail-bar>
-<view class="content">
-  <view class="prompt-box">
-    <image class="success-icon" :src="state.imagesPath.iconSuccess"></image>
-    <view class="success-text">支付成功</view>
+  <!--pages/wxfaceapp/payment/payment.wxml-->
+  <!-- <goodsDetail-bar :title="state.navigationBarTitle" color="#ffffff"></goodsDetail-bar> -->
+  <view class="content">
+    <view class="prompt-box">
+      <image class="success-icon" :src="state.imagesPath.iconSuccess"></image>
+      <view class="success-text">支付成功</view>
+    </view>
+    <view class="btn-box">
+      <button class="btn" type="default" @click="exitWxMiniApp">完成</button>
+    </view>
   </view>
-  <view class="btn-box">
-    <button class="btn" type="default" @click="exitWxMiniApp">完成</button>
-  </view>
-</view>
 </template>
 <script setup>
-import _utilsImagesPathJs from "@/utils/newretail/imagesPath";
+import _utilsImagesPathJs from '@/utils/newretail/imagesPath'
 // import { onLoad, onReady, onShow, onHide, onUnload, onPullDownRefresh, onReachBottom, onShareAppMessage } from "@dcloudio/uni-app";
-import { reactive } from "vue";
-import goodsDetailBar from '@/pages-sub/newretail/components/goodsDetail-bar/goodsDetail-bar.vue';
+import { reactive } from 'vue'
+// import goodsDetailBar from '@/pages-sub/newretail/components/goodsDetail-bar/goodsDetail-bar.vue';
 // pages/wxfaceapp/payment/payment.js
-const IMGAGESPATH = _utilsImagesPathJs;
+const IMGAGESPATH = _utilsImagesPathJs
 const state = reactive({
   imagesPath: IMGAGESPATH,
-  navigationBarTitle: "支付成功"
-});
-onLoad(function (options) {});
-onReady(function () {});
-onShow(function () {});
-onHide(function () {});
-onUnload(function () {});
-onPullDownRefresh(function () {});
-onReachBottom(function () {});
-onShareAppMessage(function () {});
+  navigationBarTitle: '支付成功',
+})
+onLoad(function (options) {})
+onReady(function () {})
+onShow(function () {})
+onHide(function () {})
+onUnload(function () {})
+onPullDownRefresh(function () {})
+onReachBottom(function () {})
+onShareAppMessage(function () {})
 function exitWxMiniApp() {
   try {
     wxfaceapp.exitMp({
       success(res) {
-        console.log("exit mini app!");
-      }
-    });
+        console.log('exit mini app!')
+      },
+    })
   } catch (e) {}
 }
 </script>
@@ -97,5 +97,4 @@ function exitWxMiniApp() {
 button::after {
   border: none;
 }
-
 </style>

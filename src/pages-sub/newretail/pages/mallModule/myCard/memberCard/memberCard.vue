@@ -107,7 +107,7 @@ const app = getApp();
 
 // pages/memberCard/memberCard.js
 const redPacketService = _apiRedPacketServiceJs;
-const NavigationBar = _componentsNavigationBarNavigationBarJs;
+;
 const memberService = _apiMemberServiceJs;
 const orderService = _apiOrderServiceJs;
 const storeService = _apiStoreServiceJs;

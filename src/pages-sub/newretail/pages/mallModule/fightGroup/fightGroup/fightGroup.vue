@@ -342,8 +342,8 @@ onLoad(function (options) {
     });
   }
   if (app.globalData.openCustomTabbar) {
-    app.getTabbar();
-    app.editTabbar();
+    app.globalData.getTabbar();
+    app.globalData.editTabbar();
     state.openCustomTabbar = true;
     state.showTabbar = true;
   } else {
@@ -351,8 +351,8 @@ onLoad(function (options) {
       app.globalData.tabBar.list.forEach(item => {
         if (item.linkModel === 'teambuying_activity') {
           uni.hideTabBar();
-          app.getTabbar();
-          app.editTabbar();
+          app.globalData.getTabbar();
+          app.globalData.editTabbar();
           state.showTabbar = true;
         }
       });
@@ -433,8 +433,8 @@ function changeStore() {
 onReady(function () {});
 onShow(function () {
   if (state.openCustomTabbar) {
-    app.getTabbar();
-    app.editTabbar();
+    app.globalData.getTabbar();
+    app.globalData.editTabbar();
   }
   if (state.storeId && app.globalData.storeInfo && (state.storeId !== app.globalData.storeInfo.id || state.storeData.virtualStoreId !== app.globalData.storeInfo.virtualStoreId)) {
     state.storeName = app.globalData.storeInfo.name;

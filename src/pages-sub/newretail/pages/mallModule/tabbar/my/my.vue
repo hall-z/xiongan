@@ -1,7 +1,7 @@
 <template>
   <!-- pages/my/my.wxml -->
   <view>
-    <navigation-bar
+    <navigationBar
       v-if="state.conventionConfig && state.conventionConfig.pageTitle"
       :style="
         state.conventionConfig.isLunbotuTopScreen === 'TRUE'
@@ -20,7 +20,7 @@
       :isShowTopNavigation="state.conventionConfig.isLunbotuTopScreen !== 'TRUE'"
       :isShowTopNavigationFlag="state.conventionConfig.isLunbotuTopScreen === 'TRUE'"
       :title="state.conventionConfig ? state.conventionConfig.pageTitle : state.navigationBarTitle"
-    ></navigation-bar>
+    ></navigationBar>
 
     <view
       class="page-content"
@@ -256,7 +256,7 @@ import authorize from '@/pages-sub/newretail/components/authorize/authorize.vue'
 const app = getApp()
 let inOnLoadPage = false
 // pages/my/my.js
-const NavigationBar = _componentsNavigationBarNavigationBarJs
+
 const CustomLoading = _componentsCustomLoadingCustomLoadingJs
 const Tabbar = _componentsTabbarTabbarJs
 const wxaUserService = _apiWxaUserServiceJs
@@ -574,8 +574,8 @@ onLoad(function (_options) {
     }
   }
   if (app.globalData.openCustomTabbar) {
-    app.getTabbar()
-    app.editTabbar()
+    app.globalData.getTabbar()
+    app.globalData.editTabbar()
     state.openCustomTabbar = true
     state.showTabbar = true
   } else {
@@ -583,8 +583,8 @@ onLoad(function (_options) {
       app.globalData.tabBar.list.forEach((item) => {
         if (item.linkModel === 'my') {
           uni.hideTabBar()
-          app.getTabbar()
-          app.editTabbar()
+          app.globalData.getTabbar()
+          app.globalData.editTabbar()
           state.showTabbar = true
         }
       })
@@ -1728,8 +1728,8 @@ onShow(function () {
     }, 1000)
   }
   if (state.openCustomTabbar) {
-    app.getTabbar()
-    app.editTabbar()
+    app.globalData.getTabbar()
+    app.globalData.editTabbar()
   }
   console.log(state.openCustomTabbar)
   const self = this
