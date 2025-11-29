@@ -1,3 +1,21 @@
+<route lang="json5" type="page">
+{
+  layout: 'default-newretail',
+  style: {
+    navigationStyle: 'custom',
+    'mp-alipay': {
+      transparentTitle: 'always',
+      titlePenetrate: 'YES',
+      defaultTitle: '',
+    },
+    'mp-weixin': {
+      navigationStyle: 'custom',
+      titlePenetrate: 'YES',
+      defaultTitle: '',
+    },
+  },
+}
+</route>
 <template>
   <!-- pages/scoreMall/scoreMall.wxml -->
   <!-- banner 图片 -->
@@ -25,11 +43,11 @@
       </view>
     </view>
     <!-- 当前门店 -->
-    <view class="current-store-box" @click="toSelectStore">
+    <!-- <view class="current-store-box" @click="toSelectStore">
       <image :src="state.imagesPath.scoreStoreIcon"></image>
       <text>当前门店：{{ state.storeName }}</text>
       <image :src="state.imagesPath.iconRight1"></image>
-    </view>
+    </view> -->
     <!-- tabbar -->
     <view class="tab-box">
       <view class="tab-bar">
@@ -114,7 +132,9 @@
               <text
                 class="oldPrice"
                 v-if="
-                  item.product && item.product.originalPrice && item.product.sellPrice < item.product.originalPrice
+                  item.product &&
+                  item.product.originalPrice &&
+                  item.product.sellPrice < item.product.originalPrice
                 "
               >
                 ￥{{ item.originalPrice }}
@@ -132,7 +152,8 @@
                   v-if="
                     item.availableStockAmount !== 0 &&
                     item.total !== 0 &&
-                    item.product && item.product.balance !== 0
+                    item.product &&
+                    item.product.balance !== 0
                   "
                   :class="state.score >= item.score ? 'enable' : 'unable'"
                   :data-goodsId="item.id"
@@ -356,11 +377,11 @@
       class="loading-btn"
       :style="'color: ' + state.themeColor"
       :loading="state.loading"
-      :hidden="!state.loading"
+      v-show="state.loading"
     >
       正在加载...
     </button>
-    <view class="order-end" :hidden="!state.noMore">~我也是有底线的~</view>
+    <view class="order-end" v-show="state.noMore">~我也是有底线的~</view>
     <!-- 旧版兑换弹窗 积分礼券走这里 -->
     <popup
       :show="state.show.middle"
@@ -454,7 +475,14 @@
     >
       <view class="exchange-popup">
         <view class="e-p-goods">
-          <view class="ex-goods-left" v-if="state.scoreProductType === 'SCORE_PRODUCT_PRODUCT' && state.selectGood && state.selectGood.product">
+          <view
+            class="ex-goods-left"
+            v-if="
+              state.scoreProductType === 'SCORE_PRODUCT_PRODUCT' &&
+              state.selectGood &&
+              state.selectGood.product
+            "
+          >
             <image
               :src="state.selectGood.product.imageUrl"
               mode="widthFix"
@@ -557,8 +585,8 @@ import _apiScoreProductService from '@/service/api/newretail/scoreProductService
 import * as filters from '@/utils/newretail/filters'
 // import { onLoad, onReady, onShow, onHide, onUnload, onPullDownRefresh, onReachBottom, onShareAppMessage } from "@dcloudio/uni-app";
 import { reactive } from 'vue'
-import popup from '@/pages-sub/newretail/components/popup/popup.vue';
-import authorize from '@/pages-sub/newretail/components/authorize/authorize.vue';
+import popup from '@/pages-sub/newretail/components/popup/popup.vue'
+import authorize from '@/pages-sub/newretail/components/authorize/authorize.vue'
 const app = getApp()
 
 // pages/scoreMall/scoreMall.js
@@ -700,7 +728,7 @@ function handleClickTab(e) {
   state.goodsList = []
   state.couponList = []
   state.thirdPartycouponList = []
-  getScoreProduct(app.globalData.storeInfo.id, tabType)
+  getScoreProduct('', tabType)
 }
 function bannerJumping(e) {
   const that = this
@@ -975,7 +1003,7 @@ function hadnleGetScoreProduct(storeIdIn, type) {
   }
   const that = this
   const tempData = {
-    storeId: state.storeId,
+    // storeId: state.storeId,
     status: 'STARTED',
   }
   scoreProductService
@@ -996,7 +1024,7 @@ function hadnleGetScoreProduct(storeIdIn, type) {
         page: state.pageData.page,
         pageSize: state.pageData.pageSize,
         onlyActivited: true,
-        storeIdIn: storeIdIn.join(','),
+        // storeIdIn: storeIdIn.join(','),
         typeEquals: type || state.scoreProductType,
         statusEquals: 'ENABLE',
       }
@@ -1610,7 +1638,6 @@ function initPage(options) {
   getBannerList(app.globalData.storeInfo.id)
 }
 
-
 onLoad(function (_options) {
   options = _options || {}
   changeStore = false
@@ -1798,7 +1825,8 @@ onShareAppMessage(function () {
   } else {
     return {
       title: app.globalData.systemConfigure.miniprogramSharingName,
-      path: '/pages-sub/newretail/pages/mallModule/score/scoreMall/scoreMall?storeId=' + state.storeId,
+      path:
+        '/pages-sub/newretail/pages/mallModule/score/scoreMall/scoreMall?storeId=' + state.storeId,
       imageUrl: sharePictures,
       success(e) {},
     }
