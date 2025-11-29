@@ -13,7 +13,7 @@
         <view class="name-mobile">
           <text v-if="!hasUserInfo" class="nike-name no-userInfo">点击头像授权登录</text>
           <text v-else class="nike-name ">{{member.nickName ? member.nickName : userInfo.nickName}}</text>
-          <text>{{filters.filtMobile(member.mobile)}}</text>
+          <text>{{filtMobile(member.mobile)}}</text>
         </view>
       </view>
       <view class="recharge-pay">

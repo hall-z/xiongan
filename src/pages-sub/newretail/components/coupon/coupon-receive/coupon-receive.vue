@@ -183,8 +183,8 @@
             有效期：{{ coupon.effectiveTime }}
           </text>
           <text class="coupon-time-label" v-else>
-            抢券时间：{{ filters.filtDateHead(coupon.startDate) }}~{{
-              filters.filtDateHead(coupon.endDate)
+            抢券时间：{{ filtDateHead(coupon.startDate) }}~{{
+              filtDateHead(coupon.endDate)
             }}
           </text>
         </view>
@@ -216,7 +216,7 @@
   <view class='coupon-info name'>{{coupon.name}}</view>
   <view class='coupon-info desc'>{{coupon.description}}</view>
   <view class='coupon-bottom'>
-    <text>抢券时间：{{filters.filtDateHead(coupon.startDate)}}~{{filters.filtDateHead(coupon.endDate)}}</text>
+    <text>抢券时间：{{filtDateHead(coupon.startDate)}}~{{filtDateHead(coupon.endDate)}}</text>
     <text class='remain-count' wx:if="{{coupon.balance}}">剩余<text>{{coupon.balance}}</text>张</text>
   </view>
   <block wx:if="{{coupon.balance > 0 || coupon.balance == null}}">

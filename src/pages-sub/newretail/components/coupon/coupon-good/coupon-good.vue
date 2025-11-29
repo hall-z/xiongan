@@ -20,8 +20,8 @@
       <view v-else></view> 
     </view>
     <view class="activity-price">￥
-      <text v-if="goods.promotionPrice != null">{{filters.filtToFix(goods.promotionPrice)}}</text>
-      <text v-else>{{filters.filtToFix(goods.sellPrice)}}</text>
+      <text v-if="goods.promotionPrice != null">{{filtToFix(goods.promotionPrice)}}</text>
+      <text v-else>{{filtToFix(goods.sellPrice)}}</text>
     </view>
   </view>
   <image class="cart-img" :src="imagesPath.iconCouponListCart" mode="widthFix" lazy-load="false" @click.stop="clickShopCart"></image>

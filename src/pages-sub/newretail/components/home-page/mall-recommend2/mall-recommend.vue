@@ -43,7 +43,6 @@
 
     <block v-for="(item, index) in state.fineQualityGoodsList" :key="index">
       <view v-if="displayStyle === 'two' || displayStyle === 'TWO'">
-        {{ JSON.stringify(item) }}1233
         <goods-store-hot
           :recommed="true"
           :goods="item"

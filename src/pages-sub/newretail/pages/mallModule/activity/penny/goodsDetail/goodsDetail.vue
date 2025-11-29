@@ -21,9 +21,9 @@
 <view class="penny-box" :style="state.theme.mainBgGradient">
   <view class="price">
     <view class="activity-price">￥
-      <text>{{state.pennyDetail.activityPrice ? filters.filtToFix(state.pennyDetail.actualPrice) : ""}}</text>
+      <text>{{state.pennyDetail.activityPrice ? filtToFix(state.pennyDetail.actualPrice) : ""}}</text>
     </view>
-    <view class="old-price">{{"￥" + filters.filtToFix(state.pennyDetail.activityPrice)}} </view>
+    <view class="old-price">{{"￥" + filtToFix(state.pennyDetail.activityPrice)}} </view>
   </view>
   <view class="number">共抽{{state.pennyDetail.prizeQuantity}}件</view>
 </view>
@@ -54,8 +54,8 @@
     <text class="look">当前门店没有库存，请切换门店</text>
   </button>
   <button v-else-if="!state.hasUserInfo" class="authorization" @click="getUserInfo">
-    <!-- <text class="left">{{pennyDetail.activityPrice ? filters.filtToFix(pennyDetail.activityPrice) + "元" : ""}}参与抽奖</text> -->
-    <text class="right">{{state.pennyDetail.activityPrice ? filters.filtToFix(state.pennyDetail.actualPrice) + "元" : ""}}马上抢</text>
+    <!-- <text class="left">{{pennyDetail.activityPrice ? filtToFix(pennyDetail.activityPrice) + "元" : ""}}参与抽奖</text> -->
+    <text class="right">{{state.pennyDetail.activityPrice ? filtToFix(state.pennyDetail.actualPrice) + "元" : ""}}马上抢</text>
   </button>
   <button v-else-if="state.hasPenny" class="authorization" @click="toMyHelpPennyDetails">
     <text class="look">查看我的抽奖</text>
@@ -64,7 +64,7 @@
     <text class="look">去抢其他好货</text>
   </button>
   <button v-else class="authorization" @click="confirmInformation">
-    <text class="look">{{state.pennyDetail.activityPrice ? filters.filtToFix(state.pennyDetail.actualPrice) + "元" : ""}}马上抢</text>
+    <text class="look">{{state.pennyDetail.activityPrice ? filtToFix(state.pennyDetail.actualPrice) + "元" : ""}}马上抢</text>
   </button>
 </view>
 <!-- 付款超时弹窗 -->
@@ -144,8 +144,8 @@
         <text class="look">当前门店没有库存，请切换门店</text>
       </button>
       <button v-else-if="!state.hasUserInfo" class="authorization" @click="getUserInfo">
-        <!-- <text class="left">{{pennyDetail.activityPrice ? filters.filtToFix(pennyDetail.activityPrice) + "元" : ""}}参与抽奖</text> -->
-        <text class="right">{{state.pennyDetail.activityPrice ? filters.filtToFix(state.pennyDetail.actualPrice) + "元" : ""}}马上抢</text>
+        <!-- <text class="left">{{pennyDetail.activityPrice ? filtToFix(pennyDetail.activityPrice) + "元" : ""}}参与抽奖</text> -->
+        <text class="right">{{state.pennyDetail.activityPrice ? filtToFix(state.pennyDetail.actualPrice) + "元" : ""}}马上抢</text>
       </button>
       <button v-else-if="state.hasPenny" class="authorization" @click="toMyHelpPennyDetails">
         <text class="look">查看我的抽奖</text>
@@ -155,8 +155,8 @@
       </button>
       <form v-else @submit="createOrder">
         <button form-type="submit">
-          <!-- <text class="left">{{pennyDetail.activityPrice ? filters.filtToFix(pennyDetail.activityPrice) + "元" : ""}}参与抽奖</text> -->
-          <text class="right">{{state.pennyDetail.activityPrice ? filters.filtToFix(state.pennyDetail.actualPrice) + "元" : ""}}马上抢</text>
+          <!-- <text class="left">{{pennyDetail.activityPrice ? filtToFix(pennyDetail.activityPrice) + "元" : ""}}参与抽奖</text> -->
+          <text class="right">{{state.pennyDetail.activityPrice ? filtToFix(state.pennyDetail.actualPrice) + "元" : ""}}马上抢</text>
         </button>
       </form>
     </view>

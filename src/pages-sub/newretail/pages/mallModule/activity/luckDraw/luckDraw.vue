@@ -111,7 +111,7 @@
             <view class="user-info">
               <view>
                 <text>
-                  {{ item.nickName ? item.nickName : filters.filtMobile(item.creatorName) }}
+                  {{ item.nickName ? item.nickName : filtMobile(item.creatorName) }}
                 </text>
                 {{ item.receiveTime }}
               </view>

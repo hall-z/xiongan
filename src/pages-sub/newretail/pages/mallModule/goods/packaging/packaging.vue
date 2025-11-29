@@ -25,13 +25,13 @@
               <view class="goods-price">
                 <view class="now-price">
                   <text>￥</text>
-                  {{ filters.filtToFix(item.sellPrice) }}
+                  {{ filtToFix(item.sellPrice) }}
                 </view>
                 <view
                   class="old-price"
                   v-if="item.originalPrice !== 0 && item.originalPrice > item.sellPrice"
                 >
-                  ￥{{ filters.filtToFix(item.originalPrice) }}
+                  ￥{{ filtToFix(item.originalPrice) }}
                 </view>
                 <view class="right" v-if="state.activityStatus === 'STARTED'">
                   <view v-if="item.balance > 0 && item.storeStatus === 'ON'">
@@ -133,7 +133,7 @@
                 {{ state.shopCart.productNum }}
               </view>
             </view>
-            ￥{{ filters.filtToFix(state.shopCart.allPrice) }}
+            ￥{{ filtToFix(state.shopCart.allPrice) }}
           </view>
           <view
             class="button-text"
@@ -205,13 +205,13 @@
                 <view class="goods-price">
                   <view class="now-price">
                     <text>￥</text>
-                    {{ filters.filtToFix(item.sellPrice) }}
+                    {{ filtToFix(item.sellPrice) }}
                   </view>
                   <view
                     class="old-price"
                     v-if="item.originalPrice !== 0 && item.originalPrice > item.sellPrice"
                   >
-                    ￥{{ filters.filtToFix(item.originalPrice) }}
+                    ￥{{ filtToFix(item.originalPrice) }}
                   </view>
                 </view>
               </view>

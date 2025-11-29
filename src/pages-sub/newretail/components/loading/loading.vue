@@ -9,7 +9,7 @@
   </view>
 </template>
 <script setup>
-import _utilsThemeManagerJs from '@/utils/newretail//themeManager'
+import _utilsThemeManagerJs from '@/utils/newretail/themeManager'
 // import { ready } from "@dcloudio/uni-app";
 import { reactive, onMounted } from 'vue'
 const app = getApp()

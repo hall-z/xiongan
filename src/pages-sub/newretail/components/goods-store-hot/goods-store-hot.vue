@@ -1,5 +1,6 @@
 <template>
   <!--components/goods-item-small/goods-item-small.wxml-->
+
   <view v-if="state.goodsData">
     <view
       :class="
@@ -144,7 +145,7 @@
           </view>
           <form @submit.stop="addToCart" @click.stop="noop">
             <view class="add-box" :style="'background-color: ' + state.themeColor + ';'">
-              <button v-if="!hasUserInfo" @click="getUserInfo"></button>
+              <button v-if="!state.hasUserInfo" @click="getUserInfo"></button>
               <button
                 v-else
                 form-type="submit"
@@ -190,7 +191,6 @@ import gouwuche from '@/utils/newretail/image/gouwuche.png'
 // import { attached, ready, detached } from "@dcloudio/uni-app";
 import { reactive, onMounted, onBeforeMount, onUnmounted } from 'vue'
 const app = getApp()
-
 // components/goods-item-small/goods-item-small.js
 const shopcartService = _apiShopcartServiceJs
 const productService = _apiProductServiceJs
@@ -260,10 +260,12 @@ watch(
   () => props.goods,
   (newVal, oldVal) => {
     state.goodsData = {
-      ...newVal,
+      ...JSON.parse(JSON.stringify(newVal)),
     }
     if (newVal != null) {
-      state.imageUrl = newVal.categoryImageUrl ? newVal.categoryImageUrl : newVal.imageUrl
+      state.imageUrl = JSON.parse(JSON.stringify(newVal)).categoryImageUrl
+        ? JSON.parse(JSON.stringify(newVal)).categoryImageUrl
+        : JSON.parse(JSON.stringify(newVal)).imageUrl
     }
   },
   {
@@ -305,8 +307,12 @@ const emit = defineEmits([
   'decrease',
   'subscribeArrivalRemind',
   'noop',
+  'getUserInfo',
 ])
 
+function filtToFix(e) {
+  return e.toFixed(2)
+}
 function clickGoodsItem(e) {
   emit('onClickGoods', e.currentTarget.dataset)
 }

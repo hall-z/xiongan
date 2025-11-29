@@ -8,7 +8,7 @@
     :animated="props.animated"
     :custom-style="
       (!props.isShowTopNavigation
-        ? 'position: absolute;left: 0;top:0;' + props.extStyle
+        ? 'position: fixed;left: 0;top:0;' + props.extStyle
         : props.extStyle) +
       ('background: ' + props.isHome && props.isShowTopNavigationFlag && !props.isShowTopNavigation
         ? 'transparent'
@@ -90,8 +90,9 @@
         </view>
       </view>
       <view v-else>
+        {{ props.nearStoreStyle }}2222
         <view :class="'left-box ' + (!props.isShowTopNavigationFlag ? 'top-left-box' : '')">
-          <view class="address" v-if="props.nearStoreStyle === '1'" @click="changeAddress">
+          <view class="address" v-if="nearStoreStyleData === '1'" @click="changeAddress">
             <image
               style="width: 22rpx; height: 30rpx"
               :src="state.imagesPath.iconNearStoreAddress"
@@ -257,16 +258,18 @@ const props = defineProps({
     value: '',
   },
 })
+let nearStoreStyleData = null
+watch(
+  () => props.nearStoreStyle,
+  (e) => {
+    nearStoreStyleData = e
+  },
+  { immediate: true },
+)
 watch(
   () => [props.nearStoreStyle, props.storeInfo, props.latitudeAndLongitude],
   function (changeVal) {
     const [nearStoreStyle, storeInfo, latitudeAndLongitude] = changeVal
-    console.log(
-      nearStoreStyle,
-      storeInfo,
-      latitudeAndLongitude,
-      'nearStoreStyle, storeInfo, latitudeAndLongitude',
-    )
     if (latitudeAndLongitude && latitudeAndLongitude !== state.latitudeAndLongitude1) {
       const latitudeAndLongitudeList = latitudeAndLongitude.split(',')
       // 2、根据坐标获取当前位置名称，显示在顶部:腾讯地图逆地址解析
@@ -280,6 +283,7 @@ watch(
       )
       state.latitudeAndLongitude1 = latitudeAndLongitude
     } else if (nearStoreStyle === '1' && storeInfo) {
+      nearStoreStyleData = nearStoreStyle
       state.storeInfoName = storeInfo.name || ''
     }
   },
@@ -365,7 +369,7 @@ function handleConfirm(e) {
   uni.navigateTo({
     url:
       '/pages-sub/newretail/pages/mallModule/goods/search/search' +
-      (state.isStoreDetail ? '?showType=product&storeId=' + state.storeId : ''),
+      (props.isStoreDetail ? '?showType=product&storeId=' + props.storeId : ''),
   })
 }
 function goBack() {

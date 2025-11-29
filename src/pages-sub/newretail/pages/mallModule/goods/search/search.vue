@@ -15,13 +15,14 @@
 <template>
   <!-- pages/search/search.wxml -->
   <!--  -->
-  <view>
+  <view class="search-page">
     <navigationBar
-      :storeId="storeData && storeData.id"
+      :storeId="state.storeData && state.storeData.id"
       :isShowAddressText="state.showStore"
       :isShowAddress="state.showStore"
       :storeTypeText="state.storeType && state.storeType.name ? state.storeType.name : ''"
       :title="state.navigationBarTitle"
+      background="#dfc8b6"
     ></navigationBar>
     <custom-loading v-if="!state.dataLoading"></custom-loading>
     <view
@@ -568,6 +569,7 @@ recorderManager.onError((res) => {
   console.log('error', res)
 })
 const state = reactive({
+  storeData: {},
   storeList: [],
   showStore: true,
   storeType: {},
@@ -629,13 +631,13 @@ function bannerJumping(e) {
 }
 function goDetail(e) {
   const id = e.currentTarget.dataset.id
-  const storeData = {
+  state.storeData = {
     ...state.storeList[e.currentTarget.dataset.idx],
   }
-  delete storeData.productList
-  delete storeData.storeImages
-  delete storeData.consultImages
-  app.globalData.storeInfo = storeData
+  delete state.storeData.productList
+  delete state.storeData.storeImages
+  delete state.storeData.consultImages
+  app.globalData.storeInfo = state.storeData
   uni.setStorageSync('storeIdactive', app.globalData.storeInfo)
   NAVPAGE.toStoreDetail('?id=' + id)
 }
@@ -883,7 +885,6 @@ function clearSearch() {
   state.searchLabelShow = true
 }
 function toSearch() {
-  const that = this
   let nameLikes = state.nameLikes
   if (!nameLikes) {
     uni.showToast({
@@ -935,7 +936,6 @@ function handleConfirm(e) {
 }
 async function getSearchProduct(keywordLikes, nameLikes) {
   const storeId = state.storeId
-  const that = this
   const page = state.page
   const pageSize = state.pageSize
   const searchCount = state.searchCount
@@ -1583,6 +1583,8 @@ function recorderEnd(e) {
 }
 let eventId = null
 onLoad(function (_options) {
+  // 根据传入的showType参数设置是否显示门店列表
+  // 'store'表示显示门店列表，其他值显示商品列表
   if (_options.showType) {
     state.showStore = _options.showType == 'store'
   }
@@ -1595,7 +1597,6 @@ onLoad(function (_options) {
     // wx.showLoading({
     //   title: '查询中',
     // })
-    state.storeType = state.storeType
     state.searchFocus = false
     state.dataLoading = false
     getSearchProduct('', '')
@@ -1613,7 +1614,6 @@ onLoad(function (_options) {
   const tabbarHeight = app.globalData.isIphoneX ? 148 : 98
   const navHeight = app.globalData.navHeight
   const searchBarHeight = (30 * systemInfo.screenWidth) / 750
-  const self = this
   eventId = bus.on('userShopCartChange', () => {
     if (app.globalData.storeInfo) {
       getShopCart(app.globalData.storeInfo.id)
@@ -2362,7 +2362,7 @@ function handleScrolltolower(e) {
 </script>
 <style scoped>
 /* pages/search/search.wxss */
-page {
+.search-page {
   background: #f3f4f6;
 }
 .search {

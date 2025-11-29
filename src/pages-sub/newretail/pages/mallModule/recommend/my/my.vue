@@ -55,7 +55,7 @@
       </view>
       <view class="topic-list">
         <scroll-view scroll-x="" style="display:flex;white-space: nowrap;width: 100%;" @scrolltolower="onReachBottom">
-          <view class="topic-item" v-for="(item , index) in state.topicList" :key="index" :data-id="item.id" :style="filters.getStyle(state.selectedTopicIds, item.id, state.themeColor)" @click="handleTopicTap">
+          <view class="topic-item" v-for="(item , index) in state.topicList" :key="index" :data-id="item.id" :style="getStyle(state.selectedTopicIds, item.id, state.themeColor)" @click="handleTopicTap">
             #{{item.name}}
         </view>
           <!-- <view wx:if="{{topicLoading}}" class="topic-item">加载中...</view> -->
@@ -71,7 +71,7 @@
         <view class="essay-item-statu" wx:if="{{item.status === 'REJECTED' && state.currentTabValue === 'memberId'}}">审核未通过</view>
         <view class="essay-pic">
             <video 
-            wx:if="{{filters.isMp4(item.imgUrlList[0])}}"
+            wx:if="{{isMp4(item.imgUrlList[0])}}"
             id="myVideo" 
             class="myVideo"
             src="{{item.imgUrlList[0]}}" 
@@ -104,7 +104,7 @@
           <view class="essay-item-statu pending" v-if="item.status === 'PENDING' && state.currentTabValue === 'memberId'">待审核</view>
         <view class="essay-item-statu" v-if="item.status === 'REJECTED' && state.currentTabValue === 'memberId'">审核未通过</view>
           <view class="essay-pic">
-            <video v-if="filters.isMp4(item.imgUrlList[0])" id="myVideo" class="myVideo" :src="item.imgUrlList[0]" :controls="false" :show-center-play-btn="false" :show-play-btn="false" :show-mute-btn="false" :picture-in-picture-mode="['push', 'pop']"></video>
+            <video v-if="isMp4(item.imgUrlList[0])" id="myVideo" class="myVideo" :src="item.imgUrlList[0]" :controls="false" :show-center-play-btn="false" :show-play-btn="false" :show-mute-btn="false" :picture-in-picture-mode="['push', 'pop']"></video>
             <image v-else :src="item.imgUrlList[0]" mode="widthFix"></image>
           </view>
           <view class="essay-title">{{item.title}}</view>

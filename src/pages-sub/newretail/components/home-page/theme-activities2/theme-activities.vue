@@ -181,7 +181,7 @@
                 </view>
                 <!-- 一行两个 -->
                 <view class="module-goods" v-if="item.prdouctDisplayStyle === 'TWO_PER_LINE'" :style="'width: 100%;padding: 0 ' + (item.pageMargin || 0) + 'px;box-sizing: border-box'">
-                  <view :style="'height: ' + (item.close ? filters.calcGoodsStyle(item.productsForPc.length, 2) * (item.modelMargin ? 450 + (filters.pxToRpx(item.modelMargin * 2) || 0) : 450) : filters.calcGoodsStyle(item.productsForPc.length, 2) * (item.modelMargin ? 540 + (filters.pxToRpx(item.modelMargin * 2) || 0) : 540)) + 'rpx;'">
+                  <view :style="'height: ' + (item.close ? calcGoodsStyle(item.productsForPc.length, 2) * (item.modelMargin ? 450 + (pxToRpx(item.modelMargin * 2) || 0) : 450) : calcGoodsStyle(item.productsForPc.length, 2) * (item.modelMargin ? 540 + (pxToRpx(item.modelMargin * 2) || 0) : 540)) + 'rpx;'">
                         <view v-for="(goodsItem , index) in item.productsForPc" :key="idx">
                             <goods-item-small :activityColor="item.activityColor" :backGroundColor="item.backGroundColor" :backGroundType="item.backGroundType" :backGroundImgObj="item.backGroundImgObj" :shopCarType="item.shopCarType" :underlinePriceShow="item.underlinePriceShow" :goodsWidth="'50%'" :fillet="item.fillet" :styleType="item.styleType" :textStyle="item.textStyle" :alignStyle="item.alignStyle" :modelMargin="item.modelMargin" :imageHeight="'300rpx'" :goodsHeight="item.close ? '450rpx' : '540rpx'" style="margin-right: 0" :goods="goodsItem" :shopCart="shopCart" :hasUserInfo="hasUserInfo" @onClickGoods="onClickGoods" @addToCart="addToCart" @noop="noop" @getUserInfo="onGetUserInfo"></goods-item-small>
                         </view>
@@ -189,7 +189,7 @@
                 </view>
                 <!-- 一行三个 -->
                 <view class="module-goods" v-if="item.prdouctDisplayStyle === 'THREE_PER_LINE'" style="white-space: normal;">
-                    <view :style="'height: ' + (item.close ? filters.calcGoodsStyle(item.productsForPc.length, 3) * (item.modelMargin ? 420 + filters.pxToRpx(item.modelMargin * 2) : 420) : filters.calcGoodsStyle(item.productsForPc.length, 3) * (item.modelMargin ? 464 + filters.pxToRpx(item.modelMargin * 2) : 464)) + 'rpx;'" class="flexbox">
+                    <view :style="'height: ' + (item.close ? calcGoodsStyle(item.productsForPc.length, 3) * (item.modelMargin ? 420 + pxToRpx(item.modelMargin * 2) : 420) : calcGoodsStyle(item.productsForPc.length, 3) * (item.modelMargin ? 464 + pxToRpx(item.modelMargin * 2) : 464)) + 'rpx;'" class="flexbox">
                         <view v-for="(goodsItem , index) in item.productsForPc" :key="idx" v-if="item.shelvesStatus != 'OFF'">
                             <view style="width: calc((100% / 3)">
                                 <goods-item-small :activityColor="item.activityColor" :backGroundColor="item.backGroundColor" :backGroundType="item.backGroundType" :backGroundImgObj="item.backGroundImgObj" :shopCarType="item.shopCarType" :underlinePriceShow="item.underlinePriceShow" goodsWidth="100%" :fillet="item.fillet" :styleType="item.styleType" :textStyle="item.textStyle" :alignStyle="item.alignStyle" :modelMargin="item.modelMargin" :goodsHeight="item.close ? '420rpx' : '464rpx'" style="margin-right: 0;" :goods="goodsItem" :shopCart="shopCart" :hasUserInfo="hasUserInfo" @onClickGoods="onClickGoods" @addToCart="addToCart" @noop="noop" @getUserInfo="onGetUserInfo" :idx="index + 1">
@@ -199,7 +199,7 @@
                     </view>
                 </view>
                 <view class="module-goods" v-if="item.prdouctDisplayStyle === 'TIVE_PER_LINE'" :style="'width: 100%;padding: 0 ' + (item.pageMargin || 0) + 'px;box-sizing: border-box'">
-                    <view :style="'height: ' + (item.close ? filters.calcGoodsStyle(item.productsForPc.length, 3) * (item.modelMargin ? 340 + filters.pxToRpx(item.modelMargin * 2) : 340) : filters.calcGoodsStyle(item.productsForPc.length, 3) * (item.modelMargin ? 380 + filters.pxToRpx(item.modelMargin * 2) : 380)) + 'rpx;'">
+                    <view :style="'height: ' + (item.close ? calcGoodsStyle(item.productsForPc.length, 3) * (item.modelMargin ? 340 + pxToRpx(item.modelMargin * 2) : 340) : calcGoodsStyle(item.productsForPc.length, 3) * (item.modelMargin ? 380 + pxToRpx(item.modelMargin * 2) : 380)) + 'rpx;'">
                         <view v-for="(item , index) in item.productsForPc" :key="idx">
                             <goods-item-small :activityColor="item.activityColor" :backGroundColor="item.backGroundColor" :backGroundType="item.backGroundType" :backGroundImgObj="item.backGroundImgObj" :shopCarType="item.shopCarType" :underlinePriceShow="item.underlinePriceShow" :goodsWidth="'31%'" :goodsHeight="item.close ? '340rpx' : '380rpx'" style="margin-right: 0;" :goods="item" :shopCart="shopCart" :hasUserInfo="hasUserInfo" @onClickGoods="onClickGoods" @addToCart="addToCart" @noop="noop" @getUserInfo="onGetUserInfo">
                             </goods-item-small>

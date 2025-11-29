@@ -173,7 +173,7 @@
             </view>
             <view class="right">
               <view class="deduction-amount">
-                -￥{{ filters.toFix(state.storedValueCard.useAmount) }}
+                -￥{{ toFix(state.storedValueCard.useAmount) }}
               </view>
               <view :class="'checkbox-icon ' + (state.useStoredValueCard ? 'active' : '')"></view>
             </view>
@@ -184,11 +184,11 @@
         </view>
         <view class="bill-details">
           <view class="discount-amounts" v-if="state.totalDiscount + shipmentCouponDiscount > 0">
-            已优惠￥{{ filters.toFix(state.totalDiscount + shipmentCouponDiscount) }}
+            已优惠￥{{ toFix(state.totalDiscount + shipmentCouponDiscount) }}
           </view>
           <view class="balance-accounts">
             商品总价：
-            <text>￥{{ filters.toFix(state.allPrice) }}</text>
+            <text>￥{{ toFix(state.allPrice) }}</text>
           </view>
         </view>
       </view>
@@ -197,7 +197,7 @@
       <image src="{{state.imagesPath.iconOrderTips}}" ></image>
     </view>
     <view class="balance-accounts">合计：
-      <text>￥{{filters.toFix(state.allPrice + state.shipmentAmount)}}</text>
+      <text>￥{{toFix(state.allPrice + state.shipmentAmount)}}</text>
     </view>
   </view> -->
 
@@ -215,7 +215,7 @@
           还需支付
           <text>
             ￥{{
-              filters.toFix(
+              toFix(
                 state.allPrice -
                   state.totalDiscount +
                   state.shipmentAmount -
@@ -258,7 +258,7 @@
             <view>
               <text class="color-454545" v-if="orderType !== 'advanceSell'">商品金额</text>
               <text class="color-454545" v-if="orderType === 'advanceSell'">预付定金</text>
-              <text class="color-ff7171">￥{{ filters.toFix(state.allPrice) }}</text>
+              <text class="color-ff7171">￥{{ toFix(state.allPrice) }}</text>
             </view>
             <view>
               <text class="color-454545">派送费</text>
@@ -294,7 +294,7 @@
             实付款:
             <text>
               ￥{{
-                filters.toFix(
+                toFix(
                   state.allPrice -
                     state.totalDiscount +
                     state.shipmentAmount -

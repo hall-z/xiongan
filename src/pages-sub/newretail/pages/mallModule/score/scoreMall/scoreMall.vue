@@ -110,7 +110,7 @@
             <text class="name" v-if="item.product">{{ item.product.name }}</text>
           </view>
           <text class="goods-now-state">
-            已兑：{{ filters.filterProductNum(item.prizeCount, item.total) }}/{{ item.total }}
+            已兑：{{ filterProductNum(item.prizeCount, item.total) }}/{{ item.total }}
           </text>
           <!-- <text class="goods-desc">{{item.productem.description?item.product.description:''}}</text> -->
           <!-- <view class="progress-box">
@@ -241,9 +241,9 @@
               <view class="main-coupon-detail-desc">{{ item.couponActivity.nr_condition }}</view>
               <view class="coupon-item-bottom">
                 <!-- <image class="coupon-time-icon" src="{{imagesPath.pass_clock}}" ></image> -->
-                <!-- <text class="time">兑券时间：{{filters.filtDateHead(item.couponActivity.startDate)}}~{{filters.filtDateHead(item.couponActivity.endDate)}}</text> -->
+                <!-- <text class="time">兑券时间：{{filtDateHead(item.couponActivity.startDate)}}~{{filtDateHead(item.couponActivity.endDate)}}</text> -->
                 <text class="time">
-                  兑券时间：{{ filters.filtDateHead(item.couponActivity.endDate) }} 截止
+                  兑券时间：{{ filtDateHead(item.couponActivity.endDate) }} 截止
                 </text>
               </view>
               <!-- 积分 + 按钮 -->
@@ -320,9 +320,9 @@
               <view class="main-coupon-detail-desc">{{ item.couponActivity.nr_condition }}</view>
               <view class="coupon-item-bottom">
                 <!-- <image class="coupon-time-icon" src="{{imagesPath.pass_clock}}" ></image> -->
-                <!-- <text class="time">兑券时间：{{filters.filtDateHead(item.couponActivity.startDate)}}~{{filters.filtDateHead(item.couponActivity.endDate)}}</text> -->
+                <!-- <text class="time">兑券时间：{{filtDateHead(item.couponActivity.startDate)}}~{{filtDateHead(item.couponActivity.endDate)}}</text> -->
                 <text class="time">
-                  兑券时间：{{ filters.filtDateHead(item.couponActivity.endDate || item.endTime) }}
+                  兑券时间：{{ filtDateHead(item.couponActivity.endDate || item.endTime) }}
                   截止
                 </text>
               </view>
@@ -349,7 +349,7 @@
           <!-- <image class="coupon-item-bg" src="{{false ? state.imagesPath.ticket1 : state.imagesPath.ticket2}}" ></image>
       <view class="coupon-item-top">
         <view class="name">{{item.name}}</view>
-        <text class="time">活动有效期：{{filters.filtDateHead(item.beginTime)}}~{{filters.filtDateHead(item.endTime)}}</text>
+        <text class="time">活动有效期：{{filtDateHead(item.beginTime)}}~{{filtDateHead(item.endTime)}}</text>
       </view> -->
         </view>
         <!-- 券兑换积分 -->
@@ -524,7 +524,7 @@
           </view>
           <text class="last-num">
             剩余{{
-              filters.filterProductNum(state.selectGood.total - state.selectGood.prizeCount)
+              filterProductNum(state.selectGood.total - state.selectGood.prizeCount)
             }}件
           </text>
         </view>

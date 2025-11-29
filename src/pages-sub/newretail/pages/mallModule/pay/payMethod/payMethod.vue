@@ -4,14 +4,14 @@
 <navigationBar :title="state.navigationBarTitle"></navigationBar>
 <view class="top-info">
   <view v-if="state.type != 'payTail'">
-    <view v-if="state.payMethods[0].checked && state.isStoredPayment">已使用余额抵扣￥{{filters.filtToFix(state.order.cashTotal)}}</view>
+    <view v-if="state.payMethods[0].checked && state.isStoredPayment">已使用余额抵扣￥{{filtToFix(state.order.cashTotal)}}</view>
     <view>应付金额
-      <text class="total">￥{{filters.filtToFix(state.order.cashTotal)}}</text>
+      <text class="total">￥{{filtToFix(state.order.cashTotal)}}</text>
     </view>
   </view>
   <view v-else>
     <view>应付金额
-      <text class="total">￥{{filters.filtToFix(state.order.balanceTotal)}}</text>
+      <text class="total">￥{{filtToFix(state.order.balanceTotal)}}</text>
     </view>
   </view>
 </view>

@@ -141,8 +141,8 @@
                 有效期：{{ state.assignCoupon.effectiveTime }}
               </text>
               <text class="coupon-time-label" v-else>
-                抢券时间：{{ filters.filtDateHead(state.assignCoupon.startDate) }}~{{
-                  filters.filtDateHead(state.assignCoupon.endDate)
+                抢券时间：{{ filtDateHead(state.assignCoupon.startDate) }}~{{
+                  filtDateHead(state.assignCoupon.endDate)
                 }}
               </text>
             </view>

@@ -9,7 +9,7 @@
         <image :src="state.imagesPath.upload_images_icon" class="submit-img"></image>
       </view>
       <view class="item-images-box" v-for="(item , idx) in state.formData.imgUrlList" :key="unique">
-        <view v-if="filters.isMp4(item)" class="item-images" :data-src="item" :data-index="idx" @click="reviewImg">
+        <view v-if="isMp4(item)" class="item-images" :data-src="item" :data-index="idx" @click="reviewImg">
             <video id="myVideo" class="myVideo" :src="item" :controls="false" :show-center-play-btn="false" :show-play-btn="false" :show-mute-btn="false" :picture-in-picture-mode="['push', 'pop']"></video>
         </view>
         <view v-else class="item-images" :data-src="item" :data-index="idx" @click="reviewImg">
@@ -70,7 +70,7 @@
     <view class="approve-box-title">审核建议</view>
     <view class="approve-item" v-for="(item , index) in state.formData.approveRecordList">
       <view class="approve-content">{{item.content}}</view>
-      <view class="approve-time">{{filters.filterTime(item.createTime)}}</view>
+      <view class="approve-time">{{filterTime(item.createTime)}}</view>
     </view>
   </view>
   <view :class="'save-btn-box ' + (state.formData.status === 'PENDING' || state.formData.status === 'REJECTED' ? 'two-btn-box' : '')">

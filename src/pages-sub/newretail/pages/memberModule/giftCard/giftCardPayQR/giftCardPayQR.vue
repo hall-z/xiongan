@@ -8,7 +8,7 @@
   <view class="qrcode-box">
     <canvas canvas-id="qrcode">
   </canvas></view>
-  <view class="number">{{filters.filtQRNumber(state.authCode)}}</view>
+  <view class="number">{{filtQRNumber(state.authCode)}}</view>
 </view>
 <text class="tig">每分钟自动刷新</text></view>
 </template>

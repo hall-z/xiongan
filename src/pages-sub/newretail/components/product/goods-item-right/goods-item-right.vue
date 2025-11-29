@@ -8,7 +8,7 @@
     :data-easyScene="state.goods1.easyScene != null ? state.goods1.easyScene : 'none'"
     @click="clickGoodsItem"
   >
-    {{ JSON.stringify(state.goods1) }}
+    <!-- {{ JSON.stringify(state.goods1) }} -->
     <view class="wm-goods-img-box">
       <image
         class="wm-goods-img"
@@ -187,8 +187,8 @@
                 :data-business="state.goods1.business"
                 :data-traceId="state.goods1.traceId"
               ></button>
-              <image class="add-img" :src="state.addImage"></image>
-              <text class="cart-count" v-if="props.shopCart[state.goods1.id]">
+              <image class="add-img" :src="addImageIcon"></image>
+              <text class="cart-count" v-if="props.shopCart && props.shopCart[state.goods1.id]">
                 {{ props.shopCart[state.goods1.id] ? props.shopCart[state.goods1.id] : '' }}
               </text>
             </view>
@@ -253,13 +253,15 @@ const props = defineProps({
   // hasUserInfo: Boolean,
   showSpecParent: Boolean,
 })
+let addImageIcon = ''
 onBeforeMount(() => {
   // 在组件实例进入页面节点树时执行
   if (app.globalData.userInfo) {
     state.hasUserInfo = true
   }
-  if (state.addImage === '' && state.reduceImage === '') {
-    state.addImage = state.imagesPath.shopping_icon_list
+  addImageIcon = props.addImage
+  if (props.addImage === '' && state.reduceImage === '') {
+    addImageIcon = state.imagesPath.shopping_icon_list
     state.reduceImage = state.imagesPath.iconMinus
   }
   state.vipGradeConfig = app.globalData.systemConfigure.vipGradeConfig
@@ -281,7 +283,7 @@ function clickGoodsItem(e) {
   emit('onClickGoods', e.currentTarget.dataset)
 }
 function addToCart(e) {
-  console.log('用户点击了：' + new Date().getTime())
+  console.log('用户点击了：', e)
   emit('addToCart', {
     dataset: e.currentTarget.dataset,
     context: this,
@@ -556,6 +558,7 @@ watch(
   font-size: 22rpx;
   /* margin-top: 16rpx; */
   line-height: 40rpx;
+  display: flex;
 }
 .wm-goods-price .nowPrice {
   font-size: 30rpx;

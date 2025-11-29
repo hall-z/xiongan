@@ -25,7 +25,7 @@
             <view class="top-tips">
                 <view class="top">
                     <view v-if="state.order.business !== 'DISTRIBUTION' && state.order.shipmentType !== 'LOGISTICAL'">
-                        <text>{{filters.filtdistributionCompany(state.order.distributionCompany)}}骑手已在配送</text>
+                        <text>{{filtdistributionCompany(state.order.distributionCompany)}}骑手已在配送</text>
                         <text class="distribution" @click="toOrderTrajectory" :style="'color:' + state.themeColor">查看配送信息</text>
                     </view>
                     <text v-else>订单已经发货</text>
@@ -524,7 +524,7 @@
                           <!-- <view class="goods-count" wx:if="{{state.order.type === 'CYCLE'}}"><text wx:if="{{item.cyclePhase}}">第{{item.cyclePhase}}期</text>
                         </view> -->
                           <view class="goods-price" v-if="state.order.business === 'SCORE' || state.order.type == 'SCORE_PRICE'">
-                              <text class="nowPrice">{{state.scorePayment ? state.scorePayment + '积分' : ''}}{{state.order.cashTotal && state.order.cashTotal > 0 && filters.toFix(state.order.cashTotal - state.shipmentAmount) > 0 ? '+￥' + filters.toFix(state.order.cashTotal - state.shipmentAmount) + '元' : ''}}</text>
+                              <text class="nowPrice">{{state.scorePayment ? state.scorePayment + '积分' : ''}}{{state.order.cashTotal && state.order.cashTotal > 0 && toFix(state.order.cashTotal - state.shipmentAmount) > 0 ? '+￥' + toFix(state.order.cashTotal - state.shipmentAmount) + '元' : ''}}</text>
                           </view>
                           <view class="goods-price" v-else>
                               <text class="nowPrice">￥{{item.price}}</text>
@@ -567,7 +567,7 @@
         <view class="bill-details">
           <view class="balance-accounts">
               商品小计：
-              <text>￥{{filters.toFix(item.orderAmount)}}</text>
+              <text>￥{{toFix(item.orderAmount)}}</text>
           </view>
         </view>
         <view class="good-type-config-item store-info" v-if="solitaireType !== 'ACTIVITY' && item.business !== 'DISTRIBUTION'">
@@ -594,7 +594,7 @@
             <view class="right coupon">
                 <view :hidden="item.deductibleShipmentAmonut !== 0 ? false : true">
                     <view class="coupon-amount-box">
-                        <text class="coupon-amount">-￥{{filters.toFix(item.deductibleShipmentAmonut)}}</text>
+                        <text class="coupon-amount">-￥{{toFix(item.deductibleShipmentAmonut)}}</text>
                     </view>
                 </view>
             </view>
@@ -644,7 +644,7 @@
                             <!-- <view class="goods-count" wx:if="{{state.order.type === 'CYCLE'}}"><text wx:if="{{item.cyclePhase}}">第{{item.cyclePhase}}期</text>
                           </view> -->
                             <view class="goods-price" v-if="state.order.business === 'SCORE' || state.order.type == 'SCORE_PRICE'">
-                                <text class="nowPrice">{{state.scorePayment ? state.scorePayment + '积分' : ''}}{{state.order.cashTotal && state.order.cashTotal > 0 && filters.toFix(state.order.cashTotal - state.shipmentAmount) > 0 ? '+￥' + filters.toFix(state.order.cashTotal - state.shipmentAmount) + '元' : ''}}</text>
+                                <text class="nowPrice">{{state.scorePayment ? state.scorePayment + '积分' : ''}}{{state.order.cashTotal && state.order.cashTotal > 0 && toFix(state.order.cashTotal - state.shipmentAmount) > 0 ? '+￥' + toFix(state.order.cashTotal - state.shipmentAmount) + '元' : ''}}</text>
                             </view>
                             <view class="goods-price" v-else>
                                 <text class="nowPrice">￥{{item.price}}</text>
@@ -680,7 +680,7 @@
                 <view class="title">运费
                     <text :hidden="state.shipmentCouponDiscount == 0">(运费券已减{{state.shipmentCouponDiscount}}元)</text>
                 </view>
-                <view class="amount" style="color:#333">+￥{{filters.filtToFix(state.shipmentAmount - state.shipmentCouponDiscount)}}
+                <view class="amount" style="color:#333">+￥{{filtToFix(state.shipmentAmount - state.shipmentCouponDiscount)}}
                 </view>
             </view>
             <!-- <view class="bill-details-item">
@@ -695,8 +695,8 @@
                     </view>
                 </view>
                 <!-- - shipmentCouponDiscount 注释优惠券减去运费优惠逻辑 -->
-                <view class="amount" v-if="state.couponDeductTotal && state.couponDeductTotal > 0">-￥{{filters.filtToFix(state.couponDeductTotal ? state.couponDeductTotal - state.shipmentCouponDiscount : 0)}}</view>
-                <view class="amount" v-else>-￥{{filters.filtToFix(state.coupon.price ? state.coupon.price - state.shipmentCouponDiscount : 0)}}</view>
+                <view class="amount" v-if="state.couponDeductTotal && state.couponDeductTotal > 0">-￥{{filtToFix(state.couponDeductTotal ? state.couponDeductTotal - state.shipmentCouponDiscount : 0)}}</view>
+                <view class="amount" v-else>-￥{{filtToFix(state.coupon.price ? state.coupon.price - state.shipmentCouponDiscount : 0)}}</view>
             </view>
             <view class="bill-details-item" :hidden="cashDeductTotal > 0 ? false : true">
                 <view class="title">活动优惠</view>
@@ -720,7 +720,7 @@
         </view>
         <view class="bill-total" v-if="state.balanceEnable">
             <view class="discount-amounts" v-if="deductibleTotal + state.deductibleShipmentAmonut > 0">
-                已优惠￥{{filters.filtToFix(deductibleTotal + state.deductibleShipmentAmonut)}}</view>
+                已优惠￥{{filtToFix(deductibleTotal + state.deductibleShipmentAmonut)}}</view>
             <view class="balance-accounts">
                 {{state.order.type === 'CYCLE' && state.goodsList[0].cyclePhase ? '每期金额：' : '共计：'}}
                 <text>￥{{state.cashTotal}} </text>
@@ -812,7 +812,7 @@
           <view class="pay-item">
             <view class="left">商品总价</view>
             <view class="right">
-                <text>+￥{{filters.toFix(state.order.orderAmount)}}</text>
+                <text>+￥{{toFix(state.order.orderAmount)}}</text>
             </view>
           </view>
           <view class="pay-item" v-if="state.shipmentAmount > 0">
@@ -844,8 +844,8 @@
                               lazy-load="false" />
                           <image class="coupon-bg" src="{{state.imagesPath.iconCouponBgRed}}" mode="widthFix"
                               lazy-load="false" /> -->
-                            <view class="coupon-amount" v-if="state.couponDeductTotal && state.couponDeductTotal > 0">-￥{{filters.filtToFix(state.couponDeductTotal ? state.couponDeductTotal - state.shipmentCouponDiscount : 0)}}</view>
-                            <view class="coupon-amount" v-else>-￥{{filters.filtToFix(state.coupon.price ? state.coupon.price - state.shipmentCouponDiscount : 0)}}</view>
+                            <view class="coupon-amount" v-if="state.couponDeductTotal && state.couponDeductTotal > 0">-￥{{filtToFix(state.couponDeductTotal ? state.couponDeductTotal - state.shipmentCouponDiscount : 0)}}</view>
+                            <view class="coupon-amount" v-else>-￥{{filtToFix(state.coupon.price ? state.coupon.price - state.shipmentCouponDiscount : 0)}}</view>
                       </view>
                   </view>
               </view>
@@ -861,10 +861,10 @@
       </view>
 
       <view class="bill-details1">
-          <view class="discount-amounts" v-if="cashDeductTotal + (state.couponDeductTotal ? state.couponDeductTotal : state.coupon ? state.coupon.price : 0) > 0">已优惠￥{{filters.toFix(cashDeductTotal + (state.couponDeductTotal ? state.couponDeductTotal : state.coupon ? state.coupon.price : 0))}}</view>
+          <view class="discount-amounts" v-if="cashDeductTotal + (state.couponDeductTotal ? state.couponDeductTotal : state.coupon ? state.coupon.price : 0) > 0">已优惠￥{{toFix(cashDeductTotal + (state.couponDeductTotal ? state.couponDeductTotal : state.coupon ? state.coupon.price : 0))}}</view>
           <view class="balance-accounts">
               支付金额：
-              <text>￥{{filters.toFix(state.order.cashTotal)}}</text>
+              <text>￥{{toFix(state.order.cashTotal)}}</text>
           </view>
       </view>
     </view>
@@ -910,7 +910,7 @@
         <view class="row refund-row" v-if="state.refundDataList.length > 0">
             <text class="color-454545">累计退款：</text>
             <view class="tracking-num refund-list-line" :style="'color:' + state.themeColor">
-                <text v-if="state.refundTotal">￥{{filters.filtToFix(state.refundTotal)}}</text>
+                <text v-if="state.refundTotal">￥{{filtToFix(state.refundTotal)}}</text>
                 <view v-for="(item , index) in state.refundDataList" :key="index" class="refund-list" :data-id="item.id" @click="toAddRefundDetails">
                     <text class="refund-id">{{item.id}}</text>
                     <view class="refund-status gray-color" v-if="item.status === 'FINISHED'">完成退款</view>

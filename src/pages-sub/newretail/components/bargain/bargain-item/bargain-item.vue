@@ -37,7 +37,7 @@
               后结束
             </view>
             <view :class="'bargain-status ' + (bargain.status === 'FAILED' ? 'fail' : '')" v-else>
-              {{ filters.filtBargainStatus(bargain.status) }}
+              {{ filtBargainStatus(bargain.status) }}
             </view>
           </view>
         </view>

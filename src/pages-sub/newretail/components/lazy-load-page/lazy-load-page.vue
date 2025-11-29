@@ -261,7 +261,7 @@ import _apiProductServiceJs from '@/service/api/newretail/productService'
 import _apiSystemServiceJs from '@/service/api/newretail/systemService'
 import _apiHomepageServiceJs from '@/service/api/newretail/homepageService'
 // import { ready } from "@dcloudio/uni-app";
-import { reactive, watch, onMounted, onBeforeMount } from 'vue'
+import { reactive, watch, onMounted, onBeforeMount, defineEmits } from 'vue'
 import searchBar from '../home-page/search-bar/search-bar.vue'
 import nearbyStore from '../home-page/nearby-store/nearby-store.vue'
 import subscribeBar from '../home-page/subscribe-bar/subscribe-bar.vue'
@@ -274,7 +274,7 @@ import bulletinBoard from '../home-page/bulletin-board/bulletin-board.vue'
 import middleMember from '../home-page/middle-member/middle-member.vue'
 import recommendStore from '../home-page/recommend-store/recommend-store.vue'
 import mallRecommend from '../home-page/mall-recommend2/mall-recommend.vue'
-import loading from '../loading/loading.vue'
+// import loading from '../loading/loading.vue'
 import collection from '../home-page/collection/collection.vue'
 import banner from '../home-page/banner2/banner2.vue'
 const app = getApp()
@@ -519,6 +519,7 @@ async function preLoading() {
     const list = []
     const conventionConfig =
       arr && arr[0] && arr[0].type == 'conventionConfig' ? JSON.parse(arr[0].content) : {}
+    console.log(conventionConfig, 'sdfasjfalsfjaskld')
     if (conventionConfig) {
       emit('upDataPageConfig', conventionConfig)
     }

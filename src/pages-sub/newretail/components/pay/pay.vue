@@ -2,7 +2,7 @@
   <!--components/pay/pay.wxml-->
   <!-- 输入密码弹窗 -->
   <popup
-    :show="show.cardPassword"
+    :show="state.show.cardPassword"
     position="middle"
     custom-class="middle"
     @close="toggleCardPasswordPopup"
@@ -13,23 +13,23 @@
         <image
           data-close="true"
           @click.stop="toggleCardPasswordPopup"
-          :src="imagesPath.iconCloseImg2"
+          :src="state.imagesPath.iconCloseImg2"
         ></image>
       </view>
       <view class="content">
         <password-input
           @valueSix="valueSix"
           @valueNow="handlePassword"
-          :input_value="inputData.input_value"
-          :value_length="inputData.value_length"
-          :isNext="inputData.isNext"
-          :get_focus="inputData.get_focus"
-          :focus_class="inputData.focus_class"
-          :value_num="inputData.value_num"
-          :height="inputData.height"
-          :width="inputData.width"
-          :see="inputData.see"
-          :interval="inputData.interval"
+          :input_value="state.inputData.input_value"
+          :value_length="state.inputData.value_length"
+          :isNext="state.inputData.isNext"
+          :get_focus="state.inputData.get_focus"
+          :focus_class="state.inputData.focus_class"
+          :value_num="state.inputData.value_num"
+          :height="state.inputData.height"
+          :width="state.inputData.width"
+          :see="state.inputData.see"
+          :interval="state.inputData.interval"
         >
           >
         </password-input>
@@ -37,17 +37,25 @@
         <view class="forget-password" @click="handleResetPassword">修改密码</view>
       </view>
       <view class="button-box">
-        <button :style="theme.mainBgColor" @click="confirmPayment">确认支付</button>
+        <button :style="state.theme.mainBgColor" @click="confirmPayment">确认支付</button>
       </view>
     </view>
   </popup>
   <!-- 付款超时弹窗 -->
-  <popup :show="show.timeOut" position="middle" custom-class="middle" @close="toggleTimeOutPopup">
+  <popup
+    v-if="state.show.timeOut"
+    :show="state.show.timeOut"
+    position="middle"
+    custom-class="middle"
+    @close="toggleTimeOutPopup"
+  >
     <view class="popup-content">
       <view class="popup-content-box">
-        <image :src="imagesPath.iconNetworkTimeout" mode="widthFix"></image>
+        <image :src="state.imagesPath.iconNetworkTimeout" mode="widthFix"></image>
       </view>
-      <view class="button" :style="theme.mainBgColor" @click="toggleTimeOutPopup">我知道了</view>
+      <view class="button" :style="state.theme.mainBgColor" @click="toggleTimeOutPopup">
+        我知道了
+      </view>
     </view>
   </popup>
 </template>
@@ -61,9 +69,19 @@ import _apiAdvanceSellServiceJs from '@/service/api/newretail/advanceSellService
 import _apiMemberServiceJs from '@/service/api/newretail/memberService'
 import _apiPennyServiceJs from '@/service/api/newretail/pennyService'
 import _apiOrderServiceJs from '@/service/api/newretail/orderService'
-import { reactive , watch} from 'vue'
-import passwordInput from '../password-input/password-input.vue';
-import popup from '../popup/popup.vue';
+import { reactive, watch, onMounted, onBeforeMount } from 'vue'
+import passwordInput from '../password-input/password-input.vue'
+import popup from '../popup/popup.vue'
+// components/pay/pay.js
+const orderService = _apiOrderServiceJs
+const pennyService = _apiPennyServiceJs
+const memberService = _apiMemberServiceJs
+const advanceSellService = _apiAdvanceSellServiceJs
+const THEME = _utilsThemeManagerJs
+const IMGAGESPATH = _utilsImagesPathJs
+const NAVPAGE = _utilsNavPageJs
+const UTILS = _utilsUtilsJs
+const request = _apiRequestJs
 const state = reactive({
   showPassFlag: false,
   imagesPath: IMGAGESPATH,
@@ -94,11 +112,11 @@ const state = reactive({
   },
   payments: {
     cardPay: {
-      total: 0
+      total: 0,
     },
     wxPay: {
-      total: 0
-    }
+      total: 0,
+    },
   },
   show: {
     middle: false,
@@ -107,22 +125,22 @@ const state = reactive({
     right: false,
     right2: false,
     cardPassword: false,
-    timeOut: false
+    timeOut: false,
   },
   password: '',
-  orderTimeId: 0
+  orderTimeId: 0,
 })
 const props = defineProps({
   orderData: {
     type: Object,
-    value: null
+    value: null,
   },
   // unpaid: { 支付改动注释
   //     type: Boolean,
   // },
   payMethod: {
     type: Object,
-    value: null
+    value: null,
   },
   storedValueCard: Object,
   payType: {
@@ -146,19 +164,11 @@ const props = defineProps({
     type: Boolean,
     value: false,
     // 监听订单是否取消
-  }
+  },
 })
 const app = getApp()
-// components/pay/pay.js
-const orderService = _apiOrderServiceJs
-const pennyService = _apiPennyServiceJs
-const memberService = _apiMemberServiceJs
-const advanceSellService = _apiAdvanceSellServiceJs
-const THEME = _utilsThemeManagerJs
-const IMGAGESPATH = _utilsImagesPathJs
-const NAVPAGE = _utilsNavPageJs
-const UTILS = _utilsUtilsJs
-const request = _apiRequestJs
+const emit = defineEmits(['loadingChange', 'continuePay', 'myevent', 'orderCancel', 'orderPay'])
+
 const colorRgba = (sHex, alpha = 1) => {
   // 十六进制颜色值的正则表达式
   const reg = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/
@@ -184,7 +194,7 @@ const colorRgba = (sHex, alpha = 1) => {
     return sColor
   }
 }
-function attached() {
+onBeforeMount(() => {
   state.theme = {
     color:
       app.globalData.uiconfig && app.globalData.uiconfig.themeColor != null
@@ -227,22 +237,20 @@ function attached() {
     BgColorRgb01:
       app.globalData.uiconfig && app.globalData.uiconfig.themeColor != null
         ? 'background-color: ' + colorRgba(app.globalData.uiconfig.themeColor, 0.1) + ';'
-        : 'background-color:rgba(255,159,67, 0.1);'
+        : 'background-color:rgba(255,159,67, 0.1);',
   }
-}
-function moved() {}
-function detached() {}
-function onShow() {
+})
+
+onShow(() => {
   state.showPassFlag = app.globalData.systemConfigure.isRechargePasswordEnabled
-}
-function onHide() {
+})
+onHide(() => {
   if (state.orderTimeId) {
     clearTimeout(state.orderTimeId)
     state.orderTimeId = null
   }
-}
+})
 function getDetailsById(id) {
-  const self = this
   orderService
     .getDetailsById(id)
     .then((res) => {
@@ -255,7 +263,6 @@ function getDetailsById(id) {
     })
 }
 function handleOrderDetails(res) {
-  const that = this
   state.order = res
   if (
     res.status !== 'CREATED' &&
@@ -300,7 +307,7 @@ function handleOrderDetails(res) {
         cardPayInfo = {
           cardDeductTotal: item.total,
           balance: item.total,
-          useStoredValueCard: true
+          useStoredValueCard: true,
         }
         isCombinationPay = true
       }
@@ -322,7 +329,7 @@ function handleOrderDetails(res) {
   }
   if (res.cashTotal === 0) {
     // 订单金额为0 直接轮询
-    getOrderStatusById(res.id, self)
+    getOrderStatusById(res.id)
   }
 }
 function handleOrderPay(order) {
@@ -330,7 +337,6 @@ function handleOrderPay(order) {
   if (order == null) {
     return
   }
-  const that = this
   // 如果是订单列表页调起支付需要查询订单
   state.order = order
   if (state.path === 'order') {
@@ -412,7 +418,7 @@ function handlePassword(e) {
 }
 function handleResetPassword() {
   uni.navigateTo({
-    url: '/pages-sub/newretail/pages/mallModule/myCard/resetPassword/resetPassword?active=1'
+    url: '/pages-sub/newretail/pages/mallModule/myCard/resetPassword/resetPassword?active=1',
   })
   // NAVPAGE.toResetPassword();
 }
@@ -420,7 +426,7 @@ function toggleTimeOutPopup() {
   toggle('timeOut')
   state.orderPay = true
   uni.redirectTo({
-    url: '/pages-sub/newretail/pages/mallModule/order/order/order'
+    url: '/pages-sub/newretail/pages/mallModule/order/order/order',
   })
 }
 function toggleCardPasswordPopup(e) {
@@ -435,14 +441,14 @@ function toggleCardPasswordPopup(e) {
           '/pages-sub/newretail/pages/mallModule/order/orderDetails/orderDetails?orderId=' +
           _order.id +
           '&orderFrom=shopCart&orderType=' +
-          (state.order && state.order.type == 'MIXED' ? 'MIXED' : '')
+          (state.order && state.order.type == 'MIXED' ? 'MIXED' : ''),
       })
     }
   }
   // if(e && e.currentTarget && e.currentTarget.dataset.close) {
   //     UTILS.showToast('您暂未输入支付密码，请重新提交！');
   //     if(that.data.unpaid) {
-  //       this.triggerEvent('orderCancel', true)
+  //       this.emit('orderCancel', true)
   //     }
   //     wx.hideLoading();
   // }
@@ -494,7 +500,7 @@ function confirmPayment() {
   //               that.toggleCardPasswordPopup()
   //               // 调用储值卡支付
   //               if(this.data.unpaid) {
-  //                   this.triggerEvent('paidOrder', postData)
+  //                   this.emit('paidOrder', postData)
   //               } else {
   //                   let order = this.data.order
   //                   that.getCardPay(order)
@@ -511,7 +517,7 @@ function confirmPayment() {
   //           wx.hideLoading();
   //           if(err.code=='16665'){
   //               let passProduct = JSON.parse(err.message)
-  //               this.triggerEvent('myevent', passProduct)
+  //               this.emit('myevent', passProduct)
   //               return
   //           } else {
   //               UTILS.showToast(err.message)
@@ -534,7 +540,6 @@ function confirmPayment() {
   // }
 }
 function getWXPay(order) {
-  const self = this
   let total = parseFloat(
     (parseFloat(order.cashTotal) - parseFloat(order.cardDeductTotal)).toFixed(2),
   )
@@ -543,26 +548,26 @@ function getWXPay(order) {
     orderId: order.id,
     payMethod: app.globalData.paymentMethod || request.PAYMETHOD,
     entry: 'ORDER',
-    total
+    total,
   }
   if (order.cashTotal === 0) {
-    getOrderStatusById(order.id, self)
+    getOrderStatusById(order.id)
   } else {
     // wx.showLoading()
-    triggerEvent('loadingChange', true)
+    emit('loadingChange', true)
     orderService
       .getCashPaySign(tempData)
       .then((res) => {
         // wx.hideLoading()
-        triggerEvent('loadingChange', false)
+        emit('loadingChange', false)
         wxPay(res, tempData)
       })
       .catch((err) => {
         // wx.hideLoading()
-        triggerEvent('loadingChange', false)
+        emit('loadingChange', false)
         if (err.code == 16665) {
           const passProduct = JSON.parse(err.message)
-          triggerEvent('myevent', passProduct)
+          emit('myevent', passProduct)
           return
         }
         if (err.code === -1001) {
@@ -570,20 +575,19 @@ function getWXPay(order) {
           orderLock(order)
           toggle('timeOut')
         } else {
-          triggerEvent('continuePay', true)
+          emit('continuePay', true)
           UTILS.showToast(err.message)
         }
       })
   }
 }
 function getCombinedPay(order) {
-  const self = this
   if (order.cashTotal === 0) {
-    getOrderStatusById(order.id, self)
+    getOrderStatusById(order.id)
   } else {
     let postData = {
       orderId: order.id,
-      total: state.storedValueCard.useAmount
+      total: state.storedValueCard.useAmount,
     }
     const password = state.password
     if (password !== '' || !state.showPassFlag) {
@@ -591,17 +595,17 @@ function getCombinedPay(order) {
         ...postData,
         cardPayPassword: password,
         entry: 'ORDER',
-        payMethod: 'CARDPAY'
+        payMethod: 'CARDPAY',
       }
     }
     const tempData = {
       orderId: order.id,
       payMethod: app.globalData.paymentMethod || request.PAYMETHOD,
       entry: 'ORDER',
-      total: 0
+      total: 0,
     }
     // wx.showLoading()
-    triggerEvent('loadingChange', true)
+    emit('loadingChange', true)
     orderService
       .getCashPaySign(postData)
       .then((res) => {
@@ -614,15 +618,15 @@ function getCombinedPay(order) {
       })
       .then((res) => {
         // wx.hideLoading()
-        triggerEvent('loadingChange', false)
+        emit('loadingChange', false)
         wxPay(res, tempData)
       })
       .catch((err) => {
         // wx.hideLoading()
-        triggerEvent('loadingChange', false)
+        emit('loadingChange', false)
         if (err.code == '16665') {
           const passProduct = JSON.parse(err.message)
-          triggerEvent('myevent', passProduct)
+          emit('myevent', passProduct)
           return
         }
         if (err.code === 44004) {
@@ -668,7 +672,7 @@ function getCombinedPay(order) {
                   '/pages-sub/newretail/pages/mallModule/order/orderDetails/orderDetails?orderId=' +
                   tempData.orderId +
                   '&orderFrom=shopCart&orderType=' +
-                  (state.order && state.order.type == 'MIXED' ? 'MIXED' : '')
+                  (state.order && state.order.type == 'MIXED' ? 'MIXED' : ''),
               })
             }, 2000)
           }
@@ -680,7 +684,7 @@ function getCardPay(order) {
   const self = this
   let postData = {
     orderId: order.id,
-    total: order.cashTotal
+    total: order.cashTotal,
   }
   const password = state.password
   if (password !== '' || !state.showPassFlag) {
@@ -688,7 +692,7 @@ function getCardPay(order) {
       ...postData,
       cardPayPassword: password,
       entry: 'ORDER',
-      payMethod: 'CARDPAY'
+      payMethod: 'CARDPAY',
     }
     // postData = {
     //   ...postData,
@@ -698,21 +702,21 @@ function getCardPay(order) {
     // }
   }
   // wx.showLoading()
-  triggerEvent('loadingChange', true)
+  emit('loadingChange', true)
   orderService
     .getCashPaySign(postData)
     .then((res) => {
       // wx.hideLoading()
-      triggerEvent('loadingChange', false)
-      getOrderStatusById(order.id, self)
+      emit('loadingChange', false)
+      getOrderStatusById(order.id)
       orderLock(order)
     })
     .catch((e) => {
       // wx.hideLoading();
-      triggerEvent('loadingChange', false)
+      emit('loadingChange', false)
       if (e.code == '16665') {
         const passProduct = JSON.parse(e.message)
-        triggerEvent('myevent', passProduct)
+        emit('myevent', passProduct)
         return
       }
       if (e.code === 44004) {
@@ -738,14 +742,14 @@ function getCardPay(order) {
           // 是否明文展示
           interval: true, // 是否显示间隔格子
         }
-        triggerEvent('continuePay', true)
+        emit('continuePay', true)
         UTILS.showToast(e.message)
       } else if (e.code === -1001) {
         // 请求超时
         orderLock(order)
         toggle('timeOut')
       } else {
-        triggerEvent('continuePay', true)
+        emit('continuePay', true)
         UTILS.showToast(e.message)
       }
     })
@@ -760,21 +764,21 @@ function getUnifiedpay(order, entry = 'ORDER') {
   let tempData = {
     orderId: order.id,
     payMethod: app.globalData.paymentMethod || request.PAYMETHOD,
-    entry
+    entry,
   }
   if (entry === 'FIRST_ADVANCE_SELL') {
     tempData = {
       ...tempData,
-      total: order.cashTotal
+      total: order.cashTotal,
     }
   } else {
     tempData = {
       ...tempData,
-      total: order.cashTotal
+      total: order.cashTotal,
     }
   }
   if (order.cashTotal === 0) {
-    getOrderStatusById(order.id, self)
+    getOrderStatusById(order.id)
   } else {
     orderService
       .getCashPaySign(tempData)
@@ -784,7 +788,7 @@ function getUnifiedpay(order, entry = 'ORDER') {
       .catch((err) => {
         if (err.code == '16665') {
           const passProduct = JSON.parse(err.message)
-          triggerEvent('myevent', passProduct)
+          emit('myevent', passProduct)
           return
         }
         if (err.code === -1001) {
@@ -792,7 +796,7 @@ function getUnifiedpay(order, entry = 'ORDER') {
           orderLock(order)
           toggle('timeOut')
         } else {
-          triggerEvent('continuePay', true)
+          emit('continuePay', true)
           UTILS.showToast(err.message)
         }
       })
@@ -804,7 +808,7 @@ function toPayTail(order) {
     orderId: order.id,
     payMethod: app.globalData.paymentMethod || request.PAYMETHOD,
     entry: 'BALANCE_ADVANCE_SELL',
-    total: order.balanceTotal
+    total: order.balanceTotal,
   }
   let id
   if (order.parentId) {
@@ -826,7 +830,7 @@ function toPayTail(order) {
     .catch((err) => {
       if (err.code == '16665') {
         const passProduct = JSON.parse(err.message)
-        triggerEvent('myevent', passProduct)
+        emit('myevent', passProduct)
       } else {
         UTILS.showToast(err.message)
       }
@@ -840,25 +844,25 @@ function toPaymentSuccess(orderId) {
       url:
         '/pages-sub/newretail/pages/mallModule/fightGroup/groupPurchase/groupPurchase?orderId=' +
         orderId +
-        '&from=orderPay'
+        '&from=orderPay',
     })
   } else if (state.order.type === 'SOLITAIRE') {
     const solitaireId = state.order.solitaireId
     if (state.path === 'perfectOrder') {
       try {
         uni.setStorageSync('wj_solitaire_' + solitaireId, {
-          solitaireId
+          solitaireId,
         })
       } catch (error) {
         console.log(error)
       }
       uni.navigateBack({
-        delta: 1
+        delta: 1,
       })
     } else {
       try {
         uni.setStorageSync('wj_solitaire_' + solitaireId, {
-          solitaireId
+          solitaireId,
         })
       } catch (error) {
         console.log(error)
@@ -873,7 +877,7 @@ function toPaymentSuccess(orderId) {
           '/pages-sub/newretail/pages/mallModule/pay/payment/payment?orderId=' +
           orderId +
           '&from=shopCart&orderType=' +
-          (state.order && state.order.type == 'MIXED' ? 'MIXED' : state.order.type)
+          (state.order && state.order.type == 'MIXED' ? 'MIXED' : state.order.type),
       })
     } else {
       if (state.payType === 'penny') {
@@ -885,14 +889,13 @@ function toPaymentSuccess(orderId) {
             '/pages-sub/newretail/pages/mallModule/pay/payment/payment?orderId=' +
             orderId +
             '&orderType=' +
-            (state.order && state.order.type == 'MIXED' ? 'MIXED' : state.order.type)
+            (state.order && state.order.type == 'MIXED' ? 'MIXED' : state.order.type),
         })
       }
     }
   }
 }
 function wxPay(paySign, postData) {
-  const self = this
   const resData = JSON.parse(paySign)
   const sign = JSON.parse(resData.sign)
   let packageValue = ''
@@ -909,16 +912,16 @@ function wxPay(paySign, postData) {
     paySign: sign.paySign,
     success: function (res) {
       console.log(res)
-      getOrderStatusById(postData.orderId, self)
+      getOrderStatusById(postData.orderId)
       const order = {
-        id: postData.orderId
+        id: postData.orderId,
       }
       orderLock(order)
     },
     fail: function (res) {
       console.log(res)
       console.log('支付失败-----------------')
-      triggerEvent('continuePay', true)
+      emit('continuePay', true)
       if (res.errMsg.indexOf('cancel') >= 0) {
         // 取消订单
         UTILS.showToast('您取消了支付订单~')
@@ -934,17 +937,17 @@ function wxPay(paySign, postData) {
             '/pages-sub/newretail/pages/mallModule/order/orderDetails/orderDetails?orderId=' +
             postData.orderId +
             '&orderFrom=shopCart&orderType=' +
-            (state.order && state.order.type == 'MIXED' ? 'MIXED' : '')
+            (state.order && state.order.type == 'MIXED' ? 'MIXED' : ''),
         })
       }
-    }
+    },
   })
 }
-function handleGetOrderStatusById(orderId, amount, self) {
+function handleGetOrderStatusById(orderId, amount) {
   // wx.showLoading({
   //     title: '支付中',
   // })
-  triggerEvent('loadingChange', true)
+  emit('loadingChange', true)
   orderService
     .getOrderStatusById(orderId)
     .then((result) => {
@@ -955,9 +958,9 @@ function handleGetOrderStatusById(orderId, amount, self) {
       if (amount > 40) {
         UTILS.setHideLoading(false)
         // wx.hideLoading()
-        self.triggerEvent('loadingChange', false)
+        emit('loadingChange', false)
         // 弹出支付超时
-        self.toggle('timeOut')
+        toggle('timeOut')
         return
       }
       if (
@@ -970,33 +973,30 @@ function handleGetOrderStatusById(orderId, amount, self) {
       ) {
         UTILS.setHideLoading(false)
         // wx.hideLoading()
-        self.triggerEvent('loadingChange', false)
+        emit('loadingChange', false)
         UTILS.showToast('支付成功')
         // 跳转到成功页面
-        self.toPaymentSuccess(orderId)
+        toPaymentSuccess(orderId)
       } else {
-        const orderTimeId = setTimeout(() => {
+        state.orderTimeId = setTimeout(() => {
           // wx.hideLoading()
-          self.triggerEvent('loadingChange', false)
+          emit('loadingChange', false)
           UTILS.setHideLoading(true)
           // 如果没有成功，调用函数本身，实现重复查询
-          self.handleGetOrderStatusById(orderId, amount, self)
+          handleGetOrderStatusById(orderId, amount)
         }, 2000)
-        self.setData({
-          orderTimeId
-        })
       }
     })
     .catch((err) => {
       // wx.hideLoading()
-      self.triggerEvent('loadingChange', false)
+      self.emit('loadingChange', false)
       UTILS.showToast(err.message)
     })
 }
-function getOrderStatusById(orderId, self) {
+function getOrderStatusById(orderId) {
   const amount = 0
   setTimeout(() => {
-    self.handleGetOrderStatusById(orderId, amount, self)
+    self.handleGetOrderStatusById(orderId, amount)
   }, 1000)
 }
 function getPennyInfo(order) {
@@ -1005,7 +1005,7 @@ function getPennyInfo(order) {
     pageSize: 1,
     memberIdEquals: app.globalData.userInfo.member.id,
     orderIdEquals: order.id,
-    searchCount: true
+    searchCount: true,
   }
   pennyService
     .queryInstance(postData)
@@ -1014,7 +1014,7 @@ function getPennyInfo(order) {
         // 处理未查到实例跳转购物抽奖列表
         UTILS.showToast('支付成功~')
         uni.redirectTo({
-          url: '/pages-sub/newretail/pages/mallModule/activity/penny/pennyList/pennyList'
+          url: '/pages-sub/newretail/pages/mallModule/activity/penny/pennyList/pennyList',
         })
         return
       }
@@ -1022,7 +1022,7 @@ function getPennyInfo(order) {
         url:
           '/pages-sub/newretail/pages/mallModule/activity/penny/helpPenny/helpPenny?instanceId=' +
           res.records[0].id +
-          '&isCreate=true'
+          '&isCreate=true',
       })
     })
     .catch((err) => {
@@ -1031,12 +1031,17 @@ function getPennyInfo(order) {
 }
 
 // Watch listeners converted from observers
-watch(() => props.orderData, (newVal, oldVal) => {
-  handleOrderPay(newVal)
-});
+watch(
+  () => props.orderData,
+  (newVal, oldVal) => {
+    handleOrderPay(newVal)
+  },
+)
 
-watch(() => props.orderData, (newVal, oldVal) => {
-  //         if(newVal) {
+watch(
+  () => props.orderData,
+  (newVal, oldVal) => {
+    //         if(newVal) {
     //           memberService.getLoginMember().then(res => {
     //             if (res.isMspPassword) {
     //               this.toggleCardPasswordPopup()
@@ -1060,20 +1065,26 @@ watch(() => props.orderData, (newVal, oldVal) => {
     //           })
     //         }
     //
-});
+  },
+)
 
-watch(() => props.orderCancel, (newVal, oldVal) => {
-  if (newVal) {
-          triggerEvent('orderCancel', newVal)
-        }
-});
+watch(
+  () => props.orderCancel,
+  (newVal, oldVal) => {
+    if (newVal) {
+      emit('orderCancel', newVal)
+    }
+  },
+)
 
-watch(() => props.orderPay, (newVal, oldVal) => {
-  if (newVal) {
-          triggerEvent('orderPay', newVal)
-        }
-});
-
+watch(
+  () => props.orderPay,
+  (newVal, oldVal) => {
+    if (newVal) {
+      emit('orderPay', newVal)
+    }
+  },
+)
 </script>
 <style scoped>
 /* components/pay/pay.wxss */

@@ -15,7 +15,7 @@
 <template>
   <!-- pages/mallModule/tabbar/category/category-list/category-list.wxml -->
 
-  <view>
+  <view class="store-detail-page">
     <navigationBar
       :isStoreDetail="true"
       :isShowCustomer="true"
@@ -104,7 +104,12 @@
       <view class="shipment-type-box">
         <view
           class="shipmentTypes"
-          :style="'border: 1px solid ' + state.themeColor + ';' + (theme && theme.BgColorRgb01)"
+          :style="
+            'border: 1px solid ' +
+            state.themeColor +
+            ';' +
+            (state.theme && state.theme.BgColorRgb01)
+          "
         >
           <view
             data-type="SELF"
@@ -112,7 +117,7 @@
             v-if="state.storeData.selfFlag"
             :style="
               (state.activeShipment == 'SELF'
-                ? (theme && theme.mainBgColor) + ';color: #fff;'
+                ? (state.theme && state.theme.mainBgColor) + ';color: #fff;'
                 : '') + 'width: 52%'
             "
           >
@@ -127,7 +132,7 @@
             v-if="state.storeData.expressFlag"
             :style="
               (state.activeShipment == 'EXPRESS'
-                ? (theme && theme.mainBgColor) + ';color: #fff;'
+                ? (state.theme && state.theme.mainBgColor) + ';color: #fff;'
                 : '') + 'width: 48%'
             "
           >
@@ -140,7 +145,7 @@
           点单
           <view
             v-if="state.tabActive == 'order'"
-            :style="theme && theme.mainBgColor"
+            :style="state.theme && state.theme.mainBgColor"
             class="active-line"
           ></view>
         </view>
@@ -151,7 +156,7 @@
           </view>
           <view
             v-if="state.tabActive == 'evaluate'"
-            :style="theme && theme.mainBgColor"
+            :style="state.theme && state.theme.mainBgColor"
             class="active-line"
           ></view>
         </view>
@@ -159,7 +164,7 @@
           商家
           <view
             v-if="state.tabActive == 'store'"
-            :style="theme && theme.mainBgColor"
+            :style="state.theme && state.theme.mainBgColor"
             class="active-line"
           ></view>
         </view>
@@ -336,11 +341,11 @@
       class="flow-car"
       @click="toShopCar"
       v-if="state.tabActive == 'order'"
-      :style="theme && theme.mainBgColor"
+      :style="state.theme && state.theme.mainBgColor"
     >
       <!-- <image src="{{imagesPath.shopping_icon_list}}" ></image> -->
       <image :src="state.imagesPath.newGouwucheIcon"></image>
-      <view class="red-hint" :hidden="!(cartCount > 0)">{{ cartCount }}</view>
+      <view class="red-hint" v-if="state.cartCount > 0">{{ state.cartCount }}</view>
     </view>
     <!-- 选择餐饮套餐弹窗 -->
     <!-- <setMeal show="{{meals.show}}" productId="{{meals.productId}}" storeId="{{meals.storeId}}" bind:outcome="chooseOutcome"></setMeal> -->
@@ -376,6 +381,7 @@ import categoryVertical from '@/pages-sub/newretail/components/category/category
 import { reactive } from 'vue'
 import bus from 'iny-bus'
 const app = getApp()
+let addShopCartData = null
 const hasCategoryId = ref(false)
 // pages/mallModule/tabbar/category/category-list/category-list.js
 const storeService = _apiStoreServiceJs
@@ -985,7 +991,7 @@ onShow(function () {
 })
 onHide(function () {})
 onUnload(function () {
-  bus.remove('userShopCartChange', eventId)
+  // bus.remove('userShopCartChange', eventId)
 })
 onPullDownRefresh(function () {
   const self = this
@@ -1052,21 +1058,21 @@ function addShopcartCatch(val) {
   addShopCartData = val
 }
 function addShopcart(val) {
-  const that = this
   if (!canAddToCart) {
     console.log('==============================正在加入购物车')
     return
   }
   canAddToCart = false
-  const productId = val.detail.target.dataset.id
-  const business = val.detail.target.dataset.business
-  const style = val.detail.target.dataset.style
-  const initialpurchasenumber = val.detail.target.dataset.initialpurchasenumber
+  console.log(val, 'adfkafsjfkj')
+  const productId = val.id
+  const business = val.business
+  const style = val.style
+  const initialpurchasenumber = val.initialpurchasenumber
   state.initialpurchasenumber = initialpurchasenumber
-  const mode = val.detail.target.dataset.type
+  const mode = val.type
   let storeId = ''
   const loginStatus = checkAuth()
-  let balance = val.detail.target.dataset.balance
+  let balance = val.balance
   let hasSharingPersonId = false
   console.log('==============================正在加入购物车')
   if (style !== 'SPEC_PARENT' && style !== 'MEALS2') {
@@ -1661,16 +1667,15 @@ function onClickGoods(val) {
   }
   toProductDetail(e)
 }
+let i = null
 function addToCart(e) {
-  console.log('收到用户点击：' + new Date().getTime())
-  const self = this
-  const _i = e.detail.detail.context
+  console.log('收到用户点击：', e)
+  const _i = e.target.dataset.context
   i = _i
   console.log(e, 'eeeeeee')
-  addShopcart(e.detail.detail)
+  addShopcart(e.target.dataset)
 }
 function addToCartAnimateTest(e) {
-  const self = this
   const _i2 = i
   const t = new Date().getTime()
   const o = state.ctime
@@ -2331,7 +2336,7 @@ function clickThreeCategoryItem(e) {
 .comment-item {
   padding: 40rpx 20rpx;
 }
-page {
+.store-detail-page {
   position: relative;
   height: 100%;
   overflow-y: auto;

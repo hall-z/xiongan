@@ -9,7 +9,7 @@
   </view>
   <text class="nickName">{{state.userInfo.wxaUser.nickName}}</text>
   <!--<template is="barcode"></template>-->
-  <text>{{filters.filtQRNumber(state.userInfo.member.id)}}</text>
+  <text>{{filtQRNumber(state.userInfo.member.id)}}</text>
   <!--<template is="couponBalanceScore" :data="state.couponCount, state.storedValue, state.score"></template>-->
   <view class="bottom-btn">
     <view class="balance-btn" @click="toBalancePay">

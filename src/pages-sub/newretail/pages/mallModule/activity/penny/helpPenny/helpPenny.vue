@@ -164,7 +164,7 @@
             <image :src="item.avatar" mode="widthFix"></image>
             <view class="member-info">
               <text>{{item.creatorName}}</text>
-              <text>{{filters.filtMobile(item.mobile)}}</text>
+              <text>{{filtMobile(item.mobile)}}</text>
             </view>
           </view>
           <text class="help-number">{{item.helperNumber}}人助力</text>

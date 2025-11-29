@@ -96,7 +96,7 @@
         <!-- <image src="{{imagesPath.seckill_price_bg}}" class="seckill_price_bg"></image> -->
         <view class="goods-price">
           ￥<text class="nowPrice">{{item.price}}</text>{{item.style == 'SPEC_PARENT' ? '起' : ''}}
-          <text class="oldPrice" v-if="item.originalPrice && item.price < item.originalPrice">￥{{filters.filtToFix(item.originalPrice)}}</text>
+          <text class="oldPrice" v-if="item.originalPrice && item.price < item.originalPrice">￥{{filtToFix(item.originalPrice)}}</text>
         </view>
         <!-- <block wx:if="{{state.shopCart[item.productId] || state.distributionShopCart[item.productId]}}">
           <view class="cart-control" wx:if="{{item.business !== 'DISTRIBUTION'}}">

@@ -85,7 +85,7 @@
             @click="bannerJumping"
           >
             <video
-              v-if="filters.isMp4(item)"
+              v-if="isMp4(item)"
               :src="item"
               :autoplay="state.isWifi && state.details.imgUrlList.length == 1"
               show-mute-btn="true"
@@ -163,7 +163,7 @@
             </view>
             <view class="comment-item-info">
               <view class="comment-item-info-time">
-                发布于{{ filters.filterTime(item.createTime) }}
+                发布于{{ filterTime(item.createTime) }}
               </view>
               <view
                 class="comment-item-info-reply"
@@ -224,7 +224,7 @@
                 </view>
                 <view class="comment-item-info">
                   <view class="comment-item-info-time">
-                    发布于{{ filters.filterTime(row.createTime) }}
+                    发布于{{ filterTime(row.createTime) }}
                   </view>
                   <view
                     class="comment-item-info-reply"

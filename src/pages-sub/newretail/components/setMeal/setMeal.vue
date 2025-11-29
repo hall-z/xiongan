@@ -41,15 +41,15 @@
                       }}{{ item.productName }}
                     </text>
                     <text class="goods-price">
-                      <text>￥{{ filters.filterAbs(item.price) }}</text>
+                      <text>￥{{ filterAbs(item.price) }}</text>
                       <text
                         class="old-price"
                         v-if="item.originalPrice && item.originalPrice > item.price"
                       >
-                        ￥{{ filters.filterAbs(item.originalPrice) || 20 }}
+                        ￥{{ filterAbs(item.originalPrice) || 20 }}
                       </text>
                     </text>
-                    <!-- <text class='goods-price' wx:if="{{idx != 0 && item.showPrice != '0.00'}}"><text> {{item.showPrice > 0? '+':'-'}}￥{{filters.filterAbs(item.showPrice)}}</text></text> -->
+                    <!-- <text class='goods-price' wx:if="{{idx != 0 && item.showPrice != '0.00'}}"><text> {{item.showPrice > 0? '+':'-'}}￥{{filterAbs(item.showPrice)}}</text></text> -->
                   </view>
                   <view
                     class="goods-check"

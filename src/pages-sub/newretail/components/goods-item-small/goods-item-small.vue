@@ -98,8 +98,8 @@
             >
               ￥{{
                 goodsData.originalPrice > goodsData.sellPrice
-                  ? filters.filtToFix(goodsData.originalPrice)
-                  : filters.filtToFix(goodsData.sellPrice)
+                  ? filtToFix(goodsData.originalPrice)
+                  : filtToFix(goodsData.sellPrice)
               }}
             </text>
           </view>
@@ -108,7 +108,7 @@
               <text style="font-size: 20rpx">￥</text>
               {{
                 goodsData.sellPrice
-                  ? filters.filtToFix(goodsData.sellPrice)
+                  ? filtToFix(goodsData.sellPrice)
                   : goodsData.price
                     ? goodsData.price
                     : '0'

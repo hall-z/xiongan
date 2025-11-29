@@ -1,9 +1,23 @@
+<route lang="json5" type="page">
+{
+  layout: 'default-newretail',
+  style: {
+    navigationStyle: 'custom',
+    'mp-alipay': {
+      transparentTitle: 'always',
+      titlePenetrate: 'YES',
+      defaultTitle: '',
+      titlePenetrate: 'NO',
+    },
+  },
+}
+</route>
 <template>
   <!-- pages/perfectOrder/perfectOrder.wxml -->
   <!--  -->
   <view>
     <navigationBar :title="state.navigationBarTitle"></navigationBar>
-    <notify id="top-notify">
+    <notify id="top-notify"></notify>
       <custom-loading v-if="state.customLoading"></custom-loading>
       <view class="page">
         <view class="top-info top-info-new"
@@ -16,14 +30,14 @@
               <image :src="state.imagesPath.iconOrderPosition"></image>
             </view>
             <view class="receive-info">
-              <view class="name-mobile" :hidden="state.addressInfo ? true : false">
+              <view class="name-mobile" v-if="!state.addressInfo">
                 <text>{{state.addressInfo.contacts}}</text>
                 <text>{{state.addressInfo.contactsMobile}}</text>
               </view>
-              <view class="receive-address" :hidden="state.addressInfo ? true : false">
+              <view class="receive-address" v-if="!state.addressInfo">
                 {{state.addressInfo.province + state.addressInfo.city + state.addressInfo.county + state.addressInfo.detailedAddress + state.addressInfo.houseNum}}
               </view>
-              <view :hidden="state.addressInfo ? false : true">请选择收货地址</view>
+              <view v-if="state.addressInfo">请选择收货地址</view>
             </view>
             <view class="iconright-box">
               <image :src="state.imagesPath.iconRight2"></image>
@@ -50,7 +64,7 @@
           </view>
         </view>
         <view v-if="state.orderType != 'service'">
-          <view v-for="(item , goodTypeIndex) in state.goodTypeList" class="good-type-box">
+          <view v-for="(item, goodTypeIndex) in state.goodTypeList" :key="goodTypeIndex" class="good-type-box">
             <view class="good-type-title">
               <!-- v-if="multipleOrdersFlag" -->
               <view style="color: #000"
@@ -83,8 +97,8 @@
                 v-if="item.orderType !== 'distribution' && item.orderType !== 'solitaire' && !item.isDistributionOrder">
                 配送方式</view>
               <view class="type-check-box"
-                :hidden="item.orderType === 'distribution' || item.orderType === 'solitaire' || item.isDistributionOrder">
-                <view v-for="(item , index) in item.shipmentSortList" :key="item">
+                v-if="item.orderType !== 'distribution' && item.orderType !== 'solitaire' && !item.isDistributionOrder">
+                <view v-for="(item, index) in item.shipmentSortList" :key="index">
                   <view :class="'self-take ' + (state.goodTypeList[goodTypeIndex].type == 'selftake' ? 'active' : '')"
                     :style="(state.goodTypeList[goodTypeIndex].type == 'selftake' ? state.theme.mainColor + state.theme.borderColor : state.theme.borderColorRgb + state.theme.mainColorRgb) + ' ' + (state.goodTypeList[goodTypeIndex].optionalShipmentType[item] == false ? 'opacity:0.3;background-color: #eee' : '')"
                     data-type="selftake" :data-idx="goodTypeIndex"
@@ -148,7 +162,7 @@
                     <image class="right-point" :src="state.imagesPath.iconRight2"></image>
                   </view>
                 </view>
-                <popup :show="item.showTime" position="bottom">
+                <popup v-if="item.showTime" :show="item.showTime" position="bottom">
                   <time-picker @onClose="onClose" :title="item.type == 'dispatch' ? '配送时间' : '自提时间'"
                     :deliveryTimeData="item.deliveryTimeData" :deliveryTime="item.deliveryTime"
                     :data-idx="goodTypeIndex" @selectTime="selectTime"></time-picker>
@@ -170,7 +184,7 @@
                     <image class="right-point" :src="state.imagesPath.iconRight2"></image>
                   </view>
                 </view>
-                <popup :show="item.showTime" position="bottom">
+                <popup v-if="item.showTime" :show="item.showTime" position="bottom">
                   <time-picker @onClose="onClose" :title="item.type == 'dispatch' ? '配送时间' : '自提时间'"
                     :deliveryTimeData="item.deliveryTimeData" :deliveryTime="item.deliveryTime"
                     :data-idx="goodTypeIndex" @selectTime="selectTime"></time-picker>
@@ -194,7 +208,7 @@
                     <image class="right-point" :src="state.imagesPath.iconRight2"></image>
                   </view>
                 </view>
-                <popup :show="item.showTime" @close="onClose" position="bottom">
+                <popup v-if="item.showTime" :show="item.showTime" @close="onClose" position="bottom">
                   <time-picker :title="item.type == 'dispatch' ? '配送时间' : '自提时间'"
                     :deliveryTimeData="item.deliveryTimeData" :deliveryTime="item.deliveryTime"
                     :data-idx="goodTypeIndex" @onClose="onClose" @selectTime="selectTime"></time-picker>
@@ -226,7 +240,7 @@
                     <image :src="item.imageUrl" mode="aspectFit"></image>
                     <image class="seckill-icon" mode="widthFix" v-if="item.grabActivityId"
                       :src="state.imagesPath.iconSeckillSeat"></image>
-                    <view class="stop-sell" :hidden="item.businessStatus || item.businessStatus == null">暂停售卖
+                    <view class="stop-sell" v-if="!item.businessStatus && item.businessStatus != null">暂停售卖
                     </view>
                   </view>
                   <view class="goods-info">
@@ -284,13 +298,13 @@
                         <view :data-idx="goodTypeIndex" :data-id="item.id" class="iconfont icon-jianhao"
                           @click.stop="goodTypeList[goodTypeIndex].orderType=='packaging'? '':'handleReduce'"
                           :style="'color:' + (item.productNum > 1 ? state.theme.color : '#BBBBBC')"
-                          :hidden="item.status === 'DELETED' || item.balance <= 0"></view>
+                          v-if="item.status !== 'DELETED' || item.balance > 0"></view>
                         <text :data-idx="goodTypeIndex" :data-id="item.id"
                           @click.stop="goodTypeList[goodTypeIndex].orderType=='packaging'?'':'handleNumber'">{{item.productNum}}</text>
                         <view :data-idx="goodTypeIndex" :data-id="item.id" class="iconfont icon-jiahao2fill"
                           :style="'color: ' + state.theme.color + ';'"
                           @click.stop="goodTypeList[goodTypeIndex].orderType=='packaging'? '':'handleAdd'"
-                          :hidden="item.status === 'DELETED' || item.balance <= 0"></view>
+                          v-if="item.status !== 'DELETED' || item.balance > 0"></view>
                       </view>
                     </view>
                   </view>
@@ -298,7 +312,7 @@
                 <view class="gift-box" v-if="false">
                   <view class="gift-title">赠品:</view>
                   <view class="gift-item-box">
-                    <view class="gift-item" v-for="(item , index) in item.goodsPromotions" :key="i">
+                    <view class="gift-item" v-for="(item , index) in item.goodsPromotions" :key="index">
                       <view>
                         <view class="gift-img-box">
                           <image :src="item.goods.image"></image>
@@ -315,7 +329,7 @@
               <view class="goods-item-box">
                 <view class="goods-item goods-item1">
                   <view class="goods-item-img">
-                    <view class="goods-img" v-for="(item , index) in item.goodsList" :key="index" :hidden="index >= 1">
+                    <view class="goods-img" v-for="(item , index) in item.goodsList" :key="index" v-show="index < 1">
                       <image :src="item.imageUrl" mode="aspectFit"></image>
                     </view>
                   </view>
@@ -333,7 +347,7 @@
                 <view class="goods-item goods-item1">
                   <view class="goods-item-img">
                     <view class="goods-img" v-for="(item , index) in item.notGoodsList" :key="index"
-                      :hidden="index >= 1">
+                      v-show="index < 1">
                       <view class="mask-layer"></view>
                       <image :src="item.imageUrl" mode="aspectFit"></image>
                     </view>
@@ -345,7 +359,7 @@
                 </view>
               </view>
             </view>
-            <view class="promotions-box" v-if="item.goodsPromotions.length > 0 || state.couponPromotions.length > 0">
+            <view class="promotions-box" v-if="(item.goodsPromotions && item.goodsPromotions.length > 0) || state.couponPromotions.length > 0">
               <view class="promotions-item" v-for="(item , index) in item.goodsPromotions" :key="index">
                 <view class="label" :style="state.theme.mainBgColor">赠品</view>
                 <view class="title promotions-data">
@@ -362,7 +376,7 @@
               <view class="gift-box">
                 <view class="gift-title">赠品:</view>
                 <view class="gift-item-box">
-                  <view class="gift-item" v-for="(item , index) in state.giftGoodsList" :key="i">
+                  <view class="gift-item" v-for="(item , index) in state.giftGoodsList" :key="index">
                     <view class="gift-img-box">
                       <image :src="item.image"></image>
                     </view>
@@ -372,10 +386,10 @@
               </view>
             </view>
             <view class="bill-details">
-              <!-- <view class="discount-amounts">已优惠￥{{filters.toFix(totalDiscount + shipmentCouponDiscount  )}}</view> -->
+              <!-- <view class="discount-amounts">已优惠￥{{toFix(totalDiscount + shipmentCouponDiscount  )}}</view> -->
               <view class="balance-accounts">
                 商品小计：
-                <text>￥{{filters.toFix(item.allPrice)}}</text>
+                <text>￥{{toFix(item.allPrice)}}</text>
               </view>
             </view>
             <view class="good-type-config-item store-info"
@@ -384,21 +398,7 @@
               <!-- bindtap="{{(goodTypeList[goodTypeIndex].orderType == 'normal' || goodTypeList[goodTypeIndex].orderType == 'nextDay') && goodTypeList[goodTypeIndex].type=='selftake' ? 'changeStore' : ''}}"  -->
               <view class="store-details" :data-idx="goodTypeIndex">
                 <view>{{item.storeName ? item.storeName : state.storeInfo.name}}</view>
-                <!-- <image class="right-point" src="{{imagesPath.iconRight2}}" v-if="(goodTypeList[goodTypeIndex].orderType == 'normal' || goodTypeList[goodTypeIndex].orderType == 'nextDay') && goodTypeList[goodTypeIndex].type=='selftake'"></image> -->
-                <!-- <image src="{{state.imagesPath.changeStore}}" bindtap="changeStore" data-idx="{{goodTypeIndex}}" v-if="state.goodTypeList[goodTypeIndex].orderType == 'normal' && state.goodTypeList[goodTypeIndex].type == 'selftake'" mode="heightFix"></image>
-            <image src="{{state.imagesPath.perfectOrderAddress}}"  data-idx="{{goodTypeIndex}}" bindtap="viewStoreLocation" mode="heightFix"></image> -->
-                <!-- <view class="address">{{storeInfo.address}}</view> -->
               </view>
-              <!-- v-if="type==='dispatch' || type==='logistical'" -->
-              <!-- <block v-if="state.goodTypeList[goodTypeIndex].type === 'dispatch' || state.goodTypeList[goodTypeIndex].type === 'logistical'">
-            <view class="open-map" style="{{state.theme.mainColor}}" bindtap="viewStoreLocation" v-if="item.orderType !== 'group' && item.orderType !== 'distribution'">查看地图</view>
-          </block>
-          <block v-else>
-            <view class="icon-right-box" bindtap="changeStore">
-              修改门店
-              <image src="{{state.imagesPath.iconRight2}}" ></image>
-            </view>
-          </block> -->
             </view>
             <view v-if="item.type == 'dispatch' && item.optimalStore && item.optimalStore.show" class="change-store">
               <view class="change-tip">推荐更换更优门店：</view>
@@ -433,7 +433,7 @@
             </view>
 
             <view class="pay-item"
-              v-if="item.orderType === 'group' && !state.systemOptions.teamOrderCanUseCoupon || item.orderType === 'advanceSell' || item.orderType === 'scoreMall' || item.orderType === 'secondkill' && state.scource === 'BUYNOW' || state.mallOrderType === 'OFFLINE' && state.offlinType === 'cashReceipt' || item.orderType === 'solitaire' || item.orderType === 'packaging' || item.orderType === 'CYCLE' && state.cycleDetails.useCoupons === 0 || !state.isDiscountCoupons ? false : true">
+              v-if="item.orderType === 'group' && !state.systemOptions.teamOrderCanUseCoupon || item.orderType === 'advanceSell' || item.orderType === 'scoreMall' || item.orderType === 'secondkill' && state.scource === 'BUYNOW' || state.mallOrderType === 'OFFLINE' && state.offlinType === 'cashReceipt' || item.orderType === 'solitaire' || item.orderType === 'packaging' || item.orderType === 'CYCLE' && state.cycleDetails.useCoupons === 0 || !state.isDiscountCoupons">
               <view class="left">
                 优惠券
               </view>
@@ -442,49 +442,48 @@
                 <view v-if="item.orderType == 'group'">
                   <text class="text" v-if="!state.systemOptions.teamOrderCanUseCoupon">活动不可用券</text>
                   <view v-else>
-                    <text class="text" :hidden="!item.couponDiscount ? false : true"
-                      v-if="state.hasAvailableCoupon">{{item.discountNum > 0 ? item.discountNum + '张可用优惠券' : '请选择优惠券'}}</text>
+                    <text class="text" v-if="!item.couponDiscount && state.hasAvailableCoupon">{{item.discountNum > 0 ? item.discountNum + '张可用优惠券' : '请选择优惠券'}}</text>
                   </view>
                 </view>
                 <view v-else>
                   <view v-if="state.hasAvailableCoupon">
                     <text class="text"
-                      :hidden="!item.couponDiscount ? false : true">{{item.discountNum > 0 ? item.discountNum + '张可用优惠券' : '请选择优惠券'}}</text>
+                      v-if="!item.couponDiscount">{{item.discountNum > 0 ? item.discountNum + '张可用优惠券' : '请选择优惠券'}}</text>
                   </view>
                 </view>
-                <view :hidden="item.couponDiscount && item.couponDiscount !== 0 ? false : true">
+                <view v-if="item.couponDiscount && item.couponDiscount !== 0">
                   <view class="coupon-amount-box">
-                    <text class="coupon-amount">-￥{{filters.toFix(item.couponDiscount)}}</text>
+                    <text class="coupon-amount">-￥{{toFix(item.couponDiscount)}}</text>
                   </view>
                 </view>
                 <image class="right-point" :src="state.imagesPath.iconRight2"></image>
               </view>
             </view>
-            <view class="pay-item" :hidden="item.type === 'selftake' || item.shipmentAmount == 0"
-              v-if="item.orderType === 'group' && !state.systemOptions.teamOrderCanUseCoupon || item.orderType === 'advanceSell' || item.orderType === 'scoreMall' || item.orderType === 'secondkill' && state.scource === 'BUYNOW' || state.mallOrderType === 'OFFLINE' && state.offlinType === 'cashReceipt' || item.orderType === 'solitaire' || item.orderType === 'packaging' || !state.isFreightVoucher ? false : true">
+            <view class="pay-item"
+              v-if="(item.orderType === 'group' && !state.systemOptions.teamOrderCanUseCoupon || item.orderType === 'advanceSell' || item.orderType === 'scoreMall' || item.orderType === 'secondkill' && state.scource === 'BUYNOW' || state.mallOrderType === 'OFFLINE' && state.offlinType === 'cashReceipt' || item.orderType === 'solitaire' || item.orderType === 'packaging' || !state.isFreightVoucher) && item.type !== 'selftake' && item.shipmentAmount != 0">
               <view class="left">运费券</view>
               <view class="right coupon" :data-idx="goodTypeIndex" @click="toChoiceCoupon" data-type="freeship">
                 <view v-if="item.orderType == 'group'">
                   <text class="coupon-text" v-if="!state.systemOptions.teamOrderCanUseCoupon">活动不可用券</text>
                   <view v-else>
                     <text class="coupon-text"
-                      :hidden="item.shipmentCouponDiscount === 0 ? false : true">{{item.freeshipNum > 0 ? item.freeshipNum + '张可用运费券' : '暂无可用运费券'}}</text>
+                      v-if="item.shipmentCouponDiscount === 0">{{item.freeshipNum > 0 ? item.freeshipNum + '张可用运费券' : '暂无可用运费券'}}</text>
                   </view>
                 </view>
                 <view v-else>
                   <view v-if="state.hasAvailableCoupon">
                     <text class="coupon-text"
-                      :hidden="item.shipmentCouponDiscount === 0 ? false : true">{{item.freeshipNum > 0 ? item.freeshipNum + '张可用运费券' : '暂无可用运费券'}}</text>
+                      v-if="item.shipmentCouponDiscount === 0">{{item.freeshipNum > 0 ? item.freeshipNum + '张可用运费券' : '暂无可用运费券'}}</text>
                   </view>
                 </view>
                 <view
-                  :hidden="item.shipmentCouponDiscount !== 0 && item.freeshipList && item.freeshipList.length > 0 ? false : true">
+                  v-if="item.shipmentCouponDiscount !== 0 && item.freeshipList && item.freeshipList.length > 0">
                   <view class="coupon-amount-box">
                     <!-- <image class="coupon-bg" src="{{state.imagesPath.iconCouponBgRed}}" mode="widthFix"
                             lazy-load="false" />
                         <image class="coupon-bg" src="{{state.imagesPath.iconCouponBgRed}}" mode="widthFix"
                             lazy-load="false" /> -->
-                    <text class="coupon-amount">-￥{{filters.toFix(item.shipmentCouponDiscount)}}</text>
+                    <text class="coupon-amount">-￥{{toFix(item.shipmentCouponDiscount)}}</text>
                   </view>
                 </view>
                 <image class="right-point" :src="state.imagesPath.iconRight2"></image>
@@ -511,7 +510,7 @@
           </view>
         </view>
         <view v-else>
-          <view v-for="(item , goodTypeIndex) in state.goodTypeList" class="good-type-box good-type-box1">
+          <view v-for="(item , goodTypeIndex) in state.goodTypeList" :key="goodTypeIndex" class="good-type-box good-type-box1">
             <view class="goods-list" v-if="item.goodsList">
               <view class="goods-item-box" v-for="(item , index) in item.goodsList" :key="index">
                 <view class="goods-item goods-item1">
@@ -519,7 +518,7 @@
                     <image :src="item.imageUrl" mode="aspectFit"></image>
                     <image class="seckill-icon" mode="widthFix" v-if="item.grabActivityId"
                       :src="state.imagesPath.iconSeckillSeat"></image>
-                    <view class="stop-sell" :hidden="item.businessStatus || item.businessStatus == null">暂停售卖
+                    <view class="stop-sell" v-if="!item.businessStatus && item.businessStatus != null">暂停售卖
                     </view>
                   </view>
                   <view class="goods-info">
@@ -583,142 +582,10 @@
             </view>
           </view>
         </view>
-        <!-- <view class='goods-box'>
-        <view class="title-box">商品信息</view>
-        <view class="goods-list">
-            <view class="goods-item-box" v-for="(item, index) in state.goodsList" wx:key="index" v-show="!(index > 2 && !state.showMore)">
-                <view class='goods-item'>
-                    <view class='goods-img'>
-                        <image src="{{item.imageUrl}}" mode="aspectFit"></image>
-                        <image class="seckill-icon" mode="widthFix" v-if="item.grabActivityId"
-                            src="{{state.imagesPath.iconSeckillSeat}}">
-                        <view class="stop-sell" v-show="!(item.businessStatus || item.businessStatus == null)">暂停售卖
-                        </view>
-                    </view>
-                    <view class="goods-info">
-                        <view class="goods-left">
-                          <view class='goods-name' v-if="state.cycleDetails && !item.giftProduct">{{state.cycleDetails.cycleName}}</view>
-                            <view class='goods-name' v-else>{{item.name}}</view>
-                            <view class="goods-detail-info" v-if="item.style === 'MEALS2'">
-                                <text v-for="(item, index) in item.groupProducts" wx:key="index">{{item.groupProductCount}}x{{item.productName}}</text>
-                            </view>
-                            <view class="goods-desc" v-else-if="state.cycleId">{{state.cycleActiveDes}}</view>
-                            <text class="goods-desc" v-else-if="item.description">{{item.description}}</text>
-                            <view v-if="item.require" class="require_label">
-                                必选
-                            </view>
-                            <view class="goods-label" v-else-if="item.labelName">{{item.labelName}}</view>
-                            <view class='goods-desc' v-else>{{item.specs ? item.specs : ''}}</view>
-                            <view class="goods-desc" v-if="item.deliveryTimeStatement && state.orderType !== 'CYCLE'" style="color: #ff9f43;">
-                                {{item.deliveryTimeStatement ? item.deliveryTimeStatement : ''}}</view>
-                            <view class='goods-advanceSell-price' v-if="state.orderType === 'advanceSell'">
-                                {{item.addvanceSellPrice === item.sellPrice ? '预售价' : state.advanceSellInfo.payType === 'FULL' ? '全款' : '定金'}}￥{{item.sellPrice}}</view>
-                            <view class='goods-price' v-if="state.orderType === 'scoreMall'">
-                                <text class="nowPrice"><text>￥</text>{{state.integral}}</text> 积分
-                            </view>
-                            <view class='goods-price' v-else-if="state.orderType === 'advanceSell'"></view>
-                            <view class='goods-price' v-else>
-                                <text class="nowPrice"><text>￥</text>{{state.orderType === 'CYCLE' && !item.giftProduct ? state.allPrice : item.sellPrice}}</text>
-                                <text class="oldPrice" v-if="orderDetailGood[item.productId] && item.sellPrice < orderDetailGood[item.productId].sellPrice">￥{{orderDetailGood[item.productId].sellPrice}}</text>
-                            </view>
-                        </view>
-                        <view class="goods-right">
-                            <view class="goods-count" v-if="state.scource === 'SHOPPINGCART' || state.orderType === 'solitaire' || state.orderType == 'packaging'">
-                                x{{item.productNum}}</view>
-                            <view class="goods-count-box" v-else>
-                                <view :dataId="item.id" class="iconfont icon-jianhao" @click="state.orderType == 'packaging' ? '' : 'handleReduce'"
-                                    style="color:{{item.productNum > 1 ? state.theme.color : '#BBBBBC'}}"
-                                    v-show="!(item.status === 'DELETED' || item.balance <= 0)"></view>
-                                <text :dataId="item.id"
-                                    @click="state.orderType == 'packaging' ? '' : 'handleNumber'">{{item.productNum}}</text>
-                                <view :dataId="item.id" class="iconfont icon-jiahao2fill" style="color: {{state.theme.color}};" @click="state.orderType == 'packaging' ? '' : 'handleAdd'"
-                                    v-show="!(item.status === 'DELETED' || item.balance <= 0)"></view>
-                            </view>
-                        </view>
-                    </view>
-                </view>
-                <view class='gift-box' v-if="false">
-                    <view class="gift-title">赠品:</view>
-                    <view class="gift-item-box">
-                        <view class="gift-item" v-for="(item, index) in item.goodsPromotions" wx:key="i">
-                            <view>
-                                <view class="gift-img-box">
-                                    <image src="{{item.goods.image}}"></image>
-                                </view>
-                                <text>{{item.goods.name}}</text>
-                            </view>
-                            <view class='gift-num'>x{{item.count}}</view>
-                        </view>
-                    </view>
-                </view>
-            </view>
-        </view>
-        <view class="viewMore" bindtap="viewMore" v-if="state.goodsList.length > 3">{{state.showMore ? "点击收起" : "查看更多"}}
-            <image src="{{state.showMore ? state.imagesPath.iconCollect : state.imagesPath.iconDropDown}}"></image>
-        </view>
-        <view class='section-box dispatching-fee' v-if="(state.type === 'dispatch' || state.type === 'logistical') && (state.shipmentAmount || state.orderType === 'CYCLE')">
-            <view class="left">派送费<text style="display: inline-block;margin-left: 12rpx; color: #333333;font-weight: 400;" v-if="state.shipmentAmount != 0 && state.orderType === 'CYCLE' && state.cycleFee > 0">￥{{state.shipmentAmount}} X {{state.cyclePhaseTotal}}期</text></view>
-            <view v-if="state.shipmentAmount != 0">
-              <view v-if="state.isShowAddressTips">
-                {{state.shipmentAmount > 0 ? '￥' + (state.orderType === 'CYCLE' ? state.cycleFee : state.shipmentAmount) : '0'}}
-              </view>
-              <view v-else style="color: #a8a8a8;">
-                超出配送范围
-              </view>
-            </view>
-            <view v-else>
-              <view v-if="state.isShowAddressTips">
-                {{state.shipmentAmount == 0 ? '包邮' : ''}}
-              </view>
-              <view v-else style="color: #a8a8a8;">
-                超出配送范围
-              </view>
-            </view>
-        </view>
-        <view class="promotions-box" v-if="state.goodsPromotions.length > 0 || state.couponPromotions.length > 0">
-            <view class="promotions-item" v-for="(item, index) in state.goodsPromotions" wx:key="index">
-                <view class="label" style="{{state.theme.mainBgColor}}">赠品</view>
-                <view class="title promotions-data">
-                  <view>{{item.goods.name}}</view>
-                  <text>x{{item.count}}</text>
-                </view>
-            </view>
-            <view class="promotions-item" v-for="(item, index) in state.couponPromotions" wx:key="index">
-                <view class="label" style="{{state.theme.mainBgColor}}">返券</view>
-                <view class="title">{{item.coupon.name}}</view>
-            </view>
-        </view>
-        <view class='gift-bottom-box' v-if="false">
-            <view class='gift-box'>
-                <view class="gift-title">赠品:</view>
-                <view class="gift-item-box">
-                    <view class="gift-item" v-for="(item, index) in state.giftGoodsList" wx:key="i">
-                        <view class="gift-img-box">
-                            <image src="{{item.image}}"></image>
-                        </view>
-                        <view class='gift-num'>x{{item.productNum}}</view>
-                    </view>
-                </view>
-            </view>
-        </view>
-    </view> -->
         <view v-if="state.planTextTip" style="padding-left: 20rpx;margin: -12rpx 0 15rpx;font-size: 24rpx;color: red">
           {{state.planTextTip}}</view>
         <view class="block-box">
           <view class="block-title">金额明细</view>
-          <!-- <view class="pay-item">
-            <view class="left">支付方式
-            </view>
-            <view class="right type-box">
-                <view class="{{!state.useStoredValueCard ? 'active' : ''}}"
-                    style="{{!state.useStoredValueCard ? state.theme.mainBgColor : ''}}" catch:tap='weixinPay'>
-                    微信支付
-                </view>
-                <view v-if="state.orderType !== 'advanceSell'" bindtap="handleSelectStoredValueCard" class="{{state.useStoredValueCard ? 'active' : ''}}" style="{{state.useStoredValueCard ? state.theme.mainBgColor : ''}}">
-                储值支付
-                </view>
-            </view>
-        </view> -->
           <view v-if="false">
             <view class="pay-item" v-if="state.useStoredValueCard">
               <view class="left">账户余额
@@ -726,9 +593,9 @@
               </view>
               <view class="right">
                 <view class="deduction-amount" v-if="state.orderType !== 'CYCLE'">
-                  -￥{{filters.toFix(state.storedValueCard.useAmount)}}</view>
+                  -￥{{toFix(state.storedValueCard.useAmount)}}</view>
                 <view class="deduction-amount" v-else>
-                  -￥{{filters.toFix(state.allPrice - state.totalDiscount + state.cycleFee - state.shipmentCouponDiscount - state.scoreDiscount - state.giftCardDiscount)}}
+                  -￥{{toFix(state.allPrice - state.totalDiscount + state.cycleFee - state.shipmentCouponDiscount - state.scoreDiscount - state.giftCardDiscount)}}
                 </view>
               </view>
             </view>
@@ -741,10 +608,10 @@
               </view>
               <!-- 最多可抵 -->
               <view class="right score">
-                <view class="deduction-amount" v-if="state.orderType !== 'CYCLE'">-￥{{filters.toFix(state.scoreAmount)}}
+                <view class="deduction-amount" v-if="state.orderType !== 'CYCLE'">-￥{{toFix(state.scoreAmount)}}
                 </view>
                 <view class="deduction-amount" v-else>
-                  -￥{{filters.toFix(state.allPrice - state.totalDiscount + state.cycleFee - state.shipmentCouponDiscount - state.scoreDiscount - state.giftCardDiscount)}}
+                  -￥{{toFix(state.allPrice - state.totalDiscount + state.cycleFee - state.shipmentCouponDiscount - state.scoreDiscount - state.giftCardDiscount)}}
                 </view>
                 <!-- <view class="checkbox-icon  {{useScore ?'active':''}}"></view> -->
               </view>
@@ -759,23 +626,23 @@
                 <view v-if="state.orderType == 'group'">
                   <text class="text" v-if="!state.systemOptions.teamOrderCanUseCoupon">活动不可用券</text>
                   <view v-else>
-                    <text class="text" :hidden="state.couponDiscount === 0 ? false : true"
-                      v-if="state.hasAvailableCoupon">{{state.discountNum > 0 ? state.discountNum + '张可用优惠券' : '暂无可用优惠券'}}</text>
+                    <text class="text"
+                      v-if="state.hasAvailableCoupon && state.couponDiscount === 0">{{state.discountNum > 0 ? state.discountNum + '张可用优惠券' : '暂无可用优惠券'}}</text>
                   </view>
                 </view>
                 <view v-else>
                   <view v-if="state.hasAvailableCoupon">
                     <text class="text"
-                      :hidden="state.couponDiscount === 0 ? false : true">{{state.discountNum > 0 ? state.discountNum + '张可用优惠券' : '暂无可用优惠券'}}</text>
+                      v-if="state.couponDiscount === 0">{{state.discountNum > 0 ? state.discountNum + '张可用优惠券' : '暂无可用优惠券'}}</text>
                   </view>
                 </view>
-                <view :hidden="state.couponDiscount !== 0 ? false : true">
+                <view v-if="state.couponDiscount !== 0">
                   <view class="coupon-amount-box">
                     <!-- <image class="coupon-bg" src="{{state.imagesPath.iconCouponBgRed}}" mode="widthFix"
                                 lazy-load="false" />
                             <image class="coupon-bg" src="{{state.imagesPath.iconCouponBgRed}}" mode="widthFix"
                                 lazy-load="false" /> -->
-                    <text class="coupon-amount">-￥{{filters.toFix(state.couponDiscount)}}</text>
+                    <text class="coupon-amount">-￥{{toFix(state.couponDiscount)}}</text>
                   </view>
                 </view>
                 <image class="right-point" :src="state.imagesPath.iconRight2"></image>
@@ -804,7 +671,7 @@
                                 lazy-load="false" />
                             <image class="coupon-bg" src="{{state.imagesPath.iconCouponBgRed}}" mode="widthFix"
                                 lazy-load="false" />
-                            <text class="coupon-amount">-￥{{filters.toFix(state.shipmentCouponDiscount)}}</text>
+                            <text class="coupon-amount">-￥{{toFix(state.shipmentCouponDiscount)}}</text>
                         </view>
                     </view>
                     <image class="right-point" src="{{state.imagesPath.iconRight2}}" ></image>
@@ -835,7 +702,7 @@
             <view class="pay-item">
               <view class="left">商品总价</view>
               <view class="right">
-                <text>+￥{{state.allPrice}}</text>
+                <text>+￥{{state.allPrice || '0'}}</text>
               </view>
             </view>
             <view class="pay-item" v-if="state.shipmentAmount > 0">
@@ -866,33 +733,6 @@
                 <text class="amount-box">-￥{{state.inputAmount}}</text>
               </view>
             </view>
-            <!-- <view class="pay-item"
-                v-if="state.orderType === 'group' && !state.systemOptions.teamOrderCanUseCoupon || state.orderType === 'advanceSell' || state.orderType === 'scoreMall' || state.orderType === 'secondkill' && state.scource === 'BUYNOW' || state.mallOrderType === 'OFFLINE' && state.offlinType === 'cashReceipt' || state.orderType === 'solitaire' || state.orderType === 'packaging' || state.orderType === 'CYCLE' && state.cycleDetails.useCoupons === 0 || !state.isDiscountCoupons ? false : true">
-                <view class="left">
-                    优惠券
-                </view>
-                <view class="right coupon" bindtap="{{state.allPrice + state.shipmentAmount - state.scoreAmount <= 0 ? '' : 'toChoiceCoupon'}}" data-type="discount">
-                    <block v-if="state.orderType == 'group'">
-                        <text class="text" v-if="!state.systemOptions.teamOrderCanUseCoupon">活动不可用券</text>
-                        <block v-else>
-                            <text class="text" v-show="!(state.couponDiscount === 0 ? false : true)"
-                                v-if="state.hasAvailableCoupon">{{state.discountNum > 0 ? state.discountNum + '张可用优惠券' : '暂无可用优惠券'}}</text>
-                        </block>
-                    </block>
-                    <block v-else>
-                        <block v-if="state.hasAvailableCoupon">
-                            <text class="text"
-                                v-show="!(state.couponDiscount === 0 ? false : true)">{{state.discountNum > 0 ? state.discountNum + '张可用优惠券' : '暂无可用优惠券'}}</text>
-                        </block>
-                    </block>
-                    <view v-show="!(state.couponDiscount !== 0 ? false : true)">
-                        <view class='coupon-amount-box'>
-                            <text class="coupon-amount">-￥{{filters.toFix(state.couponDiscount)}}</text>
-                        </view>
-                    </view>
-                    <image class="right-point" src="{{state.imagesPath.iconRight2}}" ></image>
-                </view>
-            </view> -->
             <view class="pay-item" v-if="state.couponDiscount > 0">
               <view class="left">优惠券优惠合计</view>
               <view class="right">
@@ -909,74 +749,20 @@
                 </view>
               </view>
             </view>
-            <!-- <view class="pay-item" v-show="!(state.type === 'selftake')"
-                v-if="state.orderType === 'group' && !state.systemOptions.teamOrderCanUseCoupon || state.orderType === 'advanceSell' || state.orderType === 'scoreMall' || state.orderType === 'secondkill' && state.scource === 'BUYNOW' || state.mallOrderType === 'OFFLINE' && state.offlinType === 'cashReceipt' || state.orderType === 'solitaire' || state.orderType === 'packaging' || state.orderType === 'CYCLE' && state.cycleDetails.useCoupons === 0 ? false : true">
-                <view class="left">运费券</view>
-                <view class="right coupon" bindtap="toChoiceCoupon" data-type="freeship">
-                    <block v-if="state.orderType == 'group'">
-                        <text class="coupon-text" v-if="!state.systemOptions.teamOrderCanUseCoupon">活动不可用券</text>
-                        <block v-else>
-                            <text class="coupon-text"
-                                v-show="!(state.shipmentCouponDiscount === 0 ? false : true)">{{state.freeshipNum > 0 ? state.freeshipNum + '张可用运费券' : '暂无可用运费券'}}</text>
-                        </block>
-                    </block>
-                    <block v-else>
-                        <block v-if="state.hasAvailableCoupon">
-                            <text class="coupon-text"
-                                v-show="!(state.shipmentCouponDiscount === 0 ? false : true)">{{state.freeshipNum > 0 ? state.freeshipNum + '张可用运费券' : '暂无可用运费券'}}</text>
-                        </block>
-                    </block>
-                    <view v-show="!(state.shipmentCouponDiscount !== 0 && state.couponInfo.data.freeship.length > 0 ? false : true)">
-                        <view class='coupon-amount-box'>
-                            <image class="coupon-bg" src="{{state.imagesPath.iconCouponBgRed}}" mode="widthFix"
-                                lazy-load="false" />
-                            <image class="coupon-bg" src="{{state.imagesPath.iconCouponBgRed}}" mode="widthFix"
-                                lazy-load="false" />
-                            <text class="coupon-amount">-￥{{filters.toFix(state.shipmentCouponDiscount)}}</text>
-                        </view>
-                    </view>
-                    <image class="right-point" src="{{state.imagesPath.iconRight2}}" ></image>
-                </view>
-            </view> -->
             <!-- bindtap="handleScoreChoice" -->
-            <!-- <view class="pay-item"
-                v-if="state.orderType === 'group' && !state.systemOptions.teamOrderCanUseScore || state.orderType === 'advanceSell' || state.orderType === 'secondkill' && state.scource === 'BUYNOW' || state.orderType === 'solitaire' || state.orderType === 'packaging' ? false : true"
-                >
-                <view class="left" data-scorerule="{{state.scoreInfo.scoreRule}}">积分抵扣
-                </view>
-                <view class="right score">
-                    <view class='deduction-amount'>-￥{{filters.toFix(state.scoreAmount)}}</view>
-                </view>
-            </view> -->
           </view>
-
-          <!-- <view class="pay-item" v-if="state.useStoredMspCard">
-            <view class="left">余额</view>
-            <view class="right coupon" bindtap="toChoiceMspCard">
-                <block v-if="!state.accountDetail.balance">
-                    <text class="text">选择余额</text>
-                </block>
-                <view v-show="!(state.accountDetail.balance ? false : true)">
-                    <view class='coupon-amount-box'>
-                        <text class="coupon-amount">{{state.accountDetail.companyName}} (剩余：{{state.accountDetail.balance}})</text>
-                    </view>
-                </view>
-                <image class="right-point" src="{{state.imagesPath.iconRight2}}" ></image>
-            </view>
-        </view> -->
 
           <view class="bill-details">
             <view class="discount-amounts" v-if="state.totalDiscount + state.shipmentCouponDiscount > 0">
-              已优惠￥{{filters.toFix(state.totalDiscount + state.shipmentCouponDiscount)}}</view>
+              已优惠￥{{toFix(state.totalDiscount + state.shipmentCouponDiscount)}}</view>
             <view class="balance-accounts">
               支付金额：
-              <text>￥{{filters.toFix(state.allPrice - state.totalDiscount + (state.orderType === 'CYCLE' ? state.cycleFee : state.shipmentAmount) - state.shipmentCouponDiscount - state.scoreDiscount - state.giftCardDiscount)}}</text>
-              <!-- <text>￥{{filters.toFix(allPrice)}}</text> -->
+              <text>￥{{toFix(state.allPrice - state.totalDiscount + (state.orderType === 'CYCLE' ? state.cycleFee : state.shipmentAmount) - state.shipmentCouponDiscount - state.scoreDiscount - state.giftCardDiscount)}}</text>
+              <!-- <text>￥{{toFix(allPrice)}}</text> -->
             </view>
           </view>
           <view class="dividing-line"
             v-if="(state.orderType !== 'advanceSell' || state.advanceSellPayment || state.advanceisGiftPayment) && (state.isStoredPayment || state.isGiftPayment)">
-            <!-- <image src="{{imagesPath.iconDividingline}}" mode="widthFix"></image> -->
           </view>
           <view class="block-title"
             v-if="(state.orderType !== 'advanceSell' || state.advanceSellPayment || state.advanceisGiftPayment) && (state.isStoredPayment || state.isGiftPayment)">
@@ -989,9 +775,9 @@
             </view>
             <view class="right">
               <view class="deduction-amount" v-if="state.orderType !== 'CYCLE'">
-                -￥{{filters.toFix(state.storedValueCard.useAmount)}}</view>
+                -￥{{toFix(state.storedValueCard.useAmount)}}</view>
               <view class="deduction-amount" v-else>
-                -￥{{filters.toFix(state.allPrice - state.totalDiscount + state.cycleFee - state.shipmentCouponDiscount - state.scoreDiscount - state.giftCardDiscount)}}
+                -￥{{toFix(state.allPrice - state.totalDiscount + state.cycleFee - state.shipmentCouponDiscount - state.scoreDiscount - state.giftCardDiscount)}}
               </view>
               <view class="checkbox-icon" :style="'background-image: url(' + state.imagesPath.iconUnchecked + ')'">
                 <view class="active" :style="'background-image: url(' + state.imagesPath.iconChecked1 + ')'"
@@ -1009,7 +795,7 @@
             <view class="right coupon" @click="toChoiceGiftCard">
               <view v-if="state.hasAvailableGiftCard">
                 <text class="text"
-                  :hidden="state.giftCardDiscount > 0 ? true : false">{{state.giftCardNum}}张可用礼品卡</text>
+                  v-if="state.giftCardDiscount <= 0">{{state.giftCardNum}}张可用礼品卡</text>
               </view>
               <view v-else-if="!state.hasAvailableGiftCard">
                 <text class="text">暂无可用礼品卡</text>
@@ -1029,54 +815,36 @@
               <image class="tips" :src="state.imagesPath.iconOrderTips"></image>
             </view>
             <view class="right score">最多可抵
-              <view class="deduction-amount">-￥{{filters.toFix(state.scoreAmount)}}</view>
+              <view class="deduction-amount">-￥{{toFix(state.scoreAmount)}}</view>
               <view :class="'checkbox-icon  ' + (state.useScore ? 'active' : '')"></view>
             </view>
           </view>
         </view>
-        <!-- <view class="block-box">
-        <view class="row" bindtap="addRemarks">
-            <view class="title">订单备注</view>
-            <view class="right">
-                <view class="info">{{state.remarks ? state.remarks : '添加备注'}}</view>
-                <image class="right-point" src="{{state.imagesPath.iconRight2}}" ></image>
-            </view>
-        </view>
-        <view class="row" v-if="state.showInvoice" bindtap="toInvoice">
-            <view class="title">发票信息</view>
-            <view class="right">
-                <view class="info" v-if="state.invoice">{{state.invoice.type === "1" ? "个人或事业单位" : "企业"}}-{{state.invoice.title}}
-                </view>
-                <view class="info" v-else>商家支持开具体发票</view>
-                <image class="right-point" src="{{state.imagesPath.iconRight2}}" ></image>
-            </view>
-        </view>
-    </view> -->
         <view class="bottom-box">
           <view class="order-price">
             合计:
             <text
-              v-if="state.orderType === 'CYCLE'">￥{{filters.toFix(state.allPrice - state.totalDiscount + state.cycleFee - state.shipmentCouponDiscount - state.scoreDiscount - state.giftCardDiscount)}}</text>
+              v-if="state.orderType === 'CYCLE'">￥{{toFix(state.allPrice - state.totalDiscount + state.cycleFee - state.shipmentCouponDiscount - state.scoreDiscount - state.giftCardDiscount)}}</text>
             <text
-              v-else>￥{{filters.toFix(state.allPrice - state.totalDiscount + state.shipmentAmount - state.shipmentCouponDiscount - state.scoreDiscount - state.giftCardDiscount)}}</text>
+              v-else>￥{{toFix(state.allPrice - state.totalDiscount + state.shipmentAmount - state.shipmentCouponDiscount - state.scoreDiscount - state.giftCardDiscount)}}</text>
           </view>
           <view v-if="state.type == 'selftake'">
             <!-- <form bindsubmit="togglePaymentPopup"> -->
             <form @submit="createOrderTip">
               <button class="btn" :style="state.theme.mainBgColor" form-type="submit"
-                :hidden="state.checkedProducts ? false : true">提交订单</button>
+                v-if="state.checkedProducts">提交订单</button>
             </form>
-            <view class="btn unavailable" :hidden="!state.checkedProducts ? false : true">提交订单</view>
+            <view class="btn unavailable" v-if="!state.checkedProducts">提交订单</view>
           </view>
           <view v-else>
             <!-- <form bindsubmit="togglePaymentPopup"> -->
             <form @submit="createOrderTip">
               <!-- disabled="{{ btnDisabled }}" -->
               <button class="btn" :style="state.theme.mainBgColor" form-type="submit"
-                :hidden="state.calculatedDeliveryFee && state.checkedProducts ? false : true">提交订单</button>
+                v-if="state.calculatedDeliveryFee && state.checkedProducts">提交订单</button>
             </form>
             <view class="btn unavailable"
-              :hidden="!state.calculatedDeliveryFee || !state.checkedProducts ? false : true">提交订单
+              v-if="!state.calculatedDeliveryFee || !state.checkedProducts">提交订单
             </view>
           </view>
         </view>
@@ -1150,7 +918,7 @@
         <view class="model-title">选择支付方式</view>
         <view class="model-price">
             <view>待支付</view>
-            <view>￥{{filters.toFix(state.allPrice - state.totalDiscount + state.shipmentAmount - state.shipmentCouponDiscount - state.scoreDiscount - state.giftCardDiscount)}}</view>
+            <view>￥{{toFix(state.allPrice - state.totalDiscount + state.shipmentAmount - state.shipmentCouponDiscount - state.scoreDiscount - state.giftCardDiscount)}}</view>
         </view>
         <view class="model-type-box">
             <view class="model-type-item" v-if="false">
@@ -1182,7 +950,7 @@
             <view class="model-type-item">
                 <view>
                     <view class="model-type-title">微信支付</view>
-                    <view>还需支付{{filters.toFix(state.allPrice - state.totalDiscount + state.shipmentAmount - state.shipmentCouponDiscount - state.scoreDiscount - state.giftCardDiscount - (state.accountDetail && state.accountDetail.balance && state.useStoredMspCard ? state.accountDetail.balance : 0))}}</view>
+                    <view>还需支付{{toFix(state.allPrice - state.totalDiscount + state.shipmentAmount - state.shipmentCouponDiscount - state.scoreDiscount - state.giftCardDiscount - (state.accountDetail && state.accountDetail.balance && state.useStoredMspCard ? state.accountDetail.balance : 0))}}</view>
                 </view>
                 <checkbox checked="{{state.useWxValue}}" color="{{state.theme.color}}" catch:tap='weixinPay'/>
             </view>
@@ -1192,7 +960,7 @@
         </view>
     </view>
 </view>-->
-      <popup :show="state.show.middle" position="middle" custom-class="middle" @close="toggleMiddlePopup">
+      <popup v-if="state.show.middle" :show="state.show.middle" position="middle" custom-class="middle" @close="toggleMiddlePopup">
         <view class="popup-content">
           <view class="title">账单明细</view>
           <view class="popup-content-box">
@@ -1200,12 +968,12 @@
               <view>
                 <text class="color-454545" v-if="state.orderType !== 'advanceSell'">商品金额</text>
                 <text class="color-454545" v-if="state.orderType === 'advanceSell'">预付定金</text>
-                <text class="color-ff7171">￥{{filters.toFix(state.allPrice)}}</text>
+                <text class="color-ff7171">￥{{toFix(state.allPrice)}}</text>
               </view>
               <view>
                 <text class="color-454545">派送费</text>
                 <text class="color-454545"
-                  :hidden="state.shipmentCouponDiscount === 0">(运费券已减{{state.shipmentCouponDiscount}}元)</text>
+                  v-if="state.shipmentCouponDiscount !== 0">(运费券已减{{state.shipmentCouponDiscount}}元)</text>
                 <text class="color-ff7171">+￥{{state.shipmentRealPay}}</text>
               </view>
               <view>
@@ -1224,35 +992,35 @@
                 <text class="color-454545">礼品卡</text>
                 <text class="color-ff7171">-￥{{state.giftCardDiscount >= 0 ? state.giftCardDiscount : 0.00}}</text>
               </view>
-              <view :hidden="state.cashDiscount > 0 ? false : true">
+              <view v-if="state.cashDiscount > 0 ">
                 <text class="color-454545">活动优惠</text>
                 <text class="color-ff7171">-￥{{state.cashDiscount}}</text>
               </view>
-              <view :hidden="state.inputAmount > 0 ? false : true">
+              <view v-if="state.inputAmount > 0 ">
                 <text class="color-454545">整单优惠</text>
                 <text class="color-ff7171">-￥{{state.inputAmount}}</text>
               </view>
             </view>
             <view class="realpay">
               实付款:
-              <text>￥{{filters.toFix(state.allPrice + state.shipmentAmount - state.inputAmount)}}</text>
+              <text>￥{{toFix(state.allPrice + state.shipmentAmount - state.inputAmount)}}</text>
             </view>
           </view>
           <view class="button" :style="state.theme.mainBgColor" @click="toggleMiddlePopup">确 定</view>
         </view>
       </popup>
-      <popup :show="state.show.number" position="middle" custom-class="middle" @close="toggleNumberPopup">
+      <popup v-if="state.show.number" :show="state.show.number" position="middle" custom-class="middle" @close="toggleNumberPopup">
         <view class="number-modal-body">
           <view class="number-modal-content">
             <view class="title">修改购买数量</view>
             <view class="content">
               <view class="count-box">
-                <view @click.stop="handleProductNumReduce" :hidden="item.status === 'DELETED' || item.balance <= 0">
+                <view @click.stop="handleProductNumReduce" v-if="item.status !== 'DELETED' && item.balance > 0">
                   <text>-</text>
                 </view>
                 <input cursor="0" selection-start="1" selection-end="1" :value="state.goodsInfo.productNum"
                   @input="bindProductNumInput" type="number" maxlength="3">
-                <view @click.stop="handleProductNumAdd" :hidden="item.status === 'DELETED' || item.balance <= 0">+
+                <view @click.stop="handleProductNumAdd" v-if="item.status !== 'DELETED' && item.balance > 0">+
                 </view>
               </view>
             </view>
@@ -1264,7 +1032,7 @@
           </view>
         </view>
       </popup>
-      <popup :show="state.show.pass" position="middle" custom-class="middle" @close="toggleNumberPopup">
+      <popup v-if="state.show.pass" :show="state.show.pass" position="middle" custom-class="middle" @close="toggleNumberPopup">
         <view class="number-modal-body">
           <view class="number-modal-contentA">
             <view class="title">{{state.titleActive}}</view>
@@ -1314,7 +1082,7 @@
           </view>
         </view>
       </popup>
-      <popup :show="state.orderStoreTip" position="middle" custom-class="middle" @close="toggleOrderStoreTip">
+      <popup v-if="state.show.orderStoreTip" :show="state.orderStoreTip" position="middle" custom-class="middle" @close="toggleOrderStoreTip">
         <view class="number-modal-body">
           <view class="number-modal-content number-modal-content1">
             <view class="title">请确认下单门店</view>
@@ -1347,7 +1115,6 @@
       <pay :order-data="state.order" :pay-method="state.payMethod" @paidOrder="paidOrder" @myevent="onMyEvent"
         :storedValueCard="state.storedValueCard" @continuePay="handleContinuePay" @loadingChange="loadingChange"
         @orderCancel="handleOrderCancel" @orderPay="handleOrderPay"></pay>
-    </notify>
   </view>
 </template>
 <script setup>
@@ -1412,7 +1179,6 @@ const memberService = _apiMemberServiceJs;
 const cycleService = _apiCycleServiceJs;
 const auth = _utilsAuthJs;
 const Notify = _componentsNotifyNotifyJs;
-;
 const CustomLoading = _componentsCustomLoadingCustomLoadingJs;
 const Popup = _componentsPopupPopupJs;
 const IMGAGESPATH = _utilsImagesPathJs;
@@ -1900,6 +1666,9 @@ function bindAppointmentMobile (e) {
   let appointmentMobile = e.detail.value;
   state.appointmentMobile = appointmentMobile;
 }
+function toFix(e) {
+  return e ? parseFloat(e).toFixed(2) : 0;
+}
 function bindAppointmentUser (e) {
   let appointmentUser = e.detail.value;
   state.appointmentUser = appointmentUser;
@@ -2316,9 +2085,11 @@ function getCalculateTime (idx) {
   state.calculateData.productIds = [];
   let idKeyName = state.goodTypeList[idx].goodsList && state.goodTypeList[idx].goodsList.length > 0 ? 'goodsList' : 'goodsListAll';
   console.log(state.goodTypeList[idx], 'this.data.goodTypeList[idx]');
-  state.goodTypeList[idx][idKeyName].forEach(item => {
-    state.calculateData.productIds.push(item.productId);
-  });
+  if(state.goodTypeList[idx] && state.goodTypeList[idx][idKeyName]) {
+    state.goodTypeList[idx][idKeyName].forEach(item => {
+      state.calculateData.productIds.push(item.productId);
+    });
+  }
   state.calculateData.storeId = state.goodTypeList[idx].storeId;
   if (state.goodTypeList[idx].type === 'selftake') {
     state.calculateData.shipmentType = 'SELF'; //自提
@@ -6241,8 +6012,11 @@ function formatDate (date) {
   const seconds = String(date.getSeconds()).padStart(2, '0');
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
+let cacheOrder = null;
+let optionsData = null;
 onLoad(async function (options) {
   cacheOrder = null;
+  optionsData = options || {}
   if (options.cacheOrder != null) {
     cacheOrder = JSON.parse(options.cacheOrder);
   }
@@ -6953,7 +6727,8 @@ onShow(async function () {
   let isDistributionOrder = state.multipleOrdersFlag && editActiveIdx != null ? state.goodTypeList[editActiveIdx].isDistributionOrder : state.isDistributionOrder;
   let storeId = state.multipleOrdersFlag && editActiveIdx != null && state.goodTypeList[editActiveIdx].storeInfo ? state.goodTypeList[editActiveIdx].storeInfo.id : state.storeId;
   // 雄安没有切换门店逻辑
-  if (orderType !== 'packaging' && orderType !== 'distribution' && !isDistributionOrder && (storeId !== app.globalData.storeInfo.id || storeInfo.virtualStoreId !== app.globalData.storeInfo.virtualStoreId) && (editActiveIdx || editActiveIdx == 0) && false) {
+  let noChangeStore = false;
+  if (noChangeStore && app.globalData.storeInfo && orderType !== 'packaging' && orderType !== 'distribution' && !isDistributionOrder && (storeId !== app.globalData.storeInfo.id || storeInfo.virtualStoreId !== app.globalData.storeInfo.virtualStoreId) && (editActiveIdx || editActiveIdx == 0)) {
     // 不是统配订单且门店id和全局门店信息不一致
     if (!editActiveIdx && editActiveIdx != 0) return false;
     // self.data.goodTypeList[editActiveIdx].oldStoreInfo ? {
@@ -7112,8 +6887,8 @@ onShow(async function () {
   });
 
   // 检查参数中是否有配送方式
-  if (options && options.type) {
-    let typeData = JSON.parse(options.type);
+  if (optionsData && optionsData.type) {
+    let typeData = JSON.parse(optionsData.type);
     console.log(typeData);
     state.type = typeData;
   }

@@ -19,7 +19,7 @@
   </view>
   <view class="distance" @click="changeStore">
     <!-- <image lazy-load src='{{imagesPath.iconNearStoreNav}}'></image> -->
-    <text>{{filters.filtInt(storeInfo.distance)}}km</text>
+    <text>{{filtInt(storeInfo.distance)}}km</text>
     <image lazy-load="" class="right-icon" mode="widthFix" :src="imagesPath.iconRightWhite"></image>
   </view>
 </view>
@@ -35,7 +35,7 @@
     <image lazy-load="" class="nearStore-card-bg" :src="imagesPath.iconNearStoreBg"></image>
     <view class="nearStore-nav" @click="navToStore">
       <image lazy-load="" :src="imagesPath.iconNearStoreNav"></image>
-      <text>距您{{filters.filtInt(storeInfo.distance)}}km</text>
+      <text>距您{{filtInt(storeInfo.distance)}}km</text>
     </view>
     <view class="store-info">
       <view class="left-icon">

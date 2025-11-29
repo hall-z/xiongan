@@ -44,7 +44,7 @@
         </checkbox-group>
       </view>
       <view class="order-info">
-        <view class="goods-count">退款金额：¥{{filters.toFix(refundTotal - (state.refundDetail.shipmentTotal || 0))}} <text v-if="state.refundDetail.shipmentTotal">（含运费¥{{filters.toFix(state.refundDetail.shipmentTotal)}}）</text></view>
+        <view class="goods-count">退款金额：¥{{toFix(refundTotal - (state.refundDetail.shipmentTotal || 0))}} <text v-if="state.refundDetail.shipmentTotal">（含运费¥{{toFix(state.refundDetail.shipmentTotal)}}）</text></view>
       </view>
     </view>
     <view class="refund-box">

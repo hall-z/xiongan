@@ -9,10 +9,10 @@
   <view class="refund-item" v-for="(item , index) in state.refundList" :key="index" :data-id="item.id" @click="toRefundDetails">
     <view class="refund-title">
       <view class="name"><image :src="state.imagesPath.iconRefundMoney" mode="widthFix"></image>退款</view>
-      <text v-if="item.status === 'CREATED'" class="color-2DBE1B">{{filters.filtRefundStatus(item.status)}}</text>
-      <text v-else-if="item.status === 'FINISHED'" class="color-FF8105">{{filters.filtRefundStatus(item.status)}}</text>
-      <text v-else-if="item.status === 'REJECTED'" class="color-FF3333">{{filters.filtRefundStatus(item.status)}}</text>
-      <text v-else class="text">{{filters.filtRefundStatus(item.status)}}</text>
+      <text v-if="item.status === 'CREATED'" class="color-2DBE1B">{{filtRefundStatus(item.status)}}</text>
+      <text v-else-if="item.status === 'FINISHED'" class="color-FF8105">{{filtRefundStatus(item.status)}}</text>
+      <text v-else-if="item.status === 'REJECTED'" class="color-FF3333">{{filtRefundStatus(item.status)}}</text>
+      <text v-else class="text">{{filtRefundStatus(item.status)}}</text>
     </view>
     <view class="refund-goods">
       <view class="goods-box" v-for="(item , index) in item.refundDetails" :key="idx" v-if="index < 4">

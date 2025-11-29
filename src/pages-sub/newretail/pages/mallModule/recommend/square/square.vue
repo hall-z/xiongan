@@ -28,7 +28,7 @@
     </view>
     <view class="topic-list">
       <scroll-view scroll-x="" style="display:flex;white-space: nowrap;width: 100%;" @scrolltolower="onTopicReachBottom">
-        <view class="topic-item" v-for="(item , index) in state.topicList" :key="index" :data-id="item.id" :style="filters.getStyle(state.selectedTopicIds, item.id, state.themeColor)" @click="handleTopicTap">
+        <view class="topic-item" v-for="(item , index) in state.topicList" :key="index" :data-id="item.id" :style="getStyle(state.selectedTopicIds, item.id, state.themeColor)" @click="handleTopicTap">
           #{{item.name}}
         </view>
       </scroll-view>
@@ -39,7 +39,7 @@
       <view v-for="(item , index) in state.myRecommend">
         <view class="essay-item" :data-index="index" @click="toDetails" :data-row="item">
           <view class="essay-pic">
-            <video v-if="filters.isMp4(item.imgUrlList[0])" id="myVideo" class="myVideo" :src="item.imgUrlList[0]" :controls="false" :show-center-play-btn="false" :show-play-btn="false" :show-mute-btn="false" :picture-in-picture-mode="['push', 'pop']"></video>
+            <video v-if="isMp4(item.imgUrlList[0])" id="myVideo" class="myVideo" :src="item.imgUrlList[0]" :controls="false" :show-center-play-btn="false" :show-play-btn="false" :show-mute-btn="false" :picture-in-picture-mode="['push', 'pop']"></video>
             <image v-else :src="item.imgUrlList[0]" mode="widthFix"></image>
           </view>
           <view class="essay-title">{{item.title}}</view>
@@ -61,7 +61,7 @@
   <!-- <view class="essay-list" wx:if="{{state.myRecommend.length > 0}}">
     <view class="essay-item" wx:for="{{state.myRecommend}}" data-index="{{index}}" bindtap="toDetails" data-row="{{item}}">
       <view class="essay-pic">
-        <video wx:if="{{filters.isMp4(item.imgUrlList[0])}}" id="myVideo" class="myVideo" src="{{item.imgUrlList[0]}}"
+        <video wx:if="{{isMp4(item.imgUrlList[0])}}" id="myVideo" class="myVideo" src="{{item.imgUrlList[0]}}"
           controls="{{false}}" show-center-play-btn='{{false}}' show-play-btn="{{false}}" show-mute-btn="{{false}}"
           picture-in-picture-mode="{{['push', 'pop']}}"></video>
         <image wx:else src="{{item.imgUrlList[0]}}" mode="widthFix" ></image>
