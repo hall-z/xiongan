@@ -276,6 +276,187 @@ class AddressManager {
       console.error('获取腾讯LBS key失败', error)
     }
   }
+
+  /**
+   * 获取地理位置，查询所有的门店，获取附近的门店
+   */
+  async getLocation(): Promise<StoreInfo> {
+    const self = this
+    console.log("getLocation start", utils.formatTime(new Date()).replace(/\//g, '-'))
+    this.app = this.app && this.app.globalData ? this.app : getApp()
+    
+    return new Promise((resolve, reject) => {
+      // 使用固定的测试坐标（原代码中注释掉了真实的地理位置获取）
+      const latitude = '36.599308013916016'
+      const longitude = '114.52954101562'
+
+      this.app.globalData.location = {
+        latitude: '114.529541015625',
+        longitude: '36.599308013916016'
+      }
+
+      try {
+        const now = new Date()
+        const nowDate = utils.formatTime(now).replace(/\//g, '-')
+        const tempTimeArr = nowDate.split(" ")
+        const startTime = tempTimeArr[0] + ' 00:00:00'
+        const tempTermValidity = tempTimeArr[0] + ' 23:59:59'
+        const tempAllStores = uni.getStorageSync('wj_allStores') || []
+
+        if (tempAllStores && tempAllStores.length > 0) {
+          const timeCount = uni.getStorageSync('wj_queryStoreTimeCount')
+          let tempTime = startTime.replace(/-/g, '/')
+          if (timeCount) {
+            tempTime = timeCount.replace(/-/g, '/')
+          }
+          const nowTime = new Date().getTime()
+          const time = new Date(tempTime).getTime()
+
+          if (nowTime > time) {
+            // 增量查询门店
+            let lastTime = uni.getStorageSync('wj_queryStoreTime')
+            let queryStartTime = startTime
+            if (lastTime && utils.validateDateTime(lastTime)) {
+              queryStartTime = lastTime
+            }
+
+            storeService.queryList(queryStartTime).then((res: StoreInfo[]) => {
+              let allStores = [].concat(tempAllStores)
+              res.forEach((item: StoreInfo) => {
+                let hasThisStore = false
+                allStores.forEach((ele: StoreInfo, index: number) => {
+                  if (item.id === ele.id) {
+                    hasThisStore = true
+                    allStores[index] = item
+                  }
+                })
+                if (!hasThisStore && item.status === 'OPEN') {
+                  allStores.push(item)
+                }
+              })
+
+              const newAllStores = allStores.filter((item: StoreInfo) => item.status === 'OPEN')
+              try {
+                uni.setStorageSync('wj_allStores', newAllStores)
+                uni.setStorageSync('wj_queryStoreTimeCount', tempTermValidity)
+              } catch (e) {
+                console.log(e)
+              }
+
+              const tempIndex = this.getNearestStore(newAllStores, parseFloat(latitude), parseFloat(longitude))
+              let storeInfo = newAllStores[tempIndex]
+
+              // 如果存在分享的门店id
+              if (this.app.globalData.shareStoreId !== '') {
+                for (let i = 0; i < newAllStores.length; i++) {
+                  const ele = newAllStores[i]
+                  if (ele.id == this.app.globalData.shareStoreId) {
+                    storeInfo = ele
+                    break
+                  }
+                }
+                this.app.globalData.storeId = ''
+              }
+
+              storeInfo = {
+                ...storeInfo,
+                userLatitude: parseFloat(latitude),
+                userLongitude: parseFloat(longitude)
+              }
+
+              this.handleHasStoreData(storeInfo)
+              resolve(storeInfo)
+            }).catch((err: any) => {
+              reject(err)
+            })
+          } else {
+            const tempIndex = this.getNearestStore(tempAllStores, parseFloat(latitude), parseFloat(longitude))
+            let storeInfo = tempAllStores[tempIndex]
+
+            // 如果存在分享的门店id
+            if (this.app.globalData.shareStoreId !== '') {
+              for (let i = 0; i < tempAllStores.length; i++) {
+                const ele = tempAllStores[i]
+                if (ele.id == this.app.globalData.shareStoreId) {
+                  storeInfo = ele
+                  break
+                }
+              }
+              this.app.globalData.storeId = ''
+            }
+
+            storeInfo = {
+              ...storeInfo,
+              userLatitude: parseFloat(latitude),
+              userLongitude: parseFloat(longitude)
+            }
+
+            this.handleHasStoreData(storeInfo)
+            resolve(storeInfo)
+          }
+        } else {
+          // 查询所有门店
+          storeService.queryList().then((res: StoreInfo[]) => {
+            const storeInfo = this.handleStoreData(tempTermValidity, res, parseFloat(latitude), parseFloat(longitude))
+            resolve(storeInfo)
+          }).catch((err: any) => {
+            uni.showToast({
+              title: err.message,
+              icon: 'none',
+              duration: 2000
+            })
+            reject(err)
+          })
+        }
+      } catch (e) {
+        console.log(e)
+        reject(e)
+      }
+    })
+  }
+
+  /**
+   * 处理查询到的门店数据
+   */
+  private handleStoreData(tempTermValidity: string, res: StoreInfo[], latitude: number, longitude: number): StoreInfo {
+    const allStores: StoreInfo[] = []
+    res.forEach((item: StoreInfo) => {
+      if (item.status === 'OPEN') {
+        allStores.push(item)
+      }
+    })
+
+    try {
+      uni.setStorageSync('wj_allStores', allStores)
+      uni.setStorageSync('wj_queryStoreTimeCount', tempTermValidity)
+    } catch (e) {
+      console.log(e)
+    }
+
+    const tempIndex = this.getNearestStore(allStores, latitude, longitude)
+    let storeInfo = allStores[tempIndex]
+
+    // 如果存在分享的门店id
+    if (this.app.globalData.shareStoreId !== '') {
+      for (let i = 0; i < allStores.length; i++) {
+        const ele = allStores[i]
+        if (ele.id == this.app.globalData.shareStoreId) {
+          storeInfo = ele
+          break
+        }
+      }
+      this.app.globalData.storeId = ''
+    }
+
+    storeInfo = {
+      ...storeInfo,
+      userLatitude: latitude,
+      userLongitude: longitude
+    }
+
+    this.handleHasStoreData(storeInfo)
+    return storeInfo
+  }
 }
 
 // 创建单例实例
@@ -293,5 +474,6 @@ export const {
   recordVisitStore,
   getDistributionStore,
   getNextDayStore,
-  getTenXunKey
+  getTenXunKey,
+  getLocation
 } = addressManager

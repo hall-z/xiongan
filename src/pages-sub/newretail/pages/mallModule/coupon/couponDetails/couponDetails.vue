@@ -1,3 +1,17 @@
+<route lang="json5" type="page">
+{
+  layout: 'default-newretail',
+  style: {
+    navigationStyle: 'custom',
+    'mp-alipay': {
+      transparentTitle: 'always',
+      titlePenetrate: 'YES',
+      defaultTitle: '',
+      titlePenetrate: 'NO',
+    },
+  },
+}
+</route>
 <template>
   <!-- pages/couponDetails/couponDetails.wxml -->
   <navigationBar :title="state.navigationBarTitle"></navigationBar>
@@ -217,10 +231,10 @@ import _apiCouponServiceJs from '@/service/api/newretail/couponService'
 import cardtop from '@/utils/newretail/image/cardtop.png'
 // import { onLoad, onReady, onShow, onHide, onUnload, onPullDownRefresh, onReachBottom, onShareAppMessage } from "@dcloudio/uni-app";
 import { reactive } from 'vue'
-import couponItem from '@/pages-sub/newretail/components/coupon/coupon-item4/coupon-item.vue';
-import couponReceive from '@/pages-sub/newretail/components/coupon/coupon-receive/coupon-receive.vue';
-import timeout from '@/pages-sub/newretail/components/order/timeout/timeout.vue';
-import popup from '@/pages-sub/newretail/components/popup/popup.vue';
+import couponItem from '@/pages-sub/newretail/components/coupon/coupon-item4/coupon-item.vue'
+import couponReceive from '@/pages-sub/newretail/components/coupon/coupon-receive/coupon-receive.vue'
+import timeout from '@/pages-sub/newretail/components/order/timeout/timeout.vue'
+import popup from '@/pages-sub/newretail/components/popup/popup.vue'
 const app = getApp()
 
 // pages/couponDetails/couponDetails.js
@@ -286,7 +300,10 @@ const state = reactive({
   hasUserInfo: false,
   isMember: false,
   themeColor: themeManager ? themeManager.color : uni.getStorageSync('themeColor'),
-  theme: themeManager,
+  theme: {
+    mainBgColor: 'background: #FF9F43;',
+    color: themeManager ? themeManager.color : uni.getStorageSync('themeColor') || '#FF9F43',
+  },
   isClick: true,
   showTimeout: false,
   show: {
@@ -298,9 +315,10 @@ const state = reactive({
   writeOffBizBill: '',
   hasBizBill: false,
 })
+let _options = {}
 function showCouponDetail() {
-  if (options.isExternal) {
-    const isExternal = JSON.parse(options.isExternal)
+  if (_options.isExternal) {
+    const isExternal = JSON.parse(_options.isExternal)
     if (isExternal) {
       // 外部券
       showExternalCouponDetails()
@@ -311,9 +329,8 @@ function showCouponDetail() {
   }
 }
 function showInsideCouponDetails() {
-  const that = this
   const postData = {
-    cardNumEquals: options.couponId,
+    cardNumEquals: _options.couponId,
     pages: 1,
     pageSize: 10,
   }
@@ -371,8 +388,7 @@ function showInsideCouponDetails() {
     })
 }
 function showExternalCouponDetails() {
-  const that = this
-  const couponData = JSON.parse(options.coupon)
+  const couponData = JSON.parse(_options.coupon)
   let tempData = {
     ...couponData,
     name: couponData.couponActivityName,
@@ -423,7 +439,6 @@ function showExternalCouponDetails() {
 }
 function showCouponActivity(activityId) {
   state.isExternal = false
-  const that = this
   couponService
     .getById(activityId)
     .then((res) => {
@@ -476,7 +491,7 @@ function showCouponActivity(activityId) {
             state.loading = false
           }
         } else {
-          const id = options.couponId
+          const id = _options.couponId
           const postData = {
             cardNumEquals: id,
             pages: 1,
@@ -550,7 +565,6 @@ function showCouponActivity(activityId) {
     })
 }
 function showExternalActivity(item) {
-  const that = this
   console.log(item)
   const couponData = item
   let tempData = {
@@ -598,8 +612,7 @@ function showExternalActivity(item) {
   state.isExternal = true
 }
 function getCouponDetails(activityId) {
-  const that = this
-  if (options.type === 'assign') {
+  if (_options.type === 'assign') {
     // 领券详情
     // 如果已知不是外部券
     if (options.isExternal === 'false') {
@@ -655,10 +668,10 @@ function codeTextPartition(val) {
 function toIndex() {
   NAVPAGE.toHome()
 }
-onLoad(function (_options) {
-  console.log(_options, 'optionsoptions')
-  const self = this
-  if (_options.type !== 'assign') {
+onLoad(function (options) {
+  console.log(options, 'optionsoptions')
+  _options = options
+  if (options.type !== 'assign') {
     uni.hideShareMenu()
   } else {
     state.isExternal = _options.isExternal == 'true'
@@ -719,16 +732,18 @@ onLoad(function (_options) {
     state.hasUserInfo = true
     state.member = app.globalData.userInfo.member
   }
-  if (_options.scene) {
+  if (options.scene) {
     state.isExternal = true
     state.type = 'assign'
-    showCouponActivity(_options.scene)
+    showCouponActivity(options.scene)
   }
 })
 onReady(function () {})
 onShow(function () {
   // 获取用户信息
-  state.theme = {
+  // 初始化 theme，确保 timeout 组件可以访问
+  if (!state.theme || !state.theme.mainBgColor) {
+    state.theme = {
     color:
       app.globalData.uiconfig && app.globalData.uiconfig.themeColor != null
         ? app.globalData.uiconfig.themeColor
@@ -772,6 +787,7 @@ onShow(function () {
         ? 'background-color: ' + colorRgba(app.globalData.uiconfig.themeColor, 0.1) + ';'
         : 'background-color:rgba(255,159,67, 0.1);',
   }
+  }
   state.themeColor =
     app && app.globalData && app.globalData.uiconfig && app.globalData.uiconfig.themeColor
       ? app.globalData.uiconfig.themeColor
@@ -814,7 +830,6 @@ function getSharePictures() {
     })
 }
 function toAssign(val) {
-  const self = this
   const currentCoupon = state.coupon
   // 外部券没有库存
   if (currentCoupon.balance == null || currentCoupon.balance > 0) {
@@ -875,7 +890,6 @@ function toAssign(val) {
   }
 }
 function createCouponOrder(coupon) {
-  const self = this
   let serviceType = 'GM' // 券服务类型默认为内部券（GM）
   let couponActivityId = coupon.id
   if (coupon.service === 'HD' || coupon.service === 'ZJIAN') {
@@ -910,7 +924,7 @@ function createCouponOrder(coupon) {
         }
         if (res.price === 0 && coupon.score && coupon.score > 0) {
           // 积分换券
-          getOrderStatusById(res.id, self)
+          getOrderStatusById(res.id)
         } else {
           couponWXPay(postData)
         }
@@ -935,7 +949,6 @@ function createCouponOrder(coupon) {
     })
 }
 function couponAssign(activityId) {
-  const self = this
   const postData = {
     activityId,
   }
@@ -974,7 +987,6 @@ function couponAssign(activityId) {
     })
 }
 function couponWXPay(postData) {
-  const that = this
   orderService
     .getCashPaySign(postData)
     .then((res) => {
@@ -999,7 +1011,7 @@ function couponWXPay(postData) {
         signType: sign.signType,
         paySign: sign.paySign,
         success: function (res) {
-          getOrderStatusById(postData.orderId, that)
+          getOrderStatusById(postData.orderId)
         },
         fail: function (res) {
           console.log(res)
@@ -1042,7 +1054,7 @@ function couponWXPay(postData) {
       }
     })
 }
-function handleGetOrderStatusById(orderId, amount, self) {
+function handleGetOrderStatusById(orderId, amount) {
   uni.showLoading({
     title: '支付中',
   })
@@ -1055,62 +1067,48 @@ function handleGetOrderStatusById(orderId, amount, self) {
       console.log(amount)
       if (amount > 40) {
         utils.setHideLoading(false)
-        self.setData({
-          hasAssign: false,
-        })
+        state.hasAssign = false
         uni.hideLoading()
         // 弹出支付超时
-        self.setData({
-          showTimeout: true,
-        })
+        state.showTimeout = true
         return
       }
       if (result.status === 'ACQUIRE') {
         utils.setHideLoading(false)
         uni.hideLoading()
         utils.showToast('领券成功,稍后请到我的优惠券中查看~')
-        self.setData({
-          hasAssign: false,
-        })
+        state.hasAssign = false
         // 查询未使用券
-        self.queryCoupon()
+        queryCouponFlow(state.coupon.cardNum)
       } else if (result.status === 'ACQUIREFAILED') {
         utils.setHideLoading(false)
         uni.hideLoading()
         // 弹出支付超时
-        self.setData({
-          showTimeout: true,
-        })
-        self.setData({
-          hasAssign: false,
-        })
+        state.showTimeout = true
+        state.hasAssign = false
       } else {
         const orderTimeId = setTimeout(() => {
           utils.setHideLoading(true)
           // 如果没有成功，调用函数本身，实现重复查询
-          self.handleGetOrderStatusById(orderId, amount, self)
+          handleGetOrderStatusById(orderId, amount)
         }, 2000)
-        self.setData({
-          orderTimeId,
-        })
+        state.orderTimeId = orderTimeId
       }
     })
     .catch((err) => {
       utils.showToast(err.message)
     })
 }
-function getOrderStatusById(orderId, self) {
+function getOrderStatusById(orderId) {
   const amount = 0
-  // self.handleGetOrderStatusById(orderId, amount, self);
   setTimeout(() => {
-    self.handleGetOrderStatusById(orderId, amount, self)
+    handleGetOrderStatusById(orderId, amount)
   }, 1000)
 }
 function timeoutPopupClose() {
   state.showTimeout = false
 }
 function getCouponPackageDetails(id) {
-  const self = this
   couponService
     .getPackageById(id)
     .then((res) => {
@@ -1198,7 +1196,6 @@ function getCouponPackageDetails(id) {
 }
 function handleUserLogin() {
   console.log(app.globalData.userInfo)
-  const self = this
   if (app.globalData.userInfo) {
     const user = app.globalData.userInfo
     state.userInfo = {
@@ -1222,10 +1219,9 @@ function handlePopupPhone() {
 }
 function handleBindPhone(e) {
   console.log(e.detail)
-  const that = this
   if (e.detail.bindMobile === true) {
     handlePopupPhone()
-    getCouponDetails(options.couponActivityId)
+    getCouponDetails(_options.couponActivityId)
     if (app.globalData.userInfo.member) {
       state.hasUserInfo = true
       state.member = app.globalData.userInfo.member
@@ -1233,7 +1229,6 @@ function handleBindPhone(e) {
   }
 }
 function queryExternalCoupons() {
-  const that = this
   const postData = {
     memberId: state.member.id,
     state: 'OPEN',
@@ -1247,7 +1242,7 @@ function queryExternalCoupons() {
       if (res && res.records.length > 0) {
         res.records.forEach((item) => {
           if (item.status === 'OPEN') {
-            if (item.couponActivityId == options.couponActivityId) {
+            if (item.couponActivityId == _options.couponActivityId) {
               // clearInterval(selfTime)
               uni.showToast({
                 title: '领券成功',
@@ -1308,19 +1303,17 @@ function getUserInfo(e) {
     })
 }
 function getScoreProductDetails(productId) {
-  const that = this
   scoreProductService
     .getScoreProductById(productId)
     .then((response) => {
-      const self = this
       console.log(response)
       if (response.couponActivity === null) {
         return
       }
       state.scoreProduct = response
-      const isExternal = JSON.parse(options.isExternal)
+      const isExternal = JSON.parse(_options.isExternal)
       if (isExternal) {
-        const item = JSON.parse(options.couponData)
+        const item = JSON.parse(_options.couponData)
         showExternalActivity(item)
       } else {
         showCouponActivity(response.couponActivity.id)
@@ -1329,7 +1322,6 @@ function getScoreProductDetails(productId) {
     .catch((err) => {})
 }
 function toUseCoupon() {
-  const that = this
   if (!state.isClick) return false
   state.isClick = false
   if (state.type === 'score') {
@@ -1373,8 +1365,8 @@ function toUseCoupon() {
     }
     return
   }
-  couponService
-    .queryByCouponActivityId(1, 10, options.couponActivityId, state.storeId)
+    couponService
+    .queryByCouponActivityId(1, 10, _options.couponActivityId, state.storeId)
     .then((res) => {
       console.log(res)
       if (!res || !res.records || res.records.length === 0) {
@@ -1403,7 +1395,7 @@ function toUseCoupon() {
       } else {
         state.isClick = true
         const opts =
-          '?couponActivityId=' + options.couponActivityId + '&couponName=' + state.coupon.name
+          '?couponActivityId=' + _options.couponActivityId + '&couponName=' + state.coupon.name
         NAVPAGE.toGoodsList(opts)
       }
     })

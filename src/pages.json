@@ -334,6 +334,10 @@
           "backButtonIcon": null
         }
       }
+    },
+    {
+      "path": "pages/template/addCart/addCart",
+      "type": "page"
     }
   ],
   "subPackages": [
@@ -2269,261 +2273,128 @@
       ]
     },
     {
-      "root": "pages-sub/newretail",
+      "root": "pages-sub/newretail/pages/mallModule",
       "pages": [
         {
-          "path": "pages/logs/logs",
+          "path": "advertising/advertising",
           "type": "page"
         },
         {
-          "path": "pages/customerService/customerService/customerService",
+          "path": "creditCard/creditCard",
           "type": "page"
         },
         {
-          "path": "pages/mallModule/advertising/advertising",
+          "path": "invite/invite",
           "type": "page"
         },
         {
-          "path": "pages/mallModule/creditCard/creditCard",
+          "path": "preview/index",
           "type": "page"
         },
         {
-          "path": "pages/mallModule/invite/invite",
+          "path": "qiyu/index",
           "type": "page"
         },
         {
-          "path": "pages/mallModule/preview/index",
+          "path": "shareShopcart/shareShopcart",
           "type": "page"
         },
         {
-          "path": "pages/mallModule/qiyu/index",
+          "path": "sysNotice/sysNotice",
           "type": "page"
         },
         {
-          "path": "pages/mallModule/shareShopcart/shareShopcart",
+          "path": "activity/advanceSell/advanceSell",
           "type": "page"
         },
         {
-          "path": "pages/mallModule/sysNotice/sysNotice",
+          "path": "activity/assistanceCoupon/assistanceCoupon",
           "type": "page"
         },
         {
-          "path": "pages/memberModule/bindMobile/bindMobile",
+          "path": "activity/cycle/cycle",
           "type": "page"
         },
         {
-          "path": "pages/memberModule/index/index",
+          "path": "activity/luckDraw/luckDraw",
           "type": "page"
         },
         {
-          "path": "pages/memberModule/myCard/myCard",
+          "path": "activity/newmbrActivity/newmbrActivity",
           "type": "page"
         },
         {
-          "path": "pages/memberModule/qiyu/index",
+          "path": "activity/scoreRaffle/scoreRaffle",
           "type": "page"
         },
         {
-          "path": "pages/memberModule/score/score",
+          "path": "activity/seckill/seckill",
           "type": "page"
         },
         {
-          "path": "pages/memberModule/selectStore/selectStore",
+          "path": "bargain/bargainAddOrder/bargainAddOrder",
           "type": "page"
         },
         {
-          "path": "pages/wxfaceapp/index/index",
+          "path": "bargain/bargainDetails/bargainDetails",
           "type": "page"
         },
         {
-          "path": "pages/wxfaceapp/payment/payment",
+          "path": "bargain/bargainList/bargainList",
           "type": "page"
         },
         {
-          "path": "pages/mall/solitaire/solitaireDetails/solitaireDetails",
+          "path": "bargain/helpBargain/helpBargain",
           "type": "page"
         },
         {
-          "path": "pages/mall/solitaire/solitaireList/solitaireList",
+          "path": "bargain/myBargain/myBargain",
           "type": "page"
         },
         {
-          "path": "pages/mallModule/activity/advanceSell/advanceSell",
+          "path": "benefitPlan/grantSign/grantSign",
           "type": "page"
         },
         {
-          "path": "pages/mallModule/activity/assistanceCoupon/assistanceCoupon",
+          "path": "benefitPlan/myTourism/myTourism",
           "type": "page"
         },
         {
-          "path": "pages/mallModule/activity/cycle/cycle",
+          "path": "benefitPlan/routeEvaluation/routeEvaluation",
           "type": "page"
         },
         {
-          "path": "pages/mallModule/activity/luckDraw/luckDraw",
+          "path": "benefitPlan/tourismPlan/tourismPlan",
           "type": "page"
         },
         {
-          "path": "pages/mallModule/activity/newmbrActivity/newmbrActivity",
+          "path": "benefitPlan/tourismPlanDetail/tourismPlanDetail",
           "type": "page"
         },
         {
-          "path": "pages/mallModule/activity/scoreRaffle/scoreRaffle",
+          "path": "benefitPlan/welfareMember/welfareMember",
           "type": "page"
         },
         {
-          "path": "pages/mallModule/activity/seckill/seckill",
+          "path": "benefitPlan/welfarePlan/welfarePlan",
           "type": "page"
         },
         {
-          "path": "pages/mallModule/bargain/bargainAddOrder/bargainAddOrder",
+          "path": "benefitPlan/welfarePlanSearch/welfarePlanSearch",
           "type": "page"
         },
         {
-          "path": "pages/mallModule/bargain/bargainDetails/bargainDetails",
+          "path": "coupon/choiceCoupon/choiceCoupon",
           "type": "page"
         },
         {
-          "path": "pages/mallModule/bargain/bargainList/bargainList",
+          "path": "coupon/choiceCouponMore/choiceCouponMore",
           "type": "page"
         },
         {
-          "path": "pages/mallModule/bargain/helpBargain/helpBargain",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/bargain/myBargain/myBargain",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/benefitPlan/grantSign/grantSign",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/benefitPlan/myTourism/myTourism",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/benefitPlan/routeEvaluation/routeEvaluation",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/benefitPlan/tourismPlan/tourismPlan",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/benefitPlan/tourismPlanDetail/tourismPlanDetail",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/benefitPlan/welfareMember/welfareMember",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/benefitPlan/welfarePlan/welfarePlan",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/benefitPlan/welfarePlanSearch/welfarePlanSearch",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/coupon/choiceCoupon/choiceCoupon",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/coupon/choiceCouponMore/choiceCouponMore",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/coupon/couponCenter/couponCenter",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/coupon/couponDetails/couponDetails",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/coupon/couponHistory/couponHistory",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/coupon/exchangeCoupon/exchangeCoupon",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/coupon/myCoupon/myCoupon",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/distribution/apply/apply",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/distribution/myDistribution/myDistribution",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/distribution/profit/profit",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/distribution/rankingList/rankingList",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/distribution/teamList/teamList",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/fightGroup/fightGroup/fightGroup",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/fightGroup/groupPurchase/groupPurchase",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/fightGroup/teamList/teamList",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/florist/serviceList/serviceList",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/goods/flowerDetail/index",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/goods/goodsComment/goodsComment",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/goods/goodsDetail/goodsDetail",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/goods/goodsList/goodsList",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/goods/newGoods/newGoods",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/goods/packaging/packaging",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/goods/search/search",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/index/index/index",
+          "path": "coupon/couponCenter/couponCenter",
           "type": "page",
-          "needLogin": true,
-          "layout": "default",
+          "layout": "default-newretail",
           "style": {
             "navigationStyle": "custom",
             "mp-alipay": {
@@ -2534,262 +2405,9 @@
           }
         },
         {
-          "path": "pages/mallModule/index/selectAddress/selectAddress",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/index/selectStore/selectStore",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/liveplay/showDetails/showDetails",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/liveplay/showList/showList",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/member/agreement/agreement",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/member/authorize/authorize",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/member/benefits/benefits",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/member/bindMobile/bindMobile",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/member/feedback/feedback",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/member/grade/grade",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/member/mealCard/mealCard",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/member/mealCardDetails/mealCardDetails",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/member/memberInfo/memberInfo",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/member/payment/payment",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/member/salesclerkViewing/salesclerkViewing",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/member/scoreVip/scoreVip",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/member/share/share",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/member/sign/index",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/member/system/system",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/member/vip/vip",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/member/vipPay/vipPay",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/miniAppLiveplay/showList/showList",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/myCard/balance/balance",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/myCard/memberCard/memberCard",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/myCard/recharge/recharge",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/myCard/resetPassword/resetPassword",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/myCard/topUp/topUp",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/myCard/topUpRecord/topUpRecord",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/order/addRemarks/addRemarks",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/order/evaluate/evaluate",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/order/invoice/invoice",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/order/logisticsInfo/logisticsInfo",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/order/logisticsInfoItem/logisticsInfoItem",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/order/meituan/orderMeituan",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/order/moneyGoing/moneyGoing",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/order/offlineOrderDetails/offlineOrderDetails",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/order/order/order",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/order/orderDetails/orderDetails",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/order/orderTrajectory/orderTrajectory",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/order/perfectOrder/perfectOrder",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/order/pickup/pickup",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/order/pickupResult/pickupResult",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/order/qiyu/index",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/order/queryGoods/queryGoods",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/order/refund/refund",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/order/refundAddDetails/refundAddDetails",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/order/refundDetails/refundDetails",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/order/refundList/refundList",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/order/waitPay/waitPay",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/pay/pay/pay",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/pay/payment/payment",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/pay/payMethod/payMethod",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/recommend/details/details",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/recommend/my/my",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/recommend/release/release",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/recommend/square/square",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/score/score/score",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/score/scoreAddOrder/scoreAddOrder",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/score/scoreMall/scoreMall",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/score/scoreMall copy/scoreMall",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/score/scoreOrder/scoreOrder",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/score/selectStore/selectStore",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/score/thirdCouponCode/thirdCouponCode",
-          "type": "page"
-        },
-        {
-          "path": "pages/mallModule/store-detail/storeDetail/storeDetail",
+          "path": "coupon/couponDetails/couponDetails",
           "type": "page",
-          "needLogin": true,
-          "layout": "default",
+          "layout": "default-newretail",
           "style": {
             "navigationStyle": "custom",
             "mp-alipay": {
@@ -2800,163 +2418,658 @@
           }
         },
         {
-          "path": "pages/mallModule/tabbar/my/my",
+          "path": "coupon/couponHistory/couponHistory",
+          "type": "page",
+          "layout": "default-newretail",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "coupon/exchangeCoupon/exchangeCoupon",
+          "type": "page",
+          "layout": "default-newretail",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "coupon/myCoupon/myCoupon",
+          "type": "page",
+          "layout": "default-newretail",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "distribution/apply/apply",
           "type": "page"
         },
         {
-          "path": "pages/mallModule/tabbar/selfLifting/selfLifting",
+          "path": "distribution/myDistribution/myDistribution",
           "type": "page"
         },
         {
-          "path": "pages/mallModule/tabbar/shopcart/shopcart",
+          "path": "distribution/profit/profit",
           "type": "page"
         },
         {
-          "path": "pages/mallModule/template/addCart/addCart",
+          "path": "distribution/rankingList/rankingList",
           "type": "page"
         },
         {
-          "path": "pages/mallModule/treaty/clause/clause",
+          "path": "distribution/teamList/teamList",
           "type": "page"
         },
         {
-          "path": "pages/mallModule/treaty/policy/policy",
+          "path": "fightGroup/fightGroup/fightGroup",
           "type": "page"
         },
         {
-          "path": "pages/memberModule/balance/balancePay/balancePay",
+          "path": "fightGroup/groupPurchase/groupPurchase",
           "type": "page"
         },
         {
-          "path": "pages/memberModule/balance/balancePayList/balancePayList",
+          "path": "fightGroup/teamList/teamList",
           "type": "page"
         },
         {
-          "path": "pages/memberModule/balance/changeBalancePass/changeBalancePass",
+          "path": "florist/serviceList/serviceList",
           "type": "page"
         },
         {
-          "path": "pages/memberModule/balance/storedValue/storedValue",
+          "path": "goods/flowerDetail/index",
           "type": "page"
         },
         {
-          "path": "pages/memberModule/giftCard/bindGiftCard/bindGiftCard",
+          "path": "goods/goodsComment/goodsComment",
           "type": "page"
         },
         {
-          "path": "pages/memberModule/giftCard/buyHistory/buyHistory",
+          "path": "goods/goodsDetail/goodsDetail",
           "type": "page"
         },
         {
-          "path": "pages/memberModule/giftCard/cardBuyResult/cardBuyResult",
+          "path": "goods/goodsList/goodsList",
           "type": "page"
         },
         {
-          "path": "pages/memberModule/giftCard/choiceGiftCard/choiceGiftCard",
+          "path": "goods/newGoods/newGoods",
           "type": "page"
         },
         {
-          "path": "pages/memberModule/giftCard/choiceGiftCard copy/choiceGiftCard",
+          "path": "goods/packaging/packaging",
           "type": "page"
         },
         {
-          "path": "pages/memberModule/giftCard/giftCard/giftCard",
+          "path": "goods/search/search",
+          "type": "page",
+          "layout": "default-newretail",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "index/index/index",
+          "type": "page",
+          "layout": "default-newretail",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "index/selectAddress/selectAddress",
           "type": "page"
         },
         {
-          "path": "pages/memberModule/giftCard/giftCardBuy/giftCardBuy",
+          "path": "index/selectStore/selectStore",
           "type": "page"
         },
         {
-          "path": "pages/memberModule/giftCard/giftCardDetails/giftCardDetails",
+          "path": "liveplay/showDetails/showDetails",
           "type": "page"
         },
         {
-          "path": "pages/memberModule/giftCard/giftCardPayQR/giftCardPayQR",
+          "path": "liveplay/showList/showList",
           "type": "page"
         },
         {
-          "path": "pages/memberModule/giftCard/giftCardPaysuccess/giftCardPaysuccess",
+          "path": "member/agreement/agreement",
           "type": "page"
         },
         {
-          "path": "pages/memberModule/giftCard/giveState/giveState",
+          "path": "member/authorize/authorize",
+          "type": "page",
+          "layout": "default-newretail",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "member/benefits/benefits",
           "type": "page"
         },
         {
-          "path": "pages/memberModule/giftCard/myGiftCard/myGiftCard",
+          "path": "member/bindMobile/bindMobile",
           "type": "page"
         },
         {
-          "path": "pages/memberModule/giftCard/storeList/storeList",
+          "path": "member/feedback/feedback",
           "type": "page"
         },
         {
-          "path": "pages/memberModule/giftCard/useNeedKnow/useNeedKnow",
+          "path": "member/grade/grade",
           "type": "page"
         },
         {
-          "path": "pages/mallModule/activity/lottery/helpLottery/helpLottery",
+          "path": "member/mealCard/mealCard",
           "type": "page"
         },
         {
-          "path": "pages/mallModule/activity/lottery/lotteryIndex/lotteryIndex",
+          "path": "member/mealCardDetails/mealCardDetails",
           "type": "page"
         },
         {
-          "path": "pages/mallModule/activity/lottery/myLottery/myLottery",
+          "path": "member/memberInfo/memberInfo",
           "type": "page"
         },
         {
-          "path": "pages/mallModule/activity/penny/goodsDetail/goodsDetail",
+          "path": "member/payment/payment",
           "type": "page"
         },
         {
-          "path": "pages/mallModule/activity/penny/helpPenny/helpPenny",
+          "path": "member/salesclerkViewing/salesclerkViewing",
           "type": "page"
         },
         {
-          "path": "pages/mallModule/activity/penny/pennyList/pennyList",
+          "path": "member/scoreVip/scoreVip",
           "type": "page"
         },
         {
-          "path": "pages/mallModule/member/address/addAddress/addAddress",
+          "path": "member/share/share",
           "type": "page"
         },
         {
-          "path": "pages/mallModule/member/address/addAddressOrder/addAddress",
+          "path": "member/sign/index",
           "type": "page"
         },
         {
-          "path": "pages/mallModule/member/address/addressList/addressList",
+          "path": "member/system/system",
           "type": "page"
         },
         {
-          "path": "pages/mallModule/member/authorize/authorize/authorize",
+          "path": "member/vip/vip",
           "type": "page"
         },
         {
-          "path": "pages/mallModule/member/shoppingGuide/applyInfo/applyInfo",
+          "path": "member/vipPay/vipPay",
           "type": "page"
         },
         {
-          "path": "pages/mallModule/member/shoppingGuide/cashout/cashout",
+          "path": "miniAppLiveplay/showList/showList",
           "type": "page"
         },
         {
-          "path": "pages/mallModule/member/shoppingGuide/goods/goods",
+          "path": "myCard/balance/balance",
           "type": "page"
         },
         {
-          "path": "pages/mallModule/member/shoppingGuide/task/task",
+          "path": "myCard/memberCard/memberCard",
           "type": "page"
         },
         {
-          "path": "pages/mallModule/tabbar/category/category-list/category-list",
+          "path": "myCard/recharge/recharge",
           "type": "page"
         },
         {
-          "path": "pages/mallModule/tabbar/category/category-main/category-main",
+          "path": "myCard/resetPassword/resetPassword",
+          "type": "page"
+        },
+        {
+          "path": "myCard/topUp/topUp",
+          "type": "page"
+        },
+        {
+          "path": "myCard/topUpRecord/topUpRecord",
+          "type": "page"
+        },
+        {
+          "path": "order/addRemarks/addRemarks",
+          "type": "page"
+        },
+        {
+          "path": "order/evaluate/evaluate",
+          "type": "page"
+        },
+        {
+          "path": "order/invoice/invoice",
+          "type": "page"
+        },
+        {
+          "path": "order/logisticsInfo/logisticsInfo",
+          "type": "page"
+        },
+        {
+          "path": "order/logisticsInfoItem/logisticsInfoItem",
+          "type": "page"
+        },
+        {
+          "path": "order/meituan/orderMeituan",
+          "type": "page"
+        },
+        {
+          "path": "order/moneyGoing/moneyGoing",
+          "type": "page"
+        },
+        {
+          "path": "order/offlineOrderDetails/offlineOrderDetails",
+          "type": "page"
+        },
+        {
+          "path": "order/order/order",
+          "type": "page"
+        },
+        {
+          "path": "order/orderDetails/orderDetails",
+          "type": "page"
+        },
+        {
+          "path": "order/orderTrajectory/orderTrajectory",
+          "type": "page"
+        },
+        {
+          "path": "order/perfectOrder/perfectOrder",
+          "type": "page",
+          "layout": "default-newretail",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "order/pickup/pickup",
+          "type": "page"
+        },
+        {
+          "path": "order/pickupResult/pickupResult",
+          "type": "page"
+        },
+        {
+          "path": "order/qiyu/index",
+          "type": "page"
+        },
+        {
+          "path": "order/queryGoods/queryGoods",
+          "type": "page"
+        },
+        {
+          "path": "order/refund/refund",
+          "type": "page"
+        },
+        {
+          "path": "order/refundAddDetails/refundAddDetails",
+          "type": "page"
+        },
+        {
+          "path": "order/refundDetails/refundDetails",
+          "type": "page"
+        },
+        {
+          "path": "order/refundList/refundList",
+          "type": "page"
+        },
+        {
+          "path": "order/waitPay/waitPay",
+          "type": "page"
+        },
+        {
+          "path": "pay/pay/pay",
+          "type": "page"
+        },
+        {
+          "path": "pay/payment/payment",
+          "type": "page"
+        },
+        {
+          "path": "pay/payMethod/payMethod",
+          "type": "page"
+        },
+        {
+          "path": "recommend/details/details",
+          "type": "page"
+        },
+        {
+          "path": "recommend/my/my",
+          "type": "page"
+        },
+        {
+          "path": "recommend/release/release",
+          "type": "page"
+        },
+        {
+          "path": "recommend/square/square",
+          "type": "page"
+        },
+        {
+          "path": "score/score/score",
+          "type": "page"
+        },
+        {
+          "path": "score/scoreAddOrder/scoreAddOrder",
+          "type": "page"
+        },
+        {
+          "path": "score/scoreMall/scoreMall",
+          "type": "page",
+          "layout": "default-newretail",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "YES",
+              "defaultTitle": ""
+            },
+            "mp-weixin": {
+              "navigationStyle": "custom",
+              "titlePenetrate": "YES",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "score/scoreMall copy/scoreMall",
+          "type": "page"
+        },
+        {
+          "path": "score/scoreOrder/scoreOrder",
+          "type": "page"
+        },
+        {
+          "path": "score/selectStore/selectStore",
+          "type": "page"
+        },
+        {
+          "path": "score/thirdCouponCode/thirdCouponCode",
+          "type": "page"
+        },
+        {
+          "path": "store-detail/storeDetail/storeDetail",
+          "type": "page",
+          "layout": "default-newretail",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "tabbar/my/my",
+          "type": "page"
+        },
+        {
+          "path": "tabbar/selfLifting/selfLifting",
+          "type": "page"
+        },
+        {
+          "path": "tabbar/shopcart/shopcart",
+          "type": "page",
+          "layout": "default-newretail",
+          "style": {
+            "navigationStyle": "custom",
+            "mp-alipay": {
+              "transparentTitle": "always",
+              "titlePenetrate": "NO",
+              "defaultTitle": ""
+            }
+          }
+        },
+        {
+          "path": "template/addCart/addCart",
+          "type": "page"
+        },
+        {
+          "path": "treaty/clause/clause",
+          "type": "page"
+        },
+        {
+          "path": "treaty/policy/policy",
+          "type": "page"
+        },
+        {
+          "path": "activity/lottery/helpLottery/helpLottery",
+          "type": "page"
+        },
+        {
+          "path": "activity/lottery/lotteryIndex/lotteryIndex",
+          "type": "page"
+        },
+        {
+          "path": "activity/lottery/myLottery/myLottery",
+          "type": "page"
+        },
+        {
+          "path": "activity/penny/goodsDetail/goodsDetail",
+          "type": "page"
+        },
+        {
+          "path": "activity/penny/helpPenny/helpPenny",
+          "type": "page"
+        },
+        {
+          "path": "activity/penny/pennyList/pennyList",
+          "type": "page"
+        },
+        {
+          "path": "member/address/addAddress/addAddress",
+          "type": "page"
+        },
+        {
+          "path": "member/address/addAddressOrder/addAddress",
+          "type": "page"
+        },
+        {
+          "path": "member/address/addressList/addressList",
+          "type": "page"
+        },
+        {
+          "path": "member/authorize/authorize/authorize",
+          "type": "page"
+        },
+        {
+          "path": "member/shoppingGuide/applyInfo/applyInfo",
+          "type": "page"
+        },
+        {
+          "path": "member/shoppingGuide/cashout/cashout",
+          "type": "page"
+        },
+        {
+          "path": "member/shoppingGuide/goods/goods",
+          "type": "page"
+        },
+        {
+          "path": "member/shoppingGuide/task/task",
+          "type": "page"
+        },
+        {
+          "path": "tabbar/category/category-list/category-list",
+          "type": "page"
+        },
+        {
+          "path": "tabbar/category/category-main/category-main",
+          "type": "page"
+        }
+      ]
+    },
+    {
+      "root": "pages-sub/newretail/pages/memberModule",
+      "pages": [
+        {
+          "path": "bindMobile/bindMobile",
+          "type": "page"
+        },
+        {
+          "path": "index/index",
+          "type": "page"
+        },
+        {
+          "path": "myCard/myCard",
+          "type": "page"
+        },
+        {
+          "path": "qiyu/index",
+          "type": "page"
+        },
+        {
+          "path": "score/score",
+          "type": "page"
+        },
+        {
+          "path": "selectStore/selectStore",
+          "type": "page"
+        },
+        {
+          "path": "balance/balancePay/balancePay",
+          "type": "page"
+        },
+        {
+          "path": "balance/balancePayList/balancePayList",
+          "type": "page"
+        },
+        {
+          "path": "balance/changeBalancePass/changeBalancePass",
+          "type": "page"
+        },
+        {
+          "path": "balance/storedValue/storedValue",
+          "type": "page"
+        },
+        {
+          "path": "giftCard/bindGiftCard/bindGiftCard",
+          "type": "page"
+        },
+        {
+          "path": "giftCard/buyHistory/buyHistory",
+          "type": "page"
+        },
+        {
+          "path": "giftCard/cardBuyResult/cardBuyResult",
+          "type": "page"
+        },
+        {
+          "path": "giftCard/choiceGiftCard/choiceGiftCard",
+          "type": "page"
+        },
+        {
+          "path": "giftCard/choiceGiftCard copy/choiceGiftCard",
+          "type": "page"
+        },
+        {
+          "path": "giftCard/giftCard/giftCard",
+          "type": "page"
+        },
+        {
+          "path": "giftCard/giftCardBuy/giftCardBuy",
+          "type": "page"
+        },
+        {
+          "path": "giftCard/giftCardDetails/giftCardDetails",
+          "type": "page"
+        },
+        {
+          "path": "giftCard/giftCardPayQR/giftCardPayQR",
+          "type": "page"
+        },
+        {
+          "path": "giftCard/giftCardPaysuccess/giftCardPaysuccess",
+          "type": "page"
+        },
+        {
+          "path": "giftCard/giveState/giveState",
+          "type": "page"
+        },
+        {
+          "path": "giftCard/myGiftCard/myGiftCard",
+          "type": "page"
+        },
+        {
+          "path": "giftCard/storeList/storeList",
+          "type": "page"
+        },
+        {
+          "path": "giftCard/useNeedKnow/useNeedKnow",
+          "type": "page"
+        }
+      ]
+    },
+    {
+      "root": "pages-sub/newretail/pages/mall",
+      "pages": [
+        {
+          "path": "solitaire/solitaireDetails/solitaireDetails",
+          "type": "page"
+        },
+        {
+          "path": "solitaire/solitaireList/solitaireList",
+          "type": "page"
+        }
+      ]
+    },
+    {
+      "root": "pages-sub/newretail/pages/customerService",
+      "pages": [
+        {
+          "path": "customerService/customerService",
+          "type": "page"
+        }
+      ]
+    },
+    {
+      "root": "pages-sub/newretail/pages/wxfaceapp",
+      "pages": [
+        {
+          "path": "index/index",
+          "type": "page"
+        },
+        {
+          "path": "payment/payment",
           "type": "page"
         }
       ]
