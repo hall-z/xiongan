@@ -243,3 +243,11 @@ export const isMp4 = (val: string): boolean => {
   }
 }
 
+/**
+ * 格式化商品数量（已兑/总数）
+ */
+export const filterProductNum = (prizeCount: number | string, total: number | string): number => {
+  const count = Number(prizeCount) || 0
+  const totalNum = Number(total) || 0
+  return Math.min(count, totalNum)
+}

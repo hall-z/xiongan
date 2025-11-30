@@ -116,8 +116,7 @@ import cardbg5 from '@/utils/newretail/image/cardbg5.png'
 import cardbg3 from '@/utils/newretail/image/cardbg3.png'
 import _utilsThemeManager from '@/utils/newretail/themeManager'
 import _utilsImagesPathJs from '@/utils/newretail/imagesPath'
-// import { attached, ready } from "@dcloudio/uni-app";
-import { reactive , watch} from 'vue'
+import { reactive, watch, onMounted } from 'vue'
 // components/coupon-item/coupon-item.js
 const IMAGESPATH = _utilsImagesPathJs
 const THEME = _utilsThemeManager
@@ -138,18 +137,18 @@ const props = defineProps({
   externalStyle: String,
   type: String, // normal,assign
 })
-attached(function () {})
-ready(function () {
+const emit = defineEmits(['onClickCouponItem', 'toHome', 'toUseCoupon'])
+onMounted(() => {
   console.log(state.coupon)
 })
 function clickCouponItem(e) {
-  triggerEvent('onClickCouponItem', e.currentTarget.dataset)
+  emit('onClickCouponItem', { detail: e.currentTarget.dataset })
 }
 function toHome(e) {
-  triggerEvent('toHome', e.currentTarget.dataset)
+  emit('toHome', { detail: e.currentTarget.dataset })
 }
 function toUseCoupon(e) {
-  triggerEvent('toUseCoupon', e.currentTarget.dataset)
+  emit('toUseCoupon', { detail: e.currentTarget.dataset })
 }
 
 // Watch listeners converted from observers

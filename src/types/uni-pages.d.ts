@@ -24,14 +24,6 @@ interface NavigateToOptions {
        "/pages/shop/classify" |
        "/pages/shop/index" |
        "/pages/shop/shopSearch" |
-       "/pages/template/barcode" |
-       "/pages/template/bindMobile" |
-       "/pages/template/commentItem" |
-       "/pages/template/groupKillIcon" |
-       "/pages/template/searchAddress" |
-       "/pages/template/searchTemplate" |
-       "/pages/template/searchTemplate2" |
-       "/pages/template/teamItem" |
        "/pages/template/addCart/addCart" |
        "/pages-sub/serveMain/cardApplyFromType" |
        "/pages-sub/serveMain/cardApplyType" |

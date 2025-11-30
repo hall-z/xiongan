@@ -234,8 +234,7 @@ import pinkline from '@/utils/newretail/image/pinkline.png'
 import dateicon from '@/utils/newretail/image/dateicon.png'
 import _utilsThemeManager from '@/utils/newretail/themeManager'
 import _utilsImagesPathJs from '@/utils/newretail/imagesPath'
-// import { attached, ready } from "@dcloudio/uni-app";
-import { reactive } from 'vue'
+import { reactive, ref, onMounted } from 'vue'
 const app = getApp()
 
 // components/coupon/coupon-receive/coupon-receive.js
@@ -279,8 +278,10 @@ const props = defineProps({
   // 隐藏领取按钮
   showUseBtn: Boolean, // 隐藏使用按钮
 })
-attached(function () {})
-ready(function () {
+const emit = defineEmits(['couponClick', 'getUserInfo', 'assign', 'showCode'])
+const isExpand = ref(false)
+// 初始化 theme
+onMounted(function () {
   state.theme = {
     color:
       app.globalData.uiconfig && app.globalData.uiconfig.themeColor != null
@@ -327,21 +328,21 @@ ready(function () {
   }
 })
 function clickItem(e) {
-  triggerEvent('couponClick', e.currentTarget.dataset)
+  emit('couponClick', { detail: e.currentTarget.dataset })
 }
 function getUserInfo(e) {
   console.log(e)
-  triggerEvent('getUserInfo', e)
+  emit('getUserInfo', e)
 }
 function catchCoupon() {}
 function assign(e) {
-  triggerEvent('assign', e.currentTarget.dataset)
+  emit('assign', { detail: e.currentTarget.dataset })
 }
 function actionExpand(e) {
-  state.isExpand = !state.isExpand
+  isExpand.value = !isExpand.value
 }
 function showCouponCode(e) {
-  triggerEvent('showCode', e.currentTarget.dataset)
+  emit('showCode', { detail: e.currentTarget.dataset })
 }
 </script>
 <style scoped>

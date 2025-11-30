@@ -2,7 +2,8 @@ import { NAVIGATE_TYPE } from '@/enums/routerEnum'
 import { pages, subPackages, tabBar } from '@/pages.json'
 import { isH5 } from '@/utils/platform'
 import { Modal } from '@/utils/uniapi/prompt'
-import { isArray, isObject, isString } from 'lodash-es'
+// import { isArray, isObject, isString } from 'lodash-es'
+import { isArray, isObject, isString } from 'lodash'
 import qs from 'qs'
 
 /** 判断当前页面是否是tabbar页  */

@@ -1,3 +1,17 @@
+<route lang="json5" type="page">
+{
+  layout: 'default-newretail',
+  style: {
+    navigationStyle: 'custom',
+    'mp-alipay': {
+      transparentTitle: 'always',
+      titlePenetrate: 'YES',
+      defaultTitle: '',
+      titlePenetrate: 'NO',
+    },
+  },
+}
+</route>
 <template>
   <!-- pages/couponCenter/couponCenter.wxml -->
   <view>
@@ -183,13 +197,25 @@ import _apiMemberServiceJs from '@/service/api/newretail/memberService'
 import _apiHelpActivityServiceJs from '@/service/api/newretail/helpActivityService'
 import _apiBannerServiceJs from '@/service/api/newretail/bannerService'
 import _apiCouponServiceJs from '@/service/api/newretail/couponService'
-// import { onLoad, onReady, onShow, onHide, onUnload, onPullDownRefresh, onReachBottom, onShareAppMessage } from "@dcloudio/uni-app";
+import _apiShopcartServiceJs from '@/service/api/newretail/shopcartService'
+import _apiBackCashServiceJs from '@/service/api/newretail/backCashService'
+import _apiSystemServiceJs from '@/service/api/newretail/systemService'
+import {
+  onLoad,
+  onReady,
+  onShow,
+  onHide,
+  onUnload,
+  onPullDownRefresh,
+  onReachBottom,
+  onShareAppMessage,
+} from '@dcloudio/uni-app'
 import { reactive } from 'vue'
 import bus from 'iny-bus'
-import couponReceive from '@/pages-sub/newretail/components/coupon/coupon-receive/coupon-receive.vue';
-import popup from '@/pages-sub/newretail/components/popup/popup.vue';
-import authorize from '@/pages-sub/newretail/components/authorize/authorize.vue';
-import timeout from '@/pages-sub/newretail/components/order/timeout/timeout.vue';
+import couponReceive from '@/pages-sub/newretail/components/coupon/coupon-receive/coupon-receive.vue'
+import popup from '@/pages-sub/newretail/components/popup/popup.vue'
+import authorize from '@/pages-sub/newretail/components/authorize/authorize.vue'
+import timeout from '@/pages-sub/newretail/components/order/timeout/timeout.vue'
 const app = getApp()
 
 // pages/couponCenter/couponCenter.js
@@ -198,6 +224,9 @@ const bannerService = _apiBannerServiceJs
 const helpActivityService = _apiHelpActivityServiceJs
 const memberService = _apiMemberServiceJs
 const orderService = _apiOrderServiceJs
+const shopcartService = _apiShopcartServiceJs
+const backCashService = _apiBackCashServiceJs
+const sysService = _apiSystemServiceJs
 const request = _apiRequestJs
 const utils = _utilsUtilsJs
 const ADDRESS = _utilsAddressJs
@@ -245,6 +274,17 @@ const state = reactive({
   },
   activityId: '',
   assignCoupon: {},
+  theme: {
+    color: '#FF9F43',
+    mainColor: 'color: #FF9F43;',
+    mainBgColor: 'background: #FF9F43;',
+    borderColor: 'border-color: #FF9F43;',
+    mainBgGradient: 'background: linear-gradient(-270deg, #FF9F43, #F13327);',
+    mainColorRgb: 'color:rgba(255,159,67, 0.4);',
+    borderColorRgb: 'border-color:rgba(255,159,67, 0.4);',
+    mainColorRgb02: 'rgba(255,159,67, 0.2)',
+    BgColorRgb01: 'background-color:rgba(255,159,67, 0.1);',
+  },
 })
 const _data = {
   hasExternalCoupon: true,
@@ -256,7 +296,6 @@ onLoad(function (_options) {
     app && app.globalData && app.globalData.uiconfig && app.globalData.uiconfig.themeColor
       ? app.globalData.uiconfig.themeColor
       : uni.getStorageSync('themeColor')
-  const self = this
   let showExternalCouponActivity = false
   let isUseExternalCoupon = true
   // 查询系统配置项，根据系统配置项控制列表菜单显示
@@ -326,8 +365,8 @@ onLoad(function (_options) {
   if (pageStack.length === 1) {
     state.homeBack = true
   }
-  if (options.shareId && options.shareId != '' && options.shareId != undefined) {
-    const shareId = options.shareId
+  if (_options.shareId && _options.shareId != '' && _options.shareId != undefined) {
+    const shareId = _options.shareId
     try {
       uni.setStorageSync('wj_sharingId', shareId)
     } catch (e) {}
@@ -337,6 +376,23 @@ onLoad(function (_options) {
 })
 onReady(function () {})
 onShow(function () {
+  // 初始化 theme 对象
+  const themeColor = app && app.globalData && app.globalData.uiconfig && app.globalData.uiconfig.themeColor
+    ? app.globalData.uiconfig.themeColor
+    : uni.getStorageSync('themeColor') || '#FF9F43'
+  state.theme = {
+    color: themeColor,
+    mainColor: 'color: ' + themeColor + ';',
+    mainBgColor: 'background: ' + themeColor + ';',
+    borderColor: 'border-color: ' + themeColor + ';',
+    mainBgGradient: themeColor !== '#FF9F43'
+      ? 'background: linear-gradient(-270deg, ' + themeColor + ', ' + themeColor + ');'
+      : 'background: linear-gradient(-270deg, #FF9F43, #F13327);',
+    mainColorRgb: 'color:rgba(255,159,67, 0.4);',
+    borderColorRgb: 'border-color:rgba(255,159,67, 0.4);',
+    mainColorRgb02: 'rgba(255,159,67, 0.2)',
+    BgColorRgb01: 'background-color:rgba(255,159,67, 0.1);',
+  }
   if (app.globalData.storeInfo && app.globalData.storeInfo.id != state.currentStoreInfo.storeId) {
     console.log(app.globalData.storeInfo)
     state.currentStoreInfo = {
@@ -349,6 +405,65 @@ onShow(function () {
   // 获取用户信息
   state.middle = false
   checkUserInfo()
+  // 刷新用户信息
+  if (app.globalData.userInfo && app.globalData.userInfo.member) {
+    memberService.getLoginMember(false).then((res) => {
+      if (app.globalData.userInfo && app.globalData.userInfo.member) {
+        app.globalData.userInfo.member = {
+          ...app.globalData.userInfo.member,
+          ...res,
+        }
+      }
+    }).catch((err) => {
+      console.log('刷新会员信息失败:', err)
+    })
+    // 检查是否是导购员
+    if (app.globalData.userInfo.member && app.globalData.userInfo.member.id) {
+      backCashService.memberIsGuide(app.globalData.userInfo.member.id).then((res) => {
+        app.globalData.isShoppingGuide = res
+      }).catch((err) => {
+        console.log('查询是否是导购员失败:', err)
+      })
+    }
+    // 获取购物车数量
+    shopcartService.getProductsCount().then((res) => {
+      const tabBar = app.globalData.tabBar
+      if (tabBar && tabBar.list && tabBar.list.length > 0) {
+        tabBar.list.forEach((item) => {
+          if (item.pagePath && item.pagePath.indexOf('shopcart') > -1) {
+            item.badge = String(res)
+          }
+        })
+        app.globalData.tabBar = tabBar
+        if (app.globalData.editTabbar) {
+          app.globalData.editTabbar()
+        }
+      }
+      try {
+        uni.setStorageSync('wj_userProductsCount', res)
+      } catch (error) {
+        console.log('保存购物车数量失败:', error)
+      }
+    }).catch((err) => {
+      console.log('获取购物车数量失败:', err)
+    })
+  }
+  // 获取模板ID（如果还没获取过）
+  if (app.globalData.templateIdsQuery === 0 && app.globalData.userInfo && app.globalData.userInfo.member) {
+    sysService.getTemplateIds().then((res) => {
+      if (res) {
+        app.globalData.templateIdsQuery = 1
+        app.globalData.templateIds = res
+        uni.setStorage({
+          key: 'wj_templateIds',
+          data: res,
+        })
+      }
+    }).catch((err) => {
+      app.globalData.templateIdsQuery = 1
+      console.log('查询模板id失败:', err)
+    })
+  }
 })
 onHide(function () {})
 onUnload(function () {})
@@ -390,7 +505,6 @@ function getCouponList(page) {
   uni.showLoading({
     title: '加载中',
   })
-  const that = this
   // 有内部券，查询内部券活动
   if (_data.hasInternalCoupon) {
     const storeId = state.currentStoreInfo.storeId
@@ -453,7 +567,6 @@ function getCouponList(page) {
   }
 }
 function toCouponDetails(val) {
-  const that = this
   const tempCouponList = state.couponList
   const currentId = val.detail.couponid
   let currentCoupon = null
@@ -499,7 +612,6 @@ function toSelectStore() {
 }
 function handleUserLogin() {
   console.log(app.globalData.userInfo)
-  const that = this
   if (app.globalData.userInfo) {
     const user = app.globalData.userInfo
     state.userInfo = {
@@ -545,7 +657,6 @@ function getSharePictures() {
     })
 }
 function getExternalCouponActivities(page) {
-  const that = this
   if (isQueryExternalCoupon) {
     console.log('已经在查询外部券了')
     return
@@ -596,7 +707,6 @@ function getExternalCouponActivities(page) {
     })
 }
 function bannerJumping(e) {
-  const that = this
   const bannerId = e.currentTarget.dataset.id
   const bannerList = state.banners
   let advertisementInfo = null
@@ -608,7 +718,6 @@ function bannerJumping(e) {
   toAdPage(advertisementInfo, 'banner')
 }
 function toAdPage(pageInfo, pageType) {
-  const that = this
   if (pageInfo.linkType === 'APP') {
     // 应用
     // 判断跳转模块
@@ -808,7 +917,7 @@ function toAdPage(pageInfo, pageType) {
     const index = '?'
     let webUrl = url
     if (url.indexOf(index) > -1) {
-      webUrl = webUrl + '&storeId=' + state.storeId + '&type=normal'
+      webUrl = webUrl + '&storeId=' + state.currentStoreInfo.storeId + '&type=normal'
       if (app.globalData.TENANT && webUrl.indexOf('tenant') < 0) {
         webUrl = webUrl + '&tenant=' + app.globalData.TENANT
       }
@@ -828,7 +937,6 @@ function toAdPage(pageInfo, pageType) {
   }
 }
 function handleCoupon(val) {
-  const self = this
   const couponId = val.detail.couponid
   const couponList = state.couponList
   let currentCoupon = null
@@ -890,7 +998,6 @@ function handleCoupon(val) {
   }
 }
 function createCouponOrder(coupon) {
-  const self = this
   let serviceType = 'GM' // 券服务类型默认为内部券（GM）
   let couponActivityId = coupon.id
   if (coupon.service === 'HD' || coupon.service === 'ZJIAN') {
@@ -926,7 +1033,7 @@ function createCouponOrder(coupon) {
         }
         if (res.price === 0 && coupon.score && coupon.score > 0) {
           // 积分换券
-          getOrderStatusById(res.id, self)
+          getOrderStatusById(res.id)
         } else {
           couponWXPay(postData)
         }
@@ -949,7 +1056,6 @@ function createCouponOrder(coupon) {
     })
 }
 function couponAssign(coupon) {
-  const self = this
   const postData = {
     activityId: coupon.id,
   }
@@ -992,7 +1098,6 @@ function couponAssign(coupon) {
     })
 }
 function couponWXPay(postData) {
-  const that = this
   orderService
     .getCashPaySign(postData)
     .then((res) => {
@@ -1017,7 +1122,7 @@ function couponWXPay(postData) {
         signType: sign.signType,
         paySign: sign.paySign,
         success: function (res) {
-          getOrderStatusById(postData.orderId, that)
+          getOrderStatusById(postData.orderId)
         },
         fail: function (res) {
           console.log(res)
@@ -1060,7 +1165,7 @@ function couponWXPay(postData) {
       }
     })
 }
-function handleGetOrderStatusById(orderId, amount, self) {
+function handleGetOrderStatusById(orderId, amount) {
   uni.showLoading({
     title: '支付中',
   })
@@ -1073,12 +1178,10 @@ function handleGetOrderStatusById(orderId, amount, self) {
       console.log(amount)
       if (amount > 40) {
         utils.setHideLoading(false)
-        self._data.hasAssign = false
+        _data.hasAssign = false
         uni.hideLoading()
         // 弹出支付超时
-        self.setData({
-          showTimeout: true,
-        })
+        state.showTimeout = true
         return
       }
       if (result.status === 'ACQUIRE') {
@@ -1086,35 +1189,30 @@ function handleGetOrderStatusById(orderId, amount, self) {
         uni.hideLoading()
         bus.emit('userCouponChange', 'assign')
         utils.showToast('领券成功,稍后请到我的优惠券中查看~')
-        self._data.hasAssign = false
+        _data.hasAssign = false
       } else if (result.status === 'ACQUIREFAILED') {
         utils.setHideLoading(false)
         uni.hideLoading()
         // 弹出支付超时
-        self.setData({
-          showTimeout: true,
-        })
-        self._data.hasAssign = false
+        state.showTimeout = true
+        _data.hasAssign = false
       } else {
         const orderTimeId = setTimeout(() => {
           utils.setHideLoading(true)
           // 如果没有成功，调用函数本身，实现重复查询
-          self.handleGetOrderStatusById(orderId, amount, self)
+          handleGetOrderStatusById(orderId, amount)
         }, 2000)
-        self.setData({
-          orderTimeId,
-        })
+        state.orderTimeId = orderTimeId
       }
     })
     .catch((err) => {
       utils.showToast(err.message)
     })
 }
-function getOrderStatusById(orderId, self) {
+function getOrderStatusById(orderId) {
   const amount = 0
-  // self.handleGetOrderStatusById(orderId, amount, self);
   setTimeout(() => {
-    self.handleGetOrderStatusById(orderId, amount, self)
+    handleGetOrderStatusById(orderId, amount)
   }, 1000)
 }
 function timeoutPopupClose() {
@@ -1170,7 +1268,6 @@ function handleClosePopup() {
   }
 }
 function handleUseNow() {
-  const self = this
   couponService
     .queryByCouponActivityId(1, 10, state.activityId, state.currentStoreInfo.storeId)
     .then((res) => {

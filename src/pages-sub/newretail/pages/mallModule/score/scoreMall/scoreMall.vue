@@ -1,3 +1,21 @@
+<route lang="json5" type="page">
+{
+  layout: 'default-newretail',
+  style: {
+    navigationStyle: 'custom',
+    'mp-alipay': {
+      transparentTitle: 'always',
+      titlePenetrate: 'YES',
+      defaultTitle: '',
+    },
+    'mp-weixin': {
+      navigationStyle: 'custom',
+      titlePenetrate: 'YES',
+      defaultTitle: '',
+    },
+  },
+}
+</route>
 <template>
   <!-- pages/scoreMall/scoreMall.wxml -->
   <!-- banner 图片 -->
@@ -25,15 +43,15 @@
       </view>
     </view>
     <!-- 当前门店 -->
-    <view class="current-store-box" @click="toSelectStore">
+    <!-- <view class="current-store-box" @click="toSelectStore">
       <image :src="state.imagesPath.scoreStoreIcon"></image>
       <text>当前门店：{{ state.storeName }}</text>
       <image :src="state.imagesPath.iconRight1"></image>
-    </view>
+    </view> -->
     <!-- tabbar -->
     <view class="tab-box">
       <view class="tab-bar">
-        <view v-for="(item, index) in state.tabBarList" :key="index">
+        <template v-for="(item, index) in state.tabBarList" :key="index">
           <view
             v-if="item.show"
             :class="item.type === state.scoreProductType ? 'tab-bar-item active' : 'tab-bar-item'"
@@ -43,7 +61,7 @@
             <view class="item-name">{{ item.name }}</view>
             <view class="item-activity"></view>
           </view>
-        </view>
+        </template>
       </view>
       <!-- 切换展示图标 -->
       <view class="score-show-icon" @click="changeShowModel">
@@ -76,7 +94,7 @@
         :data-traceId="item.traceId"
       >
         <view class="goods-img-box">
-          <image :src="item.product.imageUrl" mode="widthFix"></image>
+          <image v-if="item.product" :src="item.product.imageUrl" mode="widthFix"></image>
           <image
             class="qiangguang"
             :hidden="item.total > 0 ? true : false"
@@ -89,7 +107,7 @@
             <!-- <view class="goods-introduce" wx:if="{{item.product.produtlabel.length > 0 || item.product.specifications}}">
           <text wx:for="{{item.product.produtlabel}}" wx:key="index" style="background:rgb({{item.color}})" wx:if="{{index < 3}}">{{item.labelName}}</text>
         </view> -->
-            <text class="name">{{ item.product.name }}</text>
+            <text class="name" v-if="item.product">{{ item.product.name }}</text>
           </view>
           <text class="goods-now-state">
             已兑：{{ filterProductNum(item.prizeCount, item.total) }}/{{ item.total }}
@@ -114,7 +132,9 @@
               <text
                 class="oldPrice"
                 v-if="
-                  item.product.originalPrice && item.product.sellPrice < item.product.originalPrice
+                  item.product &&
+                  item.product.originalPrice &&
+                  item.product.sellPrice < item.product.originalPrice
                 "
               >
                 ￥{{ item.originalPrice }}
@@ -132,6 +152,7 @@
                   v-if="
                     item.availableStockAmount !== 0 &&
                     item.total !== 0 &&
+                    item.product &&
                     item.product.balance !== 0
                   "
                   :class="state.score >= item.score ? 'enable' : 'unable'"
@@ -147,10 +168,10 @@
                   v-if="
                     item.availableStockAmount === 0 ||
                     item.total === 0 ||
-                    item.product.balance === 0
+                    (item.product && item.product.balance === 0)
                   "
                   class="unable"
-                  :data-goodsId="item.product.id"
+                  :data-goodsId="item.product && item.product.id"
                   :data-type="item.type"
                   :data-balance="item.total"
                   :data-traceId="item.traceId"
@@ -356,11 +377,11 @@
       class="loading-btn"
       :style="'color: ' + state.themeColor"
       :loading="state.loading"
-      :hidden="!state.loading"
+      v-show="state.loading"
     >
       正在加载...
     </button>
-    <view class="order-end" :hidden="!state.noMore">~我也是有底线的~</view>
+    <view class="order-end" v-show="state.noMore">~我也是有底线的~</view>
     <!-- 旧版兑换弹窗 积分礼券走这里 -->
     <popup
       :show="state.show.middle"
@@ -454,14 +475,21 @@
     >
       <view class="exchange-popup">
         <view class="e-p-goods">
-          <view class="ex-goods-left" v-if="state.scoreProductType === 'SCORE_PRODUCT_PRODUCT'">
+          <view
+            class="ex-goods-left"
+            v-if="
+              state.scoreProductType === 'SCORE_PRODUCT_PRODUCT' &&
+              state.selectGood &&
+              state.selectGood.product
+            "
+          >
             <image
               :src="state.selectGood.product.imageUrl"
               mode="widthFix"
               class="goods-img"
             ></image>
           </view>
-          <view class="ex-goods-right">
+          <view class="ex-goods-right" v-if="state.selectGood && state.selectGood.product">
             <view class="goods-title">{{ state.selectGood.product.name }}</view>
             <view class="goods-price">
               <text class="small-font">兑换价</text>
@@ -554,10 +582,11 @@ import _apiHelpActivityServiceJs from '@/service/api/newretail/helpActivityServi
 import _apiMemberServiceJs from '@/service/api/newretail/memberService'
 import _apiBannerServiceJs from '@/service/api/newretail/bannerService'
 import _apiScoreProductService from '@/service/api/newretail/scoreProductService'
+import * as filters from '@/utils/newretail/filters'
 // import { onLoad, onReady, onShow, onHide, onUnload, onPullDownRefresh, onReachBottom, onShareAppMessage } from "@dcloudio/uni-app";
 import { reactive } from 'vue'
-import popup from '@/pages-sub/newretail/components/popup/popup.vue';
-import authorize from '@/pages-sub/newretail/components/authorize/authorize.vue';
+import popup from '@/pages-sub/newretail/components/popup/popup.vue'
+import authorize from '@/pages-sub/newretail/components/authorize/authorize.vue'
 const app = getApp()
 
 // pages/scoreMall/scoreMall.js
@@ -602,6 +631,12 @@ const colorRgba = (sHex, alpha = 1) => {
     return sColor
   }
 }
+
+// Module-level variables for lifecycle management
+let changeStore = false
+let pageOnHide = false
+let options = {}
+
 const state = reactive({
   isCanBeOrdered: true,
   productNum: 1,
@@ -693,7 +728,7 @@ function handleClickTab(e) {
   state.goodsList = []
   state.couponList = []
   state.thirdPartycouponList = []
-  getScoreProduct(app.globalData.storeInfo.id, tabType)
+  getScoreProduct('', tabType)
 }
 function bannerJumping(e) {
   const that = this
@@ -968,7 +1003,7 @@ function hadnleGetScoreProduct(storeIdIn, type) {
   }
   const that = this
   const tempData = {
-    storeId: state.storeId,
+    // storeId: state.storeId,
     status: 'STARTED',
   }
   scoreProductService
@@ -989,7 +1024,7 @@ function hadnleGetScoreProduct(storeIdIn, type) {
         page: state.pageData.page,
         pageSize: state.pageData.pageSize,
         onlyActivited: true,
-        storeIdIn: storeIdIn.join(','),
+        // storeIdIn: storeIdIn.join(','),
         typeEquals: type || state.scoreProductType,
         statusEquals: 'ENABLE',
       }
@@ -1602,7 +1637,9 @@ function initPage(options) {
   }
   getBannerList(app.globalData.storeInfo.id)
 }
+
 onLoad(function (_options) {
+  options = _options || {}
   changeStore = false
   pageOnHide = false
   console.log(app.globalData, 'app.globalDataapp.globalDataapp.globalData')
@@ -1686,9 +1723,9 @@ onLoad(function (_options) {
     initPage(_options)
   } else {
     // 获取当前地理位置，然后筛选出最近的门店，根据当前门店获取门店的商品
-    ADDRESS.getLocation()
-      .then((res) => {
-        app.globalData.storeInfo = res
+    ADDRESS.getRecentlyStore()
+      .then(() => {
+        const res = app.globalData.storeInfo
         state.storeId = res.id
         state.storeName = res.name
         if (_options.link === 'score_coupon') {
@@ -1788,7 +1825,8 @@ onShareAppMessage(function () {
   } else {
     return {
       title: app.globalData.systemConfigure.miniprogramSharingName,
-      path: '/pages-sub/newretail/pages/mallModule/score/scoreMall/scoreMall?storeId=' + state.storeId,
+      path:
+        '/pages-sub/newretail/pages/mallModule/score/scoreMall/scoreMall?storeId=' + state.storeId,
       imageUrl: sharePictures,
       success(e) {},
     }

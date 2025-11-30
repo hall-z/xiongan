@@ -55,13 +55,21 @@ import _utilsAnalysisJs from "@/utils/newretail/analysis";
 import _libsMta_analysisJs from "@/libs/mta_analysis";
 import _utilsImagesPathJs from "@/utils/newretail/imagesPath";
 import _apiCouponServiceJs from "@/service/api/newretail/couponService";
-// import { onLoad, onReady, onShow, onHide, onUnload, onPullDownRefresh, onReachBottom, onShareAppMessage } from "@dcloudio/uni-app";
+import _apiMemberServiceJs from "@/service/api/newretail/memberService";
+import _apiShopcartServiceJs from "@/service/api/newretail/shopcartService";
+import _apiBackCashServiceJs from "@/service/api/newretail/backCashService";
+import _apiSystemServiceJs from "@/service/api/newretail/systemService";
+import { onLoad, onReady, onShow, onHide, onUnload, onPullDownRefresh, onReachBottom, onShareAppMessage } from "@dcloudio/uni-app";
 import { reactive } from "vue";
 import couponItem from '@/pages-sub/newretail/components/coupon/coupon-item4/coupon-item.vue';
 const app = getApp();
 
 // pages/choiceCoupon/choiceCoupon.js
 const couponService = _apiCouponServiceJs;
+const memberService = _apiMemberServiceJs;
+const shopcartService = _apiShopcartServiceJs;
+const backCashService = _apiBackCashServiceJs;
+const sysService = _apiSystemServiceJs;
 const IMGAGESPATH = _utilsImagesPathJs;
 const mta = _libsMta_analysisJs;
 const ANALYSIS = _utilsAnalysisJs;
@@ -97,7 +105,6 @@ function clickCouponItem(val) {
   couponClick(data);
 }
 function couponClick(val) {
-  let that = this;
   let id = val.currentTarget.dataset.id;
   console.log(id);
   //设置当前样式
@@ -115,8 +122,8 @@ function couponClick(val) {
     }
   }
 }
+let options = {};
 function toPerfectOrder() {
-  const that = this;
   let couponId = state.currentItem;
   let freeshipId = state.current;
   let chooseCouponData = [];
@@ -151,7 +158,6 @@ function toPerfectOrder() {
   }
 }
 function getAvailableCoupon(data) {
-  const that = this;
   let postData = {};
   let isQrPay = null;
   const orderType = options.orderType;
@@ -292,6 +298,7 @@ function getAvailableCoupon(data) {
 }
 onLoad(function (_options) {
   uni.hideShareMenu();
+  options = _options;
   console.log(options);
   let postData = app.globalData && app.globalData.couponOrderData ? app.globalData.couponOrderData : JSON.parse(options.orderData);
   let couponType = options.couponType;
@@ -307,7 +314,67 @@ onLoad(function (_options) {
   }
 });
 onReady(function () {});
-onShow(function () {});
+onShow(function () {
+  // 刷新用户信息
+  if (app.globalData.userInfo && app.globalData.userInfo.member) {
+    memberService.getLoginMember(false).then((res) => {
+      if (app.globalData.userInfo && app.globalData.userInfo.member) {
+        app.globalData.userInfo.member = {
+          ...app.globalData.userInfo.member,
+          ...res,
+        }
+      }
+    }).catch((err) => {
+      console.log('刷新会员信息失败:', err)
+    })
+    // 检查是否是导购员
+    if (app.globalData.userInfo.member && app.globalData.userInfo.member.id) {
+      backCashService.memberIsGuide(app.globalData.userInfo.member.id).then((res) => {
+        app.globalData.isShoppingGuide = res
+      }).catch((err) => {
+        console.log('查询是否是导购员失败:', err)
+      })
+    }
+    // 获取购物车数量
+    shopcartService.getProductsCount().then((res) => {
+      const tabBar = app.globalData.tabBar
+      if (tabBar && tabBar.list && tabBar.list.length > 0) {
+        tabBar.list.forEach((item) => {
+          if (item.pagePath && item.pagePath.indexOf('shopcart') > -1) {
+            item.badge = String(res)
+          }
+        })
+        app.globalData.tabBar = tabBar
+        if (app.globalData.editTabbar) {
+          app.globalData.editTabbar()
+        }
+      }
+      try {
+        uni.setStorageSync('wj_userProductsCount', res)
+      } catch (error) {
+        console.log('保存购物车数量失败:', error)
+      }
+    }).catch((err) => {
+      console.log('获取购物车数量失败:', err)
+    })
+  }
+  // 获取模板ID（如果还没获取过）
+  if (app.globalData.templateIdsQuery === 0 && app.globalData.userInfo && app.globalData.userInfo.member) {
+    sysService.getTemplateIds().then((res) => {
+      if (res) {
+        app.globalData.templateIdsQuery = 1
+        app.globalData.templateIds = res
+        uni.setStorage({
+          key: 'wj_templateIds',
+          data: res,
+        })
+      }
+    }).catch((err) => {
+      app.globalData.templateIdsQuery = 1
+      console.log('查询模板id失败:', err)
+    })
+  }
+});
 onHide(function () {});
 onUnload(function () {
   if (app && app.globalData && app.globalData.couponOrderData) {

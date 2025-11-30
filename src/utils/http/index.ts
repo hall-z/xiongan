@@ -8,7 +8,8 @@ import { checkStatus } from '@/utils/http/checkStatus'
 
 import { Constant } from '@/enums/constant'
 import { beforeQuest, responseAes } from '@/utils/aes/encryptUtils'
-import { assign } from 'lodash-es'
+// import { assign } from 'lodash-es'
+import { assign } from 'lodash'
 import { HideLoading, Loading } from '../uniapi/prompt'
 
 const timeOut = Constant.TOKEN_TIMEOUT_VALUE
