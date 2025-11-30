@@ -283,11 +283,11 @@
                         <text
                           class="nowPrice"><text>￥</text>{{state.goodTypeList[goodTypeIndex].orderType === 'CYCLE' && !item.giftProduct ? state.goodTypeList[goodTypeIndex].allPrice : item.sellPrice || '0'}}</text>
                         <text class="oldPrice"
-                          v-if="orderDetailGood[item.productId] && item.sellPrice < orderDetailGood[item.productId].sellPrice">￥{{orderDetailGood[item.productId].sellPrice}}</text>
+                          v-if="state.orderDetailGood[item.productId] && item.sellPrice < state.orderDetailGood[item.productId].sellPrice">￥{{state.orderDetailGood[item.productId].sellPrice}}</text>
                       </view>
                       <!-- <view class='goods-price' v-else>
                               <text class="nowPrice"><text>{{state.orderType === 'CYCLE' && !item.giftProduct ? '￥' : ''}}</text>{{state.orderType === 'CYCLE' ? !item.giftProduct ? state.allPrice : '赠品' : item.sellPrice}}</text>
-                              <text class="oldPrice" v-if="orderDetailGood[item.productId] && item.sellPrice < orderDetailGood[item.productId].sellPrice">￥{{orderDetailGood[item.productId].sellPrice}}</text>
+                              <text class="oldPrice" v-if="state.orderDetailGood[item.productId] && item.sellPrice < state.orderDetailGood[item.productId].sellPrice">￥{{state.orderDetailGood[item.productId].sellPrice}}</text>
                           </view> -->
                     </view>
                     <view class="goods-right">
@@ -295,13 +295,13 @@
                         v-if="state.scource === 'SHOPPINGCART' || state.goodTypeList[goodTypeIndex].orderType === 'solitaire' || state.goodTypeList[goodTypeIndex].orderType == 'packaging'">
                         x{{item.productNum}}</view>
                       <view class="goods-count-box" v-else>
-                        <view :data-idx="goodTypeIndex" :data-id="item.id" class="iconfont icon-jianhao"
+                        <view :data-idx="goodTypeIndex" :data-id="item.id" class="iconfont2 icon-jianhao"
                           @click.stop="goodTypeList[goodTypeIndex].orderType=='packaging'? '':'handleReduce'"
                           :style="'color:' + (item.productNum > 1 ? state.theme.color : '#BBBBBC')"
                           v-if="item.status !== 'DELETED' || item.balance > 0"></view>
                         <text :data-idx="goodTypeIndex" :data-id="item.id"
                           @click.stop="goodTypeList[goodTypeIndex].orderType=='packaging'?'':'handleNumber'">{{item.productNum}}</text>
-                        <view :data-idx="goodTypeIndex" :data-id="item.id" class="iconfont icon-jiahao2fill"
+                        <view :data-idx="goodTypeIndex" :data-id="item.id" class="iconfont2 icon-jiahao2fill"
                           :style="'color: ' + state.theme.color + ';'"
                           @click.stop="goodTypeList[goodTypeIndex].orderType=='packaging'? '':'handleAdd'"
                           v-if="item.status !== 'DELETED' || item.balance > 0"></view>
@@ -547,7 +547,7 @@
                         <text
                           class="nowPrice"><text>￥</text>{{state.goodTypeList[goodTypeIndex].orderType === 'CYCLE' && !item.giftProduct ? state.goodTypeList[goodTypeIndex].allPrice : item.sellPrice || '0'}}</text>
                         <text class="oldPrice"
-                          v-if="orderDetailGood[item.productId] && item.sellPrice < orderDetailGood[item.productId].sellPrice">￥{{orderDetailGood[item.productId].sellPrice}}</text>
+                          v-if="state.orderDetailGood[item.productId] && item.sellPrice < state.orderDetailGood[item.productId].sellPrice">￥{{state.orderDetailGood[item.productId].sellPrice}}</text>
                       </view>
                     </view>
                   </view>
@@ -857,7 +857,7 @@
           <view class="model-title">商品信息</view>
           <view class="model-body">
             <view class="goods-item-box"
-              v-for="(item , index) in state.goodTypeList[editActiveIdx][showGoodType && showGoodType == 'not' ? 'notGoodsList' : 'goodsList']"
+              v-for="(item , index) in state.goodTypeList[state.editActiveIdx][state.showGoodType && state.showGoodType == 'not' ? 'notGoodsList' : 'goodsList']"
               :key="index">
               <view class="goods-item">
                 <view class="goods-img">
@@ -880,23 +880,23 @@
                     <!-- <view class="goods-desc" v-if="item.deliveryTimeStatement && state.goodTypeList[goodTypeIndex].orderType !== 'advanceSell'" style="color: #ff9f43;">
                         {{item.deliveryTimeStatement ? item.deliveryTimeStatement : ''}}</view> -->
                     <view class="goods-advanceSell-price"
-                      v-if="state.goodTypeList[editActiveIdx].orderType === 'advanceSell'">
+                      v-if="state.goodTypeList[state.editActiveIdx].orderType === 'advanceSell'">
                       <!-- {{item.addvanceSellPrice===item.sellPrice ? '预售价' : '定金'}}￥{{item.sellPrice}}</view> -->
-                      {{item.addvanceSellPrice === item.sellPrice ? '预售价' : state.goodTypeList[editActiveIdx].advanceSellInfo.payType === 'FULL' ? '全款' : '定金'}}￥{{item.sellPrice}}
+                      {{item.addvanceSellPrice === item.sellPrice ? '预售价' : state.goodTypeList[state.editActiveIdx].advanceSellInfo.payType === 'FULL' ? '全款' : '定金'}}￥{{item.sellPrice}}
                     </view>
                     <!-- <view class='goods-price' v-if="state.orderType === 'CYCLE'">
                       <text class="nowPrice"><text>￥</text>{{state.allPrice}}</text> 
                     </view> -->
-                    <view class="goods-price" v-if="state.goodTypeList[editActiveIdx].orderType === 'scoreMall'">
-                      <text class="nowPrice"><text>￥</text>{{state.goodTypeList[editActiveIdx].integral}}</text> 积分
+                    <view class="goods-price" v-if="state.goodTypeList[state.editActiveIdx].orderType === 'scoreMall'">
+                      <text class="nowPrice"><text>￥</text>{{state.goodTypeList[state.editActiveIdx].integral}}</text> 积分
                     </view>
-                    <view class="goods-price" v-else-if="state.goodTypeList[editActiveIdx].orderType === 'advanceSell'">
+                    <view class="goods-price" v-else-if="state.goodTypeList[state.editActiveIdx].orderType === 'advanceSell'">
                     </view>
                     <view class="goods-price" v-else>
                       <text
-                        class="nowPrice"><text>￥</text>{{state.goodTypeList[editActiveIdx].orderType === 'CYCLE' && !item.giftProduct ? state.goodTypeList[editActiveIdx].allPrice : item.sellPrice || '0'}}</text>
+                        class="nowPrice"><text>￥</text>{{state.goodTypeList[state.editActiveIdx].orderType === 'CYCLE' && !item.giftProduct ? state.goodTypeList[state.editActiveIdx].allPrice : item.sellPrice || '0'}}</text>
                       <text class="oldPrice"
-                        v-if="orderDetailGood[item.productId] && item.sellPrice < orderDetailGood[item.productId].sellPrice">￥{{orderDetailGood[item.productId].sellPrice}}</text>
+                        v-if="state.orderDetailGood[item.productId] && item.sellPrice < state.orderDetailGood[item.productId].sellPrice">￥{{state.orderDetailGood[item.productId].sellPrice}}</text>
                     </view>
                   </view>
                   <view class="goods-right">
@@ -1130,6 +1130,7 @@ import _utilsImagesPathJs from "@/utils/newretail/imagesPath";
 import _componentsNotifyNotifyJs from "@/pages-sub/newretail/components/notify/notify";
 import _componentsCustomLoadingCustomLoadingJs from "@/pages-sub/newretail/components/customLoading/customLoading";
 import _componentsPopupPopupJs from "@/pages-sub/newretail/components/popup/popup";
+import timePicker from "@/pages-sub/newretail/components/timer-picker/index.vue";
 import _utilsAuthJs from "@/utils/newretail/auth";
 import _apiCycleServiceJs from "@/service/api/newretail/cycleService";
 import _apiMemberServiceJs from "@/service/api/newretail/memberService";
@@ -1221,6 +1222,7 @@ const colorRgba = (sHex, alpha = 1) => {
 let canGetAvailableCouponNum = true;
 let canCalcPromotions = true;
 const state = reactive({
+  orderDetailGood: {},
   serviceDuration1: '',
   serviceDuration: '',
   // 服务时长
@@ -9505,7 +9507,7 @@ page {
   height: 100%;
   text-align: center;
 }
-.goods-info .goods-count-box .iconfont {
+.goods-info .goods-count-box .iconfont2 {
   font-size: 50rpx;
 }
 .goods-info .goods-count-box view {

@@ -462,7 +462,7 @@
                   }})
                 </picker>
                 <text
-                  class="iconfont icon-xiugai"
+                  class="iconfont2 icon-xiugai"
                   style="
                     display: inline-block;
                     margin-left: 8rpx;

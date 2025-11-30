@@ -146,7 +146,7 @@
                         @click.stop="handleAddAll"
                       ></button>
                       <!-- <image class="reduce-img" src='{{imagesPath.iconMinus}}'></image> -->
-                      <view class="reduce-img iconfont icon-jianhao" style="color: #fb5606"></view>
+                      <view class="reduce-img iconfont2 icon-jianhao" style="color: #fb5606"></view>
                     </view>
                     <text class="cart-count">{{ item.productNum }}</text>
                   </view>
@@ -166,7 +166,7 @@
                     ></button>
                     <!-- <image class="add-img" src='{{imagesPath.iconNewAdd}}'></image> -->
                     <view
-                      class="add-img iconfont icon-jiahao2fill"
+                      class="add-img iconfont2 icon-jiahao2fill"
                       :style="
                         'color: ' +
                         (state.shopCart.productNum == 0 ||
@@ -389,7 +389,7 @@
                         @click.stop="handleAdd"
                       ></button>
                       <!-- <image class="reduce-img" src='{{imagesPath.iconMinus}}'></image> -->
-                      <view class="reduce-img iconfont icon-jianhao" style="color: #eb702d"></view>
+                      <view class="reduce-img iconfont2 icon-jianhao" style="color: #eb702d"></view>
                     </view>
                     <text class="cart-count">{{ item.productNum }}</text>
                   </view>
@@ -402,7 +402,7 @@
                       @click.stop="handleAdd"
                     ></button>
                     <!-- <image class="add-img" src='{{imagesPath.iconNewAdd}}'></image> -->
-                    <view class="add-img iconfont icon-jiahao2fill" style="color: #eb702d"></view>
+                    <view class="add-img iconfont2 icon-jiahao2fill" style="color: #eb702d"></view>
                   </view>
                 </view>
               </view>
@@ -464,7 +464,7 @@
                       @click.stop="handleAddAll"
                     ></button>
                     <!-- <image class="reduce-img" src='{{imagesPath.iconMinus}}'></image> -->
-                    <view class="reduce-img iconfont icon-jianhao" style="color: #fb5606"></view>
+                    <view class="reduce-img iconfont2 icon-jianhao" style="color: #fb5606"></view>
                   </view>
                   <text class="cart-count">{{ item.productNum }}</text>
                 </view>
@@ -484,7 +484,7 @@
                   ></button>
                   <!-- <image class="add-img" src='{{imagesPath.iconNewAdd}}'></image> -->
                   <view
-                    class="add-img iconfont icon-jiahao2fill"
+                    class="add-img iconfont2 icon-jiahao2fill"
                     :style="
                       'color: ' +
                       (state.shopCart.productNum == 0 ||
@@ -2932,7 +2932,7 @@ page {
   background: transparent;
   z-index: 1;
 }
-.goods-item-box .cart-control .iconfont {
+.goods-item-box .cart-control .iconfont2 {
   font-size: 45rpx;
 }
 .goods-item-box .add-img,

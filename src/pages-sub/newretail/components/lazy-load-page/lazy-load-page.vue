@@ -194,7 +194,7 @@
           :show="state.showFlag"
           :refreshType="state.refreshTypeData"
           :pageScrollData="props.pageScrollData"
-          :nearStoreStyle="nearStoreStyle"
+          :nearStoreStyle="state.nearStoreStyle"
           v-if="state.isHomeShowNearStore && state.nearStoreStyle === '2' && index === 0"
         ></nearby-store>
       </view>

@@ -246,7 +246,7 @@
               </text>
               <text
                 :class="
-                  'add_text iconfont ' +
+                  'add_text iconfont2 ' +
                   (shopCarType != 'hollow' ? 'icon-jiahao2fill' : 'icon-jiahao')
                 "
               ></text>

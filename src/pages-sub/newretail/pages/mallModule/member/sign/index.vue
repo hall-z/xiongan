@@ -1,3 +1,17 @@
+<route lang="json5" type="page">
+{
+  layout: 'default-newretail',
+  style: {
+    navigationStyle: 'custom',
+    'mp-alipay': {
+      transparentTitle: 'always',
+      titlePenetrate: 'YES',
+      defaultTitle: '',
+      titlePenetrate: 'NO',
+    },
+  },
+}
+</route>
 <template>
   <view>
     <view class="header">
@@ -165,7 +179,6 @@ function getSignLog() {
 }
 function signIn() {
   // 签到
-  const self = this
   memberService
     .signLn()
     .then((res) => {

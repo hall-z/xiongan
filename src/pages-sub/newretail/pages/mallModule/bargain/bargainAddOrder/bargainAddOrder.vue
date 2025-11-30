@@ -398,6 +398,7 @@ import _apiAddressServiceJs from '@/service/api/newretail/addressService'
 import _apiBargainServiceJs from '@/service/api/newretail/bargainService'
 import _apiSystemServiceJs from '@/service/api/newretail/systemService'
 import _apiOrderServiceJs from '@/service/api/newretail/orderService'
+import timePicker from "@/pages-sub/newretail/components/timer-picker/index";
 // import { onLoad, onReady, onShow, onHide, onUnload, onPullDownRefresh, onReachBottom, onShareAppMessage } from "@dcloudio/uni-app";
 import { reactive } from 'vue'
 import popup from '@/pages-sub/newretail/components/popup/popup.vue'
@@ -4074,7 +4075,7 @@ button::after {
   height: 100%;
   text-align: center;
 }
-.goods-info .goods-count-box .iconfont {
+.goods-info .goods-count-box .iconfont2 {
   font-size: 50rpx;
 }
 .goods-info .goods-count-box view {

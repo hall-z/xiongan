@@ -253,7 +253,7 @@ const props = defineProps({
   // hasUserInfo: Boolean,
   showSpecParent: Boolean,
 })
-let addImageIcon = ''
+let addImageIcon = state.imagesPath.shopping_icon_list
 onBeforeMount(() => {
   // 在组件实例进入页面节点树时执行
   if (app.globalData.userInfo) {

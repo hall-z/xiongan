@@ -1,3 +1,17 @@
+<route lang="json5" type="page">
+{
+  layout: 'default-newretail',
+  style: {
+    navigationStyle: 'custom',
+    'mp-alipay': {
+      transparentTitle: 'always',
+      titlePenetrate: 'YES',
+      defaultTitle: '',
+      titlePenetrate: 'NO',
+    },
+  },
+}
+</route>
 <template>
   <!-- pages/mallModule/order/order/order.wxml -->
   <navigationBar :title="state.navigationBarTitle"></navigationBar>
@@ -6,7 +20,7 @@
     <view
       class="order-tab-box"
       v-if="state.showOfflineOrders || state.isOpenStoreOrder"
-      :style="'top:' + navHeight + 'px;'"
+      :style="'top:' + state.navHeight + 'px;'"
     >
       <view
         :class="'order-tab-item ' + (state.orderTab == 0 ? 'active' : '')"
@@ -27,14 +41,14 @@
     </view>
     <scroll-view
       class="top-tab"
-      scroll-x=""
+      scroll-x="true"
       :style="
         'width: 100%;' +
         (state.showOfflineOrders || state.isOpenStoreOrder
-          ? 'background-color: #F1F3F6;top:' + navHeightTop + 'rpx'
-          : 'top:' + navHeight + 'px')
+          ? 'background-color: #F1F3F6;top:' + state.navHeightTop + 'rpx'
+          : 'top:' + state.navHeight + 'px')
       "
-      :hidden="state.orderTab == 1"
+      v-if="state.orderTab != 1"
     >
       <view
         :class="'tab-item ' + (state.tabSelected == idx ? 'active' : '')"
@@ -47,7 +61,7 @@
         "
         v-for="(item, idx) in state.tabType"
         :data-idx="idx"
-        :key="index"
+        :key="idx"
         @click="switchTab"
       >
         {{ item }}
@@ -62,7 +76,7 @@
           ? 'background-color: #F1F3F6;top:' + navHeightTop + 'rpx'
           : 'top:' + navHeight + 'px')
       "
-      :hidden="state.orderTab == 0"
+      v-if="state.orderTab != 0"
     >
       <view
         :class="'tab-item ' + (state.tabSelected == 0 ? 'active' : '')"
@@ -89,7 +103,7 @@
     >
       <!-- 全部订单 -->
       <view class="order-content">
-        <view class="order-item-box" v-for="(item, index) in state.allOrders" :key="id">
+        <view class="order-item-box" v-for="(item, index) in state.allOrders" :key="index">
           <!--<template is="orderItem" :data="item, state.themeColor"></template>-->
         </view>
         <view class="no-data" :hidden="state.allOrders.length == 0 ? false : true">
@@ -99,7 +113,7 @@
     </view>
     <view class="offline-order-list" :hidden="state.orderTab == 0">
       <!-- 线下订单 -->
-      <view class="order-item-box" v-for="(item, index) in state.offlineOrders" :key="id">
+      <view class="order-item-box" v-for="(item, index) in state.offlineOrders" :key="index">
         <!--<template is="offlineOrderItem" :data="item"></template>-->
       </view>
       <view class="no-data" :hidden="state.offlineOrders.length == 0 ? false : true">
@@ -357,7 +371,6 @@ function generateTabType() {
     state.tabType.push(app.globalData.orderStatus[item.orderEntranceStatus].name)
   })
   state.tabType.push('历史单据')
-  state.tabType = state.tabType
   state.selectedTab = 0
 }
 function callContact(e) {
@@ -393,7 +406,6 @@ function historyOrderActive(page) {
     memberMobile: app.globalData.userInfo.member.mobile,
     searchCount: true,
   }
-  const that = this
   const tabNum = state.tabSelected
   let status = ''
   if (tabNum == '0') {
@@ -813,7 +825,9 @@ onShareAppMessage(function (res) {
       } else {
         return {
           title: '麻烦点一下，只差一个人就拿到' + name + '了～',
-          path: '/pages-sub/newretail/pages/mallModule/activity/penny/helpPenny/helpPenny?instanceId=' + instanceId,
+          path:
+            '/pages-sub/newretail/pages/mallModule/activity/penny/helpPenny/helpPenny?instanceId=' +
+            instanceId,
           imageUrl: imgUrl,
           success(e) {
             uni.showShareMenu({

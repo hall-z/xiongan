@@ -486,7 +486,7 @@ const emit = defineEmits([
   'onReadyEnd',
 ])
 function clickGoodsItem(e) {
-  emit('onClickGoods', e.detail)
+  emit('onClickGoods', e)
 }
 function onClickGoods(e) {
   emit('onClickGoods', e.detail)

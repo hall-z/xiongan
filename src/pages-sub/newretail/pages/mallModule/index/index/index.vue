@@ -32,7 +32,7 @@
       :isShowTopNavigationFlag="state.isShowTopNavigationFlag"
       :isShowTopNavigation="state.isShowTopNavigation"
       :topSearchStyle="state.topSearchStyle"
-      :nearStoreStyle="state.nearStoreStyle"
+      :nearStoreStyle="1"
     ></navigationBar>
 
     <!--<template is="add-cart-animation" :data=""></template>-->

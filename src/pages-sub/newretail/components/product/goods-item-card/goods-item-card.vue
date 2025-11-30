@@ -283,7 +283,7 @@ const props = defineProps({
 })
 onBeforeMount(() => {
   // 在组件实例进入页面节点树时执行
-  if (state.addImage === '' && state.reduceImage === '') {
+  if (props.addImage === '' && props.reduceImage === '') {
     state.addImage = state.imagesPath.shopping_icon_list
     state.reduceImage = state.imagesPath.iconMinus
   }

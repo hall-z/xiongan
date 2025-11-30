@@ -1,21 +1,21 @@
 <template>
   <!--components/popup/popup.wxml-->
-  <view
-    v-if="props.overlay"
-    :class="'overlay-class popup__overlay ' + (show ? 'popup--show' : '')"
-    :style="props.overlayStyle"
-    @click="onClickOverlay"
-  >
-    <form v-if="show && form" @submit="onClickOverlay">
+  <view>
+    <view
+      v-if="overlayData"
+      :class="'overlay-class popup__overlay ' + (props.show ? 'popup--show' : '')"
+      :style="props.overlayStyle"
+      @click="onClickOverlay"
+    ></view>
+    <form v-if="props.show && props.form" @submit="onClickOverlay">
       <button form-type="submit" class="submitButton"></button>
     </form>
-    {{ state.navHeight }}
     <view
       :class="
         'custom-class popup ' +
-        (position ? 'popup--' + position : '') +
+        (props.position ? 'popup--' + props.position : '') +
         ' ' +
-        (show ? 'popup--show' : '')
+        (props.show ? 'popup--show' : '')
       "
       :style="state.navHeight ? 'top:' + state.navHeight + 'px;' : ''"
     >
@@ -26,13 +26,17 @@
 <script setup>
 import _utilsUtilsJs from '@/utils/newretail/utils'
 // import { ready } from "@dcloudio/uni-app";
-import { reactive, watch, onBeforeMount, onMounted } from 'vue'
+import { reactive, watch } from 'vue'
 const props = defineProps({
   show: Boolean,
   overlayStyle: String,
   overlay: {
     type: Boolean,
     value: true,
+  },
+  noOverlay: {
+    type: Boolean,
+    value: false,
   },
   closeOnClickOverlay: {
     type: Boolean,
@@ -47,6 +51,7 @@ const props = defineProps({
     value: false,
   },
 })
+let overlayData = true
 const app = getApp()
 // components/popup/popup.js
 const UNTILS = _utilsUtilsJs
@@ -58,11 +63,20 @@ const emit = defineEmits(['click-overlay', 'close'])
 
 function onClickOverlay(e) {
   emit('click-overlay')
-  if (state.closeOnClickOverlay) {
+  if (props.closeOnClickOverlay) {
     emit('close')
   }
 }
 
+// Watch listeners converted from observers
+watch(
+  () => props.noOverlay,
+  (newVal, oldVal) => {
+    // 处理订单支付
+    overlayData = newVal == false
+  },
+  { immediate: true },
+)
 // Watch listeners converted from observers
 watch(
   () => props.position,
@@ -72,6 +86,7 @@ watch(
       state.navHeight = app.globalData.navHeight
     }
   },
+  { immediate: true },
 )
 </script>
 <style scoped>

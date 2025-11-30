@@ -6,7 +6,7 @@
       <view class="verifybox-top" style="{{'width:'+(imgSize.width)+';'}}">
         请完成安全验证
         <text class="verifybox-close" bindtap="close">
-          <text class="iconfont icon-close"></text>
+          <text class="iconfont2 icon-close"></text>
         </text>
       </view>
     </block>
@@ -432,7 +432,7 @@ watch(() => props.show, (newVal, oldVal) => {
 /*url('../fonts/iconfont.ttf?t=1508229193188') format('truetype'), !* chrome, firefox, opera, Safari, Android, iOS 4.2+*!*/
 /*url('../fonts/iconfont.svg?t=1508229193188#iconfont') format('svg'); !* iOS 4.1- *!*/
 /*}*/
-.iconfont {
+.iconfont2 {
   font-family: "iconfont" !important;
   font-size: 16px;
   font-style: normal;

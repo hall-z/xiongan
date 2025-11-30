@@ -4,7 +4,7 @@ import utils from './utils'
 const app = getApp()
 
 // 获取手机系统信息
-const systemInfo = app ? app.globalData?.systemInfo : {}
+const systemInfo = app ? getApp().globalData?.systemInfo : uni.getSystemInfoSync()
 // 导航数量
 let tabbarNum = 0
 // 购物车的坐标点
@@ -34,11 +34,11 @@ interface BezierPoint extends Point {
  * @param direction 点击点方位 left  right
  */
 function getShopCartCoordinate(direction: string = 'left'): Point {
-  tabbarNum = app.globalData.tabBar.list.length
+  tabbarNum = getApp().globalData.tabBar.list.length
   if (tabbarNum > 0) {
     // tabbar 不为空
     let index = 0
-    app.globalData.tabBar.list.forEach((item: any, i: number) => {
+    getApp().globalData.tabBar.list.forEach((item: any, i: number) => {
       if (item.pagePath === '/pages-sub/newretail/pages/mallModule/tabbar/shopcart/shopcart') {
         // 当前项为购物车
         index = i
@@ -193,6 +193,8 @@ const FLY = {
 
     if (goodType != null) {
       for (let i = 0; i < bezier_points.length; i++) {
+        if(bezier_points[i]) {
+
         anim.left(bezier_points[i].x)
           .top(bezier_points[i].y)
           .width(systemInfo.windowWidth * (1 - 0.03 * i))
@@ -206,21 +208,26 @@ const FLY = {
             .height(0)
             .step({ duration: 0 })
         }
+        }
       }
     } else {
       if (direction === 'left') {
         for (let i = 0; i < bezier_points.length; i++) {
-          anim.left(bezier_points[i].x)
-            .top(bezier_points[i].y)
-            .scale(1 - 0.03 * i)
-            .step({ duration: duration })
-        }
+          if(bezier_points[i]) {
+            anim.left(bezier_points[i].x)
+              .top(bezier_points[i].y)
+              .scale(1 - 0.03 * i)
+              .step({ duration: duration })
+            }
+          }
       } else {
         for (let i = len - 1; i > 0; i--) {
-          anim.left(bezier_points[i].x)
+          if(bezier_points[i]) {
+            anim.left(bezier_points[i].x)
             .top(bezier_points[i].y)
             .scale(0.03 * i)
             .step({ duration: duration })
+          }
         }
       }
     }

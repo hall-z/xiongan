@@ -90,9 +90,8 @@
         </view>
       </view>
       <view v-else>
-        {{ props.nearStoreStyle }}2222
         <view :class="'left-box ' + (!props.isShowTopNavigationFlag ? 'top-left-box' : '')">
-          <view class="address" v-if="nearStoreStyleData === '1'" @click="changeAddress">
+          <view class="address" v-if="props.nearStoreStyle === '1'" @click="changeAddress">
             <image
               style="width: 22rpx; height: 30rpx"
               :src="state.imagesPath.iconNearStoreAddress"
@@ -262,12 +261,14 @@ let nearStoreStyleData = null
 watch(
   () => props.nearStoreStyle,
   (e) => {
-    nearStoreStyleData = e
+    if (e === '1') {
+      nearStoreStyleData = e
+    }
   },
   { immediate: true },
 )
 watch(
-  () => [props.nearStoreStyle, props.storeInfo, props.latitudeAndLongitude],
+  () => [props.storeInfo, props.latitudeAndLongitude],
   function (changeVal) {
     const [nearStoreStyle, storeInfo, latitudeAndLongitude] = changeVal
     if (latitudeAndLongitude && latitudeAndLongitude !== state.latitudeAndLongitude1) {
@@ -282,11 +283,9 @@ watch(
         },
       )
       state.latitudeAndLongitude1 = latitudeAndLongitude
-    } else if (nearStoreStyle === '1' && storeInfo) {
-      nearStoreStyleData = nearStoreStyle
-      state.storeInfoName = storeInfo.name || ''
     }
   },
+  { immediate: true },
 )
 onBeforeMount(() => {
   const that = this

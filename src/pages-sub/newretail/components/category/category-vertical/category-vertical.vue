@@ -79,7 +79,7 @@
             </view>
             <text>{{ filterCategoryName(item.menuName) }}</text>
             <view
-              class="iconfont icon-jiantouyou"
+              class="iconfont2 icon-jiantouyou"
               :style="
                 'font-size: 22rpx;color: ' +
                 (props.currentCategory === item.categoryId ? 'transparent' : '') +
@@ -88,7 +88,7 @@
               v-if="props.productCategoryStyle === '风格3'"
             ></view>
             <view
-              class="iconfont icon-xiajiantouxia"
+              class="iconfont2 icon-xiajiantouxia"
               v-if="
                 props.currentCategory == item.categoryId &&
                 props.productCategoryStyle === '风格3' &&
@@ -345,7 +345,7 @@
                   <!-- <image wx:else src="../../../image/filter-icon.png" mode="widthFix" style="width: 21rpx;"></image> -->
                   <!-- <image src="{{imagesPath.filter_icon}}" mode="widthFix" style="width: 21rpx;"></image> -->
                   <view
-                    class="iconfont icon-shaixuan"
+                    class="iconfont2 icon-shaixuan"
                     :style="
                       'font-size: 22rpx;color: ' +
                       (!state.filterType.ALL ? state.themeColor : '#ddd') +
@@ -863,7 +863,7 @@ function clickCategoryAll(e) {
 }
 function bindchange(e) {}
 function onClickGoods(e) {
-  emit('onClickGoods', e.detail)
+  emit('onClickGoods', e)
 }
 function addToCart(e) {
   emit('addToCart', e.detail)

@@ -2,7 +2,8 @@
   <!-- components/setMeal/setMeal.wxml -->
   <view>
     <popup
-      :show="show.middle"
+      v-if="state.show.middle"
+      :show="state.show.middle"
       position="bottom"
       custom-class="bottom"
       @close="toggleMiddlePopup"
@@ -10,13 +11,17 @@
     >
       <view class="setMeal-box">
         <view class="setMeal-header">
-          <view class="setMeal-title">{{ name }}</view>
+          <view class="setMeal-title">{{ state.name }}</view>
           <view class="spec-close-box" @click="toggleMiddlePopup">
             <image :src="state.imagesPath.iconCloseImg" mode="widthFix"></image>
           </view>
         </view>
-        <scroll-view class="setMeal-content-box" scroll-y="" style="height: 980rpx">
-          <view class="section" v-for="(groupItem, index) in cateringGroupProducts" :key="index">
+        <scroll-view class="setMeal-content-box" scroll-y="true" style="height: 980rpx">
+          <view
+            class="section"
+            v-for="(groupItem, index) in state.cateringGroupProducts"
+            :key="index"
+          >
             <view class="section-title">
               {{ groupItem.groupName }}{{ groupItem.required ? ' (必选)' : '' }}
             </view>
@@ -25,7 +30,7 @@
                 <view
                   :class="'goods-item ' + (item.defalutChoose ? 'active' : '')"
                   :style="
-                    'border: 2px solid ' + (item.defalutChoose ? themeColor : '#E4E4E4') + ';'
+                    'border: 2px solid ' + (item.defalutChoose ? state.themeColor : '#E4E4E4') + ';'
                   "
                   :data-exist="item.exist"
                   :data-index="index"
@@ -55,9 +60,9 @@
                     class="goods-check"
                     :style="
                       'background: ' +
-                      (item.defalutChoose ? themeColor : '#fff') +
+                      (item.defalutChoose ? state.themeColor : '#fff') +
                       ';border: 1px solid ' +
-                      (item.defalutChoose ? themeColor : '#999') +
+                      (item.defalutChoose ? state.themeColor : '#999') +
                       ';'
                     "
                   >
@@ -71,7 +76,7 @@
                   <image
                     class="no-balance"
                     mode="widthFix"
-                    :src="imagesPath.soldOutIcon"
+                    :src="state.imagesPath.soldOutIcon"
                     v-if="!item.exist"
                   ></image>
                 </view>
@@ -81,14 +86,14 @@
         </scroll-view>
         <view class="setMeal-bottom">
           <form @submit="_addShopcart" @click.stop="_emptyMethods">
-            <view class="setMeal-bottom-box" :style="'background: ' + themeColor">
+            <view class="setMeal-bottom-box" :style="'background: ' + state.themeColor">
               <view class="setMeal-price">
                 ¥
-                <text>{{ filtToFix(totalPrice) }}</text>
+                <text>{{ filtToFix(state.totalPrice) }}</text>
               </view>
-              <button form-type="submit">{{ operateFun }}</button>
+              <button form-type="submit">{{ state.operateFun }}</button>
             </view>
-            <!-- <button style="background: {{themeColor}}" form-type="submit">选好了</button> -->
+            <!-- <button style="background: {{state.themeColor}}" form-type="submit">选好了</button> -->
           </form>
         </view>
       </view>

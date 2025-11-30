@@ -317,7 +317,7 @@
                     <view class="count-box">
                       <view
                         :data-id="item.id"
-                        class="iconfont icon-jianhao"
+                        class="iconfont2 icon-jianhao"
                         :data-type="shoppingTypeItem"
                         @click.stop="handleReduce"
                         :style="
@@ -338,7 +338,7 @@
                       <view
                         :data-id="item.id"
                         :data-type="shoppingTypeItem"
-                        class="iconfont icon-jiahao2fill"
+                        class="iconfont2 icon-jiahao2fill"
                         @click.stop="handleAdd"
                         :style="'color: ' + state.themeColor + ';'"
                         v-if="item.status !== 'DELETED' && item.balance > 0"
@@ -587,9 +587,8 @@
                 :style="state.calcPromotionsFlag != 0 ? 'pointer-events: none' : ''"
                 :checked="state.checkedAll"
                 :color="state.themeColor"
-              >
-                全选
-              </checkbox>
+              ></checkbox>
+              全选
             </label>
           </checkbox-group>
           <view class="calc-info">
@@ -702,7 +701,7 @@
             <view class="count-box">
               <view
                 @click.stop="handleProductNumReduce"
-                v-if="item.status !== 'DELETED' && item.balance > 0"
+                v-if="state.goodsInfo.status !== 'DELETED' && state.goodsInfo.balance > 0"
               >
                 <text>-</text>
               </view>
@@ -717,7 +716,7 @@
               />
               <view
                 @click.stop="handleProductNumAdd"
-                v-if="item.status !== 'DELETED' && item.balance > 0"
+                v-if="state.goodsInfo.status !== 'DELETED' && state.goodsInfo.balance > 0"
               >
                 +
               </view>
@@ -766,11 +765,11 @@
         <view class="oneMore-content-box">
           <view class="oneMore-title">以下商品无法购买</view>
           <view class="oneMore-tips">你可以选购其他商品</view>
-          <scroll-view scroll-y="" class="unsupported-product-box">
+          <scroll-view scroll-y="true" class="unsupported-product-box">
             <view
               class="unsupported-product-item"
-              v-for="(item, index) in unsupportedProductList"
-              :key="id"
+              v-for="(item, index) in state.unsupportedProductList"
+              :key="index"
             >
               <view class="name">{{ item.productName }}</view>
               <view class="number">
@@ -920,7 +919,7 @@ const state = reactive({
     nextDayNum: 0,
   },
   hasUserInfo: false,
-  goodsInfo: null,
+  goodsInfo: {},
   show: {
     middle: false,
     top: false,
@@ -1343,7 +1342,7 @@ function handlePriceCalc(e) {
     if (checkedFlag) {
       checkedNum += 1
       shoppingTypeItem1 = shoppingTypeItem
-      if (isNumber(shoppingTypeItem)) {
+      if (isNumber(shoppingTypeItem) || state.shoppingData[shoppingTypeItem].storeId) {
         storeId = shoppingTypeItem
       } else if (shoppingTypeItem == 'store') {
         if (app.globalData.storeInfo) {
@@ -1520,7 +1519,9 @@ function handleReduce(e) {
       } else if (storeType == 'distribution' || storeType == state.distributionStoreId) {
         storeId = state.distributionStoreId
       } else {
-        storeId = isNumber(storeType) ? storeType : app.globalData.storeInfo.id
+        storeId = isNumber(storeType)
+          ? storeType
+          : state.shoppingData[storeType].storeId || app.globalData.storeInfo.id
       }
       const postData = {
         storeId,
@@ -1654,7 +1655,9 @@ function handleAdd(e) {
       } else if (storeType == 'distribution' || storeType == state.distributionStoreId) {
         storeId = state.distributionStoreId
       } else {
-        storeId = isNumber(storeType) ? storeType : app.globalData.storeInfo.id
+        storeId = isNumber(storeType)
+          ? storeType
+          : state.shoppingData[storeType].storeId || app.globalData.storeInfo.id
       }
       const postData = {
         storeId,
@@ -1671,19 +1674,22 @@ function handleNumber(e) {
   state.activeShoppingType = storeType
   const tempData = state.shoppingData[storeType].goodsList
   let _data = null
-  tempData.forEach((item) => {
+  tempData.some((item) => {
     if (item.id === e.currentTarget.dataset.id) {
-      console.log(item)
-      _data = item
+      _data = {
+        ...item,
+      }
+      console.log(_data)
+      if (_data) {
+        state.goodsInfo = {
+          ..._data,
+          focus: true,
+        }
+        toggleNumberPopup()
+      }
     }
+    return item.id === e.currentTarget.dataset.id
   })
-  if (_data) {
-    state.goodsInfo = {
-      ..._data,
-      focus: true,
-    }
-    toggleNumberPopup()
-  }
 }
 function handleProductNumAdd() {
   const goodsInfo = state.goodsInfo
@@ -1925,8 +1931,9 @@ function onConfirm(e) {
     } else {
       storeId = isNumber(state.activeShoppingType)
         ? state.activeShoppingType
-        : app.globalData.storeInfo.id
+        : state.shoppingData[state.activeShoppingType].storeId || app.globalData.storeInfo.id
     }
+
     const postData = {
       storeId,
       ...tempGoodsData,
@@ -2264,7 +2271,6 @@ async function queryShopcart() {
             state.shoppingType.push(res1.storeId)
             getShopCartData(res1, res1.storeId)
           })
-          state.shoppingType = state.shoppingType
 
           queryInverntory()
         }
@@ -2275,6 +2281,9 @@ async function queryShopcart() {
             state.shoppingData[storeType] = {
               goodsList: [],
             }
+          }
+          if (isNumber(storeType)) {
+            state.shoppingData[storeType].storeId = storeType
           }
           state.shoppingData[storeType].storeName = res.storeName
           const tempItems = []
@@ -2899,7 +2908,9 @@ function toMultipleGoodPerfectOrder(selectTypeList) {
             goodsList: availableGoodsList,
             giftProducts,
             orderType: 'normal',
-            storeId: isNumber(storeType) ? storeType : app.globalData.storeInfo.id,
+            storeId: isNumber(storeType)
+              ? storeType
+              : state.shoppingData[storeType].storeId || app.globalData.storeInfo.id,
             storeName: state.shoppingData[storeType].storeName,
             discount: parseFloat(state.shoppingData[storeType].discount),
             scource: 'SHOPPINGCART',
@@ -2922,14 +2933,18 @@ function toMultipleGoodPerfectOrder(selectTypeList) {
             if (secKillList.length > 0) {
               shopcart = {
                 ...shopcart,
-                storeId: isNumber(storeType) ? storeType : app.globalData.storeInfo.id,
+                storeId: isNumber(storeType)
+                  ? storeType
+                  : state.shoppingData[storeType].storeId || app.globalData.storeInfo.id,
                 storeName: state.shoppingData[storeType].storeName,
                 orderType: 'secondkill',
               }
             } else {
               shopcart = {
                 ...shopcart,
-                storeId: isNumber(storeType) ? storeType : app.globalData.storeInfo.id,
+                storeId: isNumber(storeType)
+                  ? storeType
+                  : state.shoppingData[storeType].storeId || app.globalData.storeInfo.id,
                 storeName: state.shoppingData[storeType].storeName,
                 orderType: 'normal',
               }
@@ -3095,7 +3110,7 @@ function toPerfectOrder(storeType) {
         goodsList: availableGoodsList,
         giftProducts,
         orderType: 'normal',
-        storeId: app.globalData.storeInfo.id,
+        storeId: isNumber(storeType) ? storeType : app.globalData.storeInfo.id,
         discount: parseFloat(state.shoppingData[storeType].discount),
         scource: 'SHOPPINGCART',
       }
@@ -3115,18 +3130,17 @@ function toPerfectOrder(storeType) {
         if (secKillList.length > 0) {
           shopcart = {
             ...shopcart,
-            storeId: app.globalData.storeInfo.id,
+            storeId: isNumber(storeType) ? storeType : app.globalData.storeInfo.id,
             orderType: 'secondkill',
           }
         } else {
           shopcart = {
             ...shopcart,
-            storeId: app.globalData.storeInfo.id,
+            storeId: isNumber(storeType) ? storeType : app.globalData.storeInfo.id,
             orderType: 'normal',
           }
         }
       }
-      console.log('wj_shopcart', shopcart)
       uni.setStorageSync('wj_shopcart', shopcart)
     } catch (e) {
       console.log(e.message)
@@ -3158,7 +3172,7 @@ function toPerfectOrder(storeType) {
           })
           const postData = {
             memberId: app.globalData.userInfo && app.globalData.userInfo.member.id,
-            storeId: app.globalData.storeInfo.id,
+            storeId: isNumber(storeType) ? storeType : app.globalData.storeInfo.id,
             shoppingCarts,
           }
           shopcartService
@@ -3805,8 +3819,7 @@ function toggleNumberPopup() {
   toggle('number')
 }
 function toggle(type) {
-  state[`show.${type}`] = !state.show[type]
-  state.overlayStyle = state.overlayStyle
+  state.show[type] = !state.show[type]
 }
 function handleUserLogin() {
   console.log(app.globalData.userInfo)
@@ -3855,7 +3868,7 @@ function toGoodsDetails(e) {
   } else if (storeType == 'distribution' || storeType == state.distributionStoreId) {
     storeId = state.distributionStoreId
   } else if (storeType == 'store' || isNumber(storeType)) {
-    if (isNumber(storeType)) {
+    if (isNumber(storeType || state.shoppingData[storeType].storeId)) {
       storeId = storeType
     } else if (app.globalData.storeInfo) {
       storeId = app.globalData.storeInfo.id
@@ -4282,18 +4295,18 @@ page {
   align-items: center;
 }
 
-checkbox .uni-checkbox-input {
-  border-radius: 50%;
-  width: 32rpx;
-  height: 32rpx;
+::v-deep uni-checkbox .uni-checkbox-input {
+  border-radius: 50% !important;
+  width: 32rpx !important;
+  height: 32rpx !important;
 }
 
-checkbox .uni-checkbox-input.uni-checkbox-input-checked {
-  border-color: #ff9f43;
-  background: #ff9f43;
+::v-deep uni-checkbox .uni-checkbox-input.uni-checkbox-input-checked {
+  border-color: #ff9f43 !important;
+  background: #ff9f43 !important;
 }
 
-checkbox .uni-checkbox-input.uni-checkbox-input-checked::before {
+uni-checkbox .uni-checkbox-input.uni-checkbox-input-checked::before {
   border-radius: 50%;
   width: 32rpx;
   height: 32rpx;
@@ -4642,7 +4655,7 @@ checkbox .uni-checkbox-input.uni-checkbox-input-checked::before {
   text-align: center;
   /* display: inline-block; */
 }
-.shopcart-item .price-number .count-box .iconfont {
+.shopcart-item .price-number .count-box .iconfont2 {
   font-size: 45rpx;
   line-height: 38rpx;
 }

@@ -1299,8 +1299,8 @@ function addShopcart(val) {
       productId +
       (business == 'DISTRIBUTION' || business == 'NEXT_DAY' ? '' : '&storeId=' + state.storeId) +
       '&source=addshopcart&type=normal'
-    if (val.detail.target.dataset.easyscene != null) {
-      opts = opts + '&easyScene=' + val.detail.target.dataset.easyscene
+    if (val.easyscene != null) {
+      opts = opts + '&easyScene=' + val.easyscene
     }
     NAVPAGE.toGoodsDetails(opts)
   }
@@ -1661,8 +1661,8 @@ function showLoadingChange(e) {
 }
 function onClickGoods(val) {
   const e = {
-    productId: val.detail.productid,
-    type: val.detail.type,
+    productId: val.productid,
+    type: val.type,
     lastPage: 'sort',
   }
   toProductDetail(e)

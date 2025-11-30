@@ -1,1117 +1,1131 @@
+<route lang="json5" type="page">
+{
+  layout: 'default-newretail',
+  style: {
+    navigationStyle: 'custom',
+    'mp-alipay': {
+      transparentTitle: 'always',
+      titlePenetrate: 'YES',
+      defaultTitle: '',
+      titlePenetrate: 'NO',
+    },
+  },
+}
+</route>
 <template>
-<!-- pages/orderDetails/orderDetails.wxml -->
-<navigationBar :title="state.navigationBarTitle"></navigationBar>
-<view>
-<view class="order">
-    <view class="top-info">
-        <view class="refresh" @click="getOrder">刷新</view>
-        <image class="icon-top-more" :src="state.imagesPath.iconOrderTopMore"></image>
-        <view class="order-status">订单{{state.order.status}}</view>
-        <view v-if="state.order.status == '待付款'">
-            <view class="top-tips">
-                <view class="top">
-                    <view class="countdown" v-if="state.order.status == '待付款'">
-                        <text :style="'color:' + state.themeColor">{{state.payTime}}</text>
-                        <text>内未支付，订单将自动取消。</text>
-                    </view>
-                </view>
-            </view>
-            <view class="top-button-box" v-if="state.butFalse">
-                <button class="cancel" @click="toCancel" :data-id="state.orderId">取消订单</button>
-                <button class="payment" :style="'background: ' + state.themeColor + ';border: 2rpx solid ' + state.themeColor + ';'" @click="toPay" :data-id="state.orderId">去支付</button>
-            </view>
-        </view>
-        <view v-if="state.order.status == '配送中'">
-            <view class="top-tips">
-                <view class="top">
-                    <view v-if="state.order.business !== 'DISTRIBUTION' && state.order.shipmentType !== 'LOGISTICAL'">
-                        <text>{{filtdistributionCompany(state.order.distributionCompany)}}骑手已在配送</text>
-                        <text class="distribution" @click="toOrderTrajectory" :style="'color:' + state.themeColor">查看配送信息</text>
-                    </view>
-                    <text v-else>订单已经发货</text>
-                    <text>请您耐心等待~</text>
-                </view>
-            </view>
-            <view class="top-button-box" v-if="state.butFalse" :hidden="state.business == 'SCORE'">
-                <button class="cancle" @click="toRefundGoods" :data-id="state.orderId" :data-status="state.status" :data-type="'REFUND'" v-if="state.business !== 'SCORE' && state.order.orderCanRefund">申请退款</button>
-                <button class="service btn" :style="'background: ' + state.themeColor + ';border: 2rpx solid ' + state.themeColor + ';'" @click="isOpenCustomerService ? '' : 'callContact'">联系客服</button>
-                <!-- <button class="cancle" wx:if="{{canOneMore}}" bindtap="oneMore">再来一单</button> -->
-                <button class="payment btn" :style="'background: ' + state.themeColor + ';border: 2rpx solid ' + state.themeColor + ';'" @click="handleConfirmReceipt">确认收货</button>
-            </view>
-        </view>
-        <view v-if="state.order.status == '待服务'">
-            <view class="top-tips">
-                <view class="top">
-                    <text>请按照预约时间到店</text>
-                    <text>别忘记哦~</text>
-                </view>
-            </view>
-            <view class="top-button-box" :hidden="state.business == 'SCORE'" v-if="state.butFalse">
-                <button class="cancle" @click="toRefundGoods" :data-id="state.orderId" :data-status="state.status" :data-type="'REFUND'" v-if="state.business !== 'SCORE' && state.order.orderCanRefund">申请退款</button>
-                <!-- <button class="cancle" wx:if="{{canOneMore}}" bindtap="oneMore">再来一单</button> -->
-                <button class="service btn" :style="'background: ' + state.themeColor + ';border: 2rpx solid ' + state.themeColor + ';'" @click="isOpenCustomerService ? '' : 'callContact'">联系客服</button>
-            </view>
-        </view>
-        <view v-if="state.order.status == '待自提'">
-            <view class="top-tips">
-                <view class="top">
-                    <text>请按照预约时间自提</text>
-                    <text>别忘记提货哦~</text>
-                </view>
-            </view>
-            <view class="top-button-box" :hidden="state.business == 'SCORE'" v-if="state.butFalse">
-                <button class="cancle" @click="toRefundGoods" :data-id="state.orderId" :data-status="state.status" :data-type="'REFUND'" v-if="state.business !== 'SCORE' && state.order.orderCanRefund">申请退款</button>
-                <!-- <button class="cancle" wx:if="{{canOneMore}}" bindtap="oneMore">再来一单</button> -->
-                <button class="service btn" :style="'background: ' + state.themeColor + ';border: 2rpx solid ' + state.themeColor + ';'" @click="isOpenCustomerService ? '' : 'callContact'">联系客服</button>
-            </view>
-        </view>
-        <view v-if="state.order.status == '已付款'">
-            <view class="top-tips">
-                <view class="top">
-                    <text>门店已接单,正在为您备货</text>
-                    <text>请您耐心等待~</text>
-                </view>
-            </view>
-            <view class="top-button-box" :hidden="state.business == 'SCORE'" v-if="state.order.type !== 'PENNY' && state.butFalse">
-                <button class="cancle" @click="toRefundGoods" :data-id="state.orderId" :data-status="state.status" :data-type="'REFUND'" v-if="state.business !== 'SCORE' && state.order.orderCanRefund && state.order.type !== 'PENNY'">申请退款</button>
-                <!-- <button class="cancle" wx:if="{{canOneMore}}" bindtap="oneMore">再来一单</button> -->
-                <button class="service btn" :style="'background: ' + state.themeColor + ';border: 2rpx solid ' + state.themeColor + ';'" @click="isOpenCustomerService ? '' : 'callContact'">联系客服</button>
-            </view>
-        </view>
-        <view v-if="state.order.status == '接龙中'">
-            <view class="top-tips">
-                <view class="top">
-                    <text>订单正在接龙中</text>
-                </view>
-                <text class="bottom">接龙活动结束后才能{{state.order.shipmentAmount === "SELF" ? "自提" : "发货"}}哦请耐心等待~</text>
-            </view>
-            <view class="top-button-box" :hidden="state.business == 'SCORE'" v-if="state.order.type !== 'PENNY' && state.butFalse">
-                <button class="cancle" @click="toRefundGoods" :data-id="state.orderId" :data-status="state.status" :data-type="'REFUND'" v-if="state.business !== 'SCORE' && state.order.orderCanRefund && state.order.type !== 'PENNY'">申请退款</button>
-                <button class="cancle btn" @click="isOpenCustomerService ? '' : 'callContact'">联系客服</button>
-            </view>
-        </view>
-        <view v-if="state.order.status == '待发货'">
-            <view class="top-tips">
-                <view class="top">
-                    <text>门店正在为您备货</text>
-                    <text>请耐心等待配送员接单~</text>
-                </view>
-            </view>
-            <view class="top-button-box" :hidden="state.business == 'SCORE'" v-if="state.canShowService || state.business !== 'SCORE' && state.order.orderCanRefund && state.order.type !== 'PENNY' && state.butFalse">
-                <button class="cancle" @click="toRefundGoods" :data-id="state.orderId" :data-status="state.status" :data-type="'REFUND'" v-if="state.business !== 'SCORE' && state.order.orderCanRefund && state.order.type !== 'PENNY'">申请退款</button>
-                <button class="cancle" @click="toRefundGoods" :data-type="'REFUND'" :data-status="state.status" v-if="state.canShowService">申请退款</button>
-                <!-- <button class="cancle" wx:if="{{canOneMore}}" bindtap="oneMore">再来一单</button> -->
-                <button class="to-invitation btn" :style="'background: ' + state.themeColor + ';border: 2rpx solid ' + state.themeColor + ';'" open-type="share" data-shareType="penny" @click="shaerPenny" v-if="state.canShowService">邀请好友助力</button>
-            </view>
-        </view>
-        <view v-if="state.order.status == '已发货'">
-            <view class="top-tips">
-                <view class="top">
-                    <text>门店已经发货</text>
-                    <text>请耐心等待配送员接单~</text>
-                </view>
-            </view>
-            <view class="top-button-box" v-if="state.order.type !== 'PENNY' && state.butFalse">
-                <button class="cancle" @click="toRefundGoods" :data-id="state.orderId" :data-status="state.status" v-if="state.business !== 'SCORE' && state.order.orderCanRefund && state.order.type !== 'PENNY'">申请退款</button>
-                <!-- <button class="cancle" wx:if="{{canOneMore}}" bindtap="oneMore">再来一单</button> -->
-                <button class="service btn" :style="'background: ' + state.themeColor + ';border: 2rpx solid ' + state.themeColor + ';'" @click="isOpenCustomerService ? '' : 'callContact'">联系客服</button>
-            </view>
-        </view>
-        <view v-if="state.order.status == '待配送'">
-            <view class="top-tips">
-                <view class="top">
-                    <text>门店正在为您备货</text>
-                    <text>请您耐心等待~</text>
-                </view>
-            </view>
-            <view class="top-button-box" v-if="state.butFalse">
-                <button class="cancle" @click="toRefundGoods" :data-id="state.orderId" :data-status="state.status" v-if="state.business !== 'SCORE' && state.order.orderCanRefund && state.order.type !== 'PENNY'">申请退款</button>
-                <!-- <button class="cancle" wx:if="{{canOneMore}}" bindtap="oneMore">再来一单</button> -->
-                <button class="cancle btn" @click="toTrackingDetails" :hidden="state.isDistribution ? false : true">查看物流</button>
-                <button class="service btn" :style="'background: ' + state.themeColor + ';border: 2rpx solid ' + state.themeColor + ';'" @click="isOpenCustomerService ? '' : 'callContact'">联系客服</button>
-            </view>
-        </view>
-        <view v-if="state.order.status == '已完成'">
-            <view class="top-tips">
-                <view class="top">
-                    <text>感谢您对线上商城的信任</text>
-                    <text>期待您再次光临。</text>
-                </view>
-            </view>
-            <view class="top-button-box" :hidden="state.business == 'SCORE' || state.storeOrderId" v-if="state.order.type !== 'PENNY' && state.butFalse">
-                <!-- <button class="cancle" wx:if="{{canOneMore}}" bindtap="oneMore">再来一单</button> -->
-                <button class="cancle" @click="toRefundGoods" :data-id="state.orderId" :data-status="state.status" v-if="state.business !== 'SCORE' && state.order.type !== 'PENNY'">申请退款</button>
-                <button class="service btn" :style="'background: ' + state.themeColor + ';border: 2rpx solid ' + state.themeColor + ';'" @click="isOpenCustomerService ? '' : 'callContact'">联系客服</button>
-            </view>
-        </view>
-        <view v-if="state.order.status == '待评价'">
-            <view class="top-tips">
-                <view class="top">
-                    <text>感谢您对线上商城的信任</text>
-                    <text>您的鼓励将是我们前进的动力。</text>
-                </view>
-            </view>
-            <view class="top-button-box" v-if="state.butFalse">
-                <button class="cancle" @click="toEvaluate" :data-id="state.orderId">去评价</button>
-                <button class="cancle" @click="toRefundGoods" :data-id="state.orderId" :data-status="state.status" v-if="state.business !== 'SCORE' && state.order.type !== 'PENNY'">申请退款</button>
-                <!-- <button class="cancle" wx:if="{{canOneMore}}" bindtap="oneMore">再来一单</button> -->
-                <button class="service btn" :style="'background: ' + state.themeColor + ';border: 2rpx solid ' + state.themeColor + ';'" @click="isOpenCustomerService ? '' : 'callContact'">联系客服</button>
-            </view>
-        </view>
-        <view v-if="state.order.status == '退款中' || state.order.status == '接龙失败，退款中'">
-            <view class="top-tips">
-                <view class="top">
-                    <text>订单您已申请退款</text>
-                    <text>退款金额将在2个工作日内原路退回。</text>
-                </view>
-                <text class="bottom"></text>
-            </view>
-            <view class="top-button-box" v-if="state.butFalse">
-                <button class="cancle" @click="toService1">联系门店</button>
-                <button class="cancle" @click="cancalRefund" :hidden="state.cancelFlag">取消退款</button>
-                <!-- <button class="cancle" wx:if="{{canOneMore}}" bindtap="oneMore">再来一单</button> -->
-                <button class="service btn" :style="'background: ' + state.themeColor + ';border: 2rpx solid ' + state.themeColor + ';'" @click="isOpenCustomerService ? '' : 'callContact'">联系客服</button>
-            </view>
-        </view>
-        <view v-if="state.order.status == '已退款' || state.order.status == '接龙失败，已退款'">
-            <view class="top-tips">
-                <view class="top">
-                    <text>您的订单已退款成功</text>
-                    <text>退款金额已退回原路。</text>
-                </view>
-            </view>
-            <view class="top-button-box" v-if="state.butFalse">
-                <button class="cancle" @click="toMoneyGoing" v-if="state.order.type === 'PENNY'">钱款去向</button>
-                <!-- <button class="cancle" wx:if="{{canOneMore}}" bindtap="oneMore">再来一单</button> -->
-                <button class="service btn" :style="'background: ' + state.themeColor + ';border: 2rpx solid ' + state.themeColor + ';'" @click="isOpenCustomerService ? '' : 'callContact'">联系客服</button>
-            </view>
-        </view>
-        <view v-if="state.order.status == '部分退款'">
-            <view class="top-tips">
-                <view class="top">
-                    <text>您的订单已部分退款成功</text>
-                    <text>退款金额已退回原路。</text>
-                </view>
-            </view>
-            <view class="top-button-box" v-if="state.butFalse">
-                <button class="cancle" @click="toRefundGoods" :data-id="state.orderId" :data-status="state.status" v-if="state.business !== 'SCORE' && state.order.orderCanRefund && state.order.type !== 'PENNY'">申请退款</button>
-                <button class="cancle" @click="toMoneyGoing" v-if="state.order.type === 'PENNY'">钱款去向</button>
-                <!-- <button class="cancle" wx:if="{{canOneMore}}" bindtap="oneMore">再来一单</button> -->
-            </view>
-        </view>
-        <view v-if="state.order.status == '待拼团'">
-            <view class="top-tips">
-                <view class="top">
-                    <text>订单拼团还在等待拼团</text>
-                    <text>拼团记得叫上小伙伴哦~</text>
-                </view>
-            </view>
-            <view class="top-button-box" v-if="state.butFalse">
-                <button class="cancle" @click="toRefundGoods" :data-id="state.orderId" :data-status="state.status" :data-type="'REFUND'" v-if="state.business !== 'SCORE'">申请退款</button>
-                <button class="to-invitation btn" :style="'background: ' + state.themeColor + ';border: 2rpx solid ' + state.themeColor + ';'" open-type="share" @click="shareGroup" :hidden="state.teamMemberCount - state.joinMemberCount == 0 || state.teamBuyEnd">邀请好友</button>
-            </view>
-        </view>
-        <view v-if="state.order.status == '已成团'">
-            <view class="top-tips">
-                <view class="top">
-                    <text>订单拼团已经成团</text>
-                    <text>门店正在努力备货，请耐心等待~</text>
-                </view>
-            </view>
-            <view class="top-button-box" v-if="state.butFalse">
-                <button class="cancle" @click="toRefundGoods" :data-id="state.orderId" :data-status="state.status" :data-type="'REFUND'" v-if="state.business !== 'SCORE'">申请退款</button>
-                <button class="to-invitation btn" :style="'background: ' + state.themeColor + ';border: 2rpx solid ' + state.themeColor + ';'" open-type="share" @click="shareGroup" :hidden="state.teamMemberCount - state.joinMemberCount == 0 || state.teamBuyEnd">邀请好友</button>
-            </view>
-        </view>
-        <view v-if="state.order.status == '已取消'">
-            <view class="top-tips">
-                <view class="top">
-                    <text>订单已支付超时</text>
-                    <text>超出支付时间订单已自动取消。</text>
-                </view>
-            </view>
-            <!-- <view class="top-button-box" wx:if="{{state.canOneMore && state.butFalse}}">
-                <button class="cancle" wx:if="{{state.canOneMore}}" bindtap="oneMore">再来一单</button>
-            </view> -->
-        </view>
-        <view v-if="state.order.status == '支付失败'">
-            <view class="top-tips">
-                <view class="top">
-                    <text>订单已支付失败</text>
-                </view>
-            </view>
-            <!-- <view class="top-button-box" wx:if="{{state.canOneMore && state.butFalse}}">
-                <button class="cancle" wx:if="{{state.canOneMore}}" bindtap="oneMore">再来一单</button>
-            </view> -->
-        </view>
-        <view v-if="state.order.status == '待付尾款'">
-            <view class="top-tips">
-                <view class="top">
-                    <text>订单已支付</text>
-                    <text v-if="state.butFalse" class="order-tips" :style="'color:' + state.themeColor + ';'">请于{{state.advanceSellTime.balanceDate}}期间支付尾款</text>
-                    <text v-if="state.shipmentType === 'EXPRESS'">支付尾款后配送~</text>
-                    <text v-if="state.shipmentType === 'SELF'">支付尾款后自提~</text>
-                </view>
-            </view>
-            <view class="top-button-box" v-if="state.butFalse">
-                <button class="payment" :style="'color: ' + state.themeColor + ';border: 2rpx solid ' + state.themeColor + ';'" @click="toPayTail" :data-id="state.orderId">待付尾款</button>
-            </view>
-        </view>
-    </view>
-    <view class="receive-box" v-if="state.shipmentType === 'EXPRESS' && state.memberName">
-        <view class="icon-box">
-            <image :src="state.imagesPath.iconOrderPosition"></image>
-        </view>
-        <view class="receive-info">
-            <view>
-                {{state.memberName}}
-                <text>{{state.mobile}}</text>
-            </view>
-            <view>{{state.address ? state.address : ""}}</view>
-        </view>
-    </view>
-    <view class="invite-join" v-if="state.isTeamShare">
-        <view class="group-title">
-            <view v-if="!state.teamBuyEnd">
-                <view v-if="state.teamStatus == 'success'">拼团成功</view>
-                <view v-else>还差 {{state.teamMemberCount - state.joinMemberCount}} 人拼团成功</view>
-            </view>
-            <view v-if="state.teamBuyEnd">当前团购活动已过期</view>
-            <view v-if="!state.teamBuyEnd">
-                <view v-if="state.teamStatus != 'success'">剩余时间
-                    <text>{{state.countDownList.hou}}:{{state.countDownList.min}}:{{state.countDownList.sec}}</text>
-                </view>
-            </view>
-            <view v-if="state.teamBuyEnd"></view>
-        </view>
-        <view class="group-people-list">
-            <view v-if="teamBuyingType !== 'THOUSAND'">
-                <view class="people-item leader" v-for="(item , idx) in state.joinMbrs" :key="idx" v-if="idx == 0" :hidden="state.joinPeopleCount == 0">
-                    <image :src="item.avatar"></image>
-                    <text class="leader-label">团长</text>
-                </view>
-            </view>
-            <view v-if="teamBuyingType === 'THOUSAND'">
-                <view class="people-item" v-for="(item , index) in state.joinMbrs" :key="index" v-if="state.teamPeopleCount > 10 ? index < 9 : index < state.teamPeopleCount">
-                    <image :src="item.avatar"></image>
-                </view>
-                <view class="people-item" v-for="(item , index) in state.teamPeopleCount - state.joinPeopleCount" v-if="state.teamPeopleCount > 10 ? index < 9 - state.joinPeopleCount : state.teamPeopleCount - state.joinPeopleCount" :key="index">
-                    <text>?</text>
-                </view>
-            </view>
-            <view v-if="teamBuyingType !== 'THOUSAND'">
-                <view class="people-item" v-for="(item , index) in state.joinMbrs" :key="index" v-if="state.teamPeopleCount > 10 ? index < 8 : index < state.teamPeopleCount" :hidden="index == 0">
-                    <image :src="item.avatar"></image>
-                </view>
-                <view class="people-item" v-for="(item , index) in state.teamPeopleCount - state.joinPeopleCount" v-if="state.teamPeopleCount > 10 ? index < 9 - state.joinPeopleCount : state.teamPeopleCount - state.joinPeopleCount" :key="index">
-                    <text>?</text>
-                </view>
-            </view>
-            <view class="people-more" v-if="state.teamPeopleCount > 10" :key="index">
-                <image :src="state.imagesPath.iconCollageMore"></image>
-            </view>
-        </view>
-        <view v-if="state.teamMemberCount - state.joinMemberCount == 0 || state.teamBuyEnd ? false : true">
-            <button class="join-group usable" :style="'background-color: ' + state.themeColor" open-type="share" @click="shareGroup" :hidden="state.teamMemberCount - state.joinMemberCount == 0 || state.teamBuyEnd">邀请好友参团</button>
-            <view :hidden="state.teamBuyEnd || state.teamStatus == 'success'" class="group-share-text">分享到3个群，有95%的机会在5分钟内成团</view>
-        </view>
-        <view v-else>
-            <view class="group-success" v-if="state.teamStatus == 'success'">
-                <icon type="success" size="20" :color="state.themeColor">
-                <text>门店正在配货 请耐心等待片刻</text>
-            </icon></view>
-        </view>
-    </view>
-    <view v-if="(state.shipmentType === 'SELF' || state.shipmentType === 'EXPRESS') && state.order.type !== 'CYCLE' && (!state.subOrders || state.subOrders.length < 2)">
-        <view class="pickup-store">
-            <view class="navigation-box">
-              <view class="title">
-                {{state.order.business == 'SERVICE' ? '服务' : state.shipmentType == 'EXPRESS' ? '配送' : '提货'}}门店：{{state.order.storeName}}
-              </view>
-            </view>
-            <view class="selftake-time color-454545" v-if="state.order.teamId != null || state.order.type === 'SOLITAIRE'">
-                {{state.selfTimeScope}}
-            </view>
-            <view class="selftake-time color-454545" v-else-if="state.order.business == 'SERVICE' && state.order.selfPickBeginTime">
-                <view>
-                  预约时间：{{state.order.selfPickBeginTime}}
-                </view>
-                <view>
-                  预约手机：{{state.order.receiverMobile}}
-                </view>
-            </view>
-            <view class="selftake-time color-454545" v-else-if="state.selfTimeScope">
-                {{state.shipmentType == 'EXPRESS' ? '配送' : '提货'}}时间：{{state.selfTimeScope}}
-            </view>
-            <!-- 门店时间 -->
-            <view class="selftake-time color-454545" v-else-if="state.storeInfo && state.storeInfo.storeHours">
-              {{state.shipmentType == 'EXPRESS' ? '配送' : '提货'}}时间：{{state.storeInfo.storeHours}}
-            </view>
-            <view class="self-address color-454545" v-if="state.order.business != 'SERVICE' && state.storeInfo && state.shipmentType === 'SELF' && state.storeInfo.province">
-              自提地址：{{state.storeInfo.province || ''}}{{state.storeInfo.city || ''}}{{state.storeInfo.district || ''}}{{state.storeInfo.address || ''}}
-            </view>
-            <view class="self-address color-454545">
-              订单备注：{{state.order.remark || ''}}
-            </view>
-            <view v-if="state.order.status === '已付款' && state.order.type != 'SERVICE'" class="order-btn-box">
-              <!-- <view class="navigation" wx:if="{{state.shipmentType === 'SELF'}}" catchtap="navToStore">
-                <image src="{{state.imagesPath.iconStoreNav}}"></image>
-                <text>到这去</text>
-              </view> -->
-              <button type="default" size="mini" @click.stop="editTime" plain="" v-if="state.status && !(state.status == '待付款' || orderfrom || state.status == '付款待自提') && state.selfTimeScope && state.orderDeliveryTimeCanModifyCount && state.orderDeliveryTimeCanModifyCount > state.order.deliveryTimeModifyCount">
-                <image class="order-icon" :src="state.imagesPath.orderEditTime" mode="heightFix"></image>
-                修改时间/备注
-              </button>
-              <button v-if="state.shipmentType === 'SELF'" type="default" size="mini" plain="" @click.stop="navToStore">
-                <image class="order-icon" :src="state.imagesPath.orderAddress" mode="heightFix"></image>
-                导航地址
-              </button>
-            </view>
-            <view v-if="(state.order.status === '待服务' || state.shipmentType === 'SELF' && (state.order.status === '待自提' || state.order.status === '已付款')) && !state.showBarcode">
-              <image mode="widthFix" @click="getOrder" class="self-code-img" :src="state.imagesPath.selfCode"></image>
-            </view>
-            <view v-else-if="state.order.status === '待自提' || state.business == 'SCORE' && state.order.status == '已付款'">
-                <view class="code-box">
-                    <view class="barcode-box" @click="showBarcode ? 'handleToBigBarcode' : ''">
-                        <view v-if="state.showBarcode">
-                            <canvas id="orderBarcode" type="2d" :style="state.barcodeImageUrl ? '' : 'left: -999999rpx;'">
-                            <image :src="state.barcodeImageUrl" v-if="state.barcodeImageUrl"></image>
-                        </canvas></view>
-                        <view v-else>
-                            <image mode="widthFix" :src="state.imagesPath.iconOrderCode"></image>
+  <!-- pages/orderDetails/orderDetails.wxml -->
+  <navigationBar :title="state.navigationBarTitle"></navigationBar>
+  <view>
+    <view class="order">
+        <view class="top-info">
+            <view class="refresh" @click="getOrder">刷新</view>
+            <image class="icon-top-more" :src="state.imagesPath.iconOrderTopMore"></image>
+            <view class="order-status">订单{{state.order.status}}</view>
+            <view v-if="state.order.status == '待付款'">
+                <view class="top-tips">
+                    <view class="top">
+                        <view class="countdown" v-if="state.order.status == '待付款'">
+                            <text :style="'color:' + state.themeColor">{{state.payTime}}</text>
+                            <text>内未支付，订单将自动取消。</text>
                         </view>
                     </view>
-                    <text class="code-text" v-if="state.showBarcode">{{state.codeText}}</text>
-                    <text class="selfTime-text" v-if="!state.showBarcode">{{state.selfTimeText}}</text>
                 </view>
-                <view class="deliveryTimeStatement" v-if="state.deliveryTimeStatement">
-                    该订单内含有特殊可自提/配送时间商品，此类商品自提/配送时间以该商品描述为准</view>
-            </view>
-        </view>
-    </view>
-    <!-- 添加快递类 展示配送信息 -->
-    <view class="addressBox" v-if="refundStatus == 'REFUND_WAITRECEIVER' && state.order.shipmentType === 'LOGISTICAL'">
-        <view class="addressBox-active">
-            <view class="addressBox-active-left">
-                <image src="http://wmsaas-prod.oss-cn-beijing.aliyuncs.com/wmsaas-prod/20221109/1590217534970281985/%E7%BB%84%202@2x.png"></image>
-                
-            </view>
-            <view class="addressBox-active-content">
-                <view class="addressBox-active-content-top">
-                    {{refundAddress.contact}} {{refundAddress.mobile}}
-                </view>
-                <view>
-                    {{refundAddress.address}}
+                <view class="top-button-box" v-if="state.butFalse">
+                    <button class="cancel" @click="toCancel" :data-id="state.orderId">取消订单</button>
+                    <button class="payment" :style="'background: ' + state.themeColor + ';border: 2rpx solid ' + state.themeColor + ';'" @click="toPay" :data-id="state.orderId">去支付</button>
                 </view>
             </view>
-            <view class="addressBox-active-right" @click="clipBtn">
-                <image src="http://wmsaas-prod.oss-cn-beijing.aliyuncs.com/wmsaas-prod/20221109/1590217908309475330/%E5%BD%A2%E7%8A%B6%201@2x.png"></image>
-                
+            <view v-if="state.order.status == '配送中'">
+                <view class="top-tips">
+                    <view class="top">
+                        <view v-if="state.order.business !== 'DISTRIBUTION' && state.order.shipmentType !== 'LOGISTICAL'">
+                            <text>{{filtdistributionCompany(state.order.distributionCompany)}}骑手已在配送</text>
+                            <text class="distribution" @click="toOrderTrajectory" :style="'color:' + state.themeColor">查看配送信息</text>
+                        </view>
+                        <text v-else>订单已经发货</text>
+                        <text>请您耐心等待~</text>
+                    </view>
+                </view>
+                <view class="top-button-box" v-if="state.butFalse" :hidden="state.business == 'SCORE'">
+                    <button class="cancle" @click="toRefundGoods" :data-id="state.orderId" :data-status="state.status" :data-type="'REFUND'" v-if="state.business !== 'SCORE' && state.order.orderCanRefund">申请退款</button>
+                    <button class="service btn" :style="'background: ' + state.themeColor + ';border: 2rpx solid ' + state.themeColor + ';'" @click="isOpenCustomerService ? '' : 'callContact'">联系客服</button>
+                    <!-- <button class="cancle" wx:if="{{canOneMore}}" bindtap="oneMore">再来一单</button> -->
+                    <button class="payment btn" :style="'background: ' + state.themeColor + ';border: 2rpx solid ' + state.themeColor + ';'" @click="handleConfirmReceipt">确认收货</button>
+                </view>
             </view>
-        </view>
-        <view class="addressBox-active-bottom" @click="addressBox">
-            <view class="addressBox-active-bottom-top">
-                我已寄出
+            <view v-if="state.order.status == '待服务'">
+                <view class="top-tips">
+                    <view class="top">
+                        <text>请按照预约时间到店</text>
+                        <text>别忘记哦~</text>
+                    </view>
+                </view>
+                <view class="top-button-box" :hidden="state.business == 'SCORE'" v-if="state.butFalse">
+                    <button class="cancle" @click="toRefundGoods" :data-id="state.orderId" :data-status="state.status" :data-type="'REFUND'" v-if="state.business !== 'SCORE' && state.order.orderCanRefund">申请退款</button>
+                    <!-- <button class="cancle" wx:if="{{canOneMore}}" bindtap="oneMore">再来一单</button> -->
+                    <button class="service btn" :style="'background: ' + state.themeColor + ';border: 2rpx solid ' + state.themeColor + ';'" @click="isOpenCustomerService ? '' : 'callContact'">联系客服</button>
+                </view>
             </view>
-            <view class="addressBox-active-bottom-bottom">
-                {{state.order.refundTrackingNumber ? '查看物流信息' : '填写物流信息'}} <image style="width: 12rpx; height: 23rpx; vertical-align: middle; margin-left: 8rpx;" :src="state.imagesPath.iconRight2"></image>
+            <view v-if="state.order.status == '待自提'">
+                <view class="top-tips">
+                    <view class="top">
+                        <text>请按照预约时间自提</text>
+                        <text>别忘记提货哦~</text>
+                    </view>
+                </view>
+                <view class="top-button-box" :hidden="state.business == 'SCORE'" v-if="state.butFalse">
+                    <button class="cancle" @click="toRefundGoods" :data-id="state.orderId" :data-status="state.status" :data-type="'REFUND'" v-if="state.business !== 'SCORE' && state.order.orderCanRefund">申请退款</button>
+                    <!-- <button class="cancle" wx:if="{{canOneMore}}" bindtap="oneMore">再来一单</button> -->
+                    <button class="service btn" :style="'background: ' + state.themeColor + ';border: 2rpx solid ' + state.themeColor + ';'" @click="isOpenCustomerService ? '' : 'callContact'">联系客服</button>
+                </view>
             </view>
-        </view>
-    </view>
-
-    <view class="tracking_content" v-if="trackingList && trackingList.length > 0">
-        <view class="track_tabbar">
-            <view v-for="(item , index) in trackingList" :style="'color: ' + (state.trackActiveIndex === index ? state.themeColor : '#999')" :class="state.trackActiveIndex === index ? 'tab_active' : ''" :key="i" :data-id="item.id" :data-index="index" @click="clickShipdetails">
-                包裹{{index + 1}}
+            <view v-if="state.order.status == '已付款'">
+                <view class="top-tips">
+                    <view class="top">
+                        <text>门店已接单,正在为您备货</text>
+                        <text>请您耐心等待~</text>
+                    </view>
+                </view>
+                <view class="top-button-box" :hidden="state.business == 'SCORE'" v-if="state.order.type !== 'PENNY' && state.butFalse">
+                    <button class="cancle" @click="toRefundGoods" :data-id="state.orderId" :data-status="state.status" :data-type="'REFUND'" v-if="state.business !== 'SCORE' && state.order.orderCanRefund && state.order.type !== 'PENNY'">申请退款</button>
+                    <!-- <button class="cancle" wx:if="{{canOneMore}}" bindtap="oneMore">再来一单</button> -->
+                    <button class="service btn" :style="'background: ' + state.themeColor + ';border: 2rpx solid ' + state.themeColor + ';'" @click="isOpenCustomerService ? '' : 'callContact'">联系客服</button>
+                </view>
             </view>
-        </view>
-        <view class="tracking-item">
-            <view class="header">
-                <view>运单号:<text class="express-number">{{trackingList[trackActiveIndex].trackingNumber}}</text><text class="copy_text" @click.stop="clipBtn1" :style="'color:' + state.themeColor" :data-track="trackingList[trackActiveIndex].trackingNumber">复制</text></view>
-                <view>国内承运人:<text class="express-name">{{trackingList[trackActiveIndex].trackingCom}}</text></view>
-                <view>国内承运人电话:<text class="express-tel" :style="'color: ' + state.themeColor" @click="callTrackingPhone">{{trackingList[trackActiveIndex].phoneNum}}</text></view>
-                <view class="checkGoods" v-if="state.orderTraceType != 'DLY'" :data-trackingNumber="trackingList[trackActiveIndex].trackingNumber" :data-item="trackingList[trackActiveIndex]" @click.stop="checkGoods">查看商品</view>
-                <!-- <view class="right">配送详情<image class="right-icon {{state.currentItem === trackingList[trackActiveIndex].id ? 'active' : ''}}" src="{{state.imagesPath.iconRight2}}" ></image>
+            <view v-if="state.order.status == '接龙中'">
+                <view class="top-tips">
+                    <view class="top">
+                        <text>订单正在接龙中</text>
+                    </view>
+                    <text class="bottom">接龙活动结束后才能{{state.order.shipmentAmount === "SELF" ? "自提" : "发货"}}哦请耐心等待~</text>
+                </view>
+                <view class="top-button-box" :hidden="state.business == 'SCORE'" v-if="state.order.type !== 'PENNY' && state.butFalse">
+                    <button class="cancle" @click="toRefundGoods" :data-id="state.orderId" :data-status="state.status" :data-type="'REFUND'" v-if="state.business !== 'SCORE' && state.order.orderCanRefund && state.order.type !== 'PENNY'">申请退款</button>
+                    <button class="cancle btn" @click="isOpenCustomerService ? '' : 'callContact'">联系客服</button>
+                </view>
+            </view>
+            <view v-if="state.order.status == '待发货'">
+                <view class="top-tips">
+                    <view class="top">
+                        <text>门店正在为您备货</text>
+                        <text>请耐心等待配送员接单~</text>
+                    </view>
+                </view>
+                <view class="top-button-box" :hidden="state.business == 'SCORE'" v-if="state.canShowService || state.business !== 'SCORE' && state.order.orderCanRefund && state.order.type !== 'PENNY' && state.butFalse">
+                    <button class="cancle" @click="toRefundGoods" :data-id="state.orderId" :data-status="state.status" :data-type="'REFUND'" v-if="state.business !== 'SCORE' && state.order.orderCanRefund && state.order.type !== 'PENNY'">申请退款</button>
+                    <button class="cancle" @click="toRefundGoods" :data-type="'REFUND'" :data-status="state.status" v-if="state.canShowService">申请退款</button>
+                    <!-- <button class="cancle" wx:if="{{canOneMore}}" bindtap="oneMore">再来一单</button> -->
+                    <button class="to-invitation btn" :style="'background: ' + state.themeColor + ';border: 2rpx solid ' + state.themeColor + ';'" open-type="share" data-shareType="penny" @click="shaerPenny" v-if="state.canShowService">邀请好友助力</button>
+                </view>
+            </view>
+            <view v-if="state.order.status == '已发货'">
+                <view class="top-tips">
+                    <view class="top">
+                        <text>门店已经发货</text>
+                        <text>请耐心等待配送员接单~</text>
+                    </view>
+                </view>
+                <view class="top-button-box" v-if="state.order.type !== 'PENNY' && state.butFalse">
+                    <button class="cancle" @click="toRefundGoods" :data-id="state.orderId" :data-status="state.status" v-if="state.business !== 'SCORE' && state.order.orderCanRefund && state.order.type !== 'PENNY'">申请退款</button>
+                    <!-- <button class="cancle" wx:if="{{canOneMore}}" bindtap="oneMore">再来一单</button> -->
+                    <button class="service btn" :style="'background: ' + state.themeColor + ';border: 2rpx solid ' + state.themeColor + ';'" @click="isOpenCustomerService ? '' : 'callContact'">联系客服</button>
+                </view>
+            </view>
+            <view v-if="state.order.status == '待配送'">
+                <view class="top-tips">
+                    <view class="top">
+                        <text>门店正在为您备货</text>
+                        <text>请您耐心等待~</text>
+                    </view>
+                </view>
+                <view class="top-button-box" v-if="state.butFalse">
+                    <button class="cancle" @click="toRefundGoods" :data-id="state.orderId" :data-status="state.status" v-if="state.business !== 'SCORE' && state.order.orderCanRefund && state.order.type !== 'PENNY'">申请退款</button>
+                    <!-- <button class="cancle" wx:if="{{canOneMore}}" bindtap="oneMore">再来一单</button> -->
+                    <button class="cancle btn" @click="toTrackingDetails" :hidden="state.isDistribution ? false : true">查看物流</button>
+                    <button class="service btn" :style="'background: ' + state.themeColor + ';border: 2rpx solid ' + state.themeColor + ';'" @click="isOpenCustomerService ? '' : 'callContact'">联系客服</button>
+                </view>
+            </view>
+            <view v-if="state.order.status == '已完成'">
+                <view class="top-tips">
+                    <view class="top">
+                        <text>感谢您对线上商城的信任</text>
+                        <text>期待您再次光临。</text>
+                    </view>
+                </view>
+                <view class="top-button-box" :hidden="state.business == 'SCORE' || state.storeOrderId" v-if="state.order.type !== 'PENNY' && state.butFalse">
+                    <!-- <button class="cancle" wx:if="{{canOneMore}}" bindtap="oneMore">再来一单</button> -->
+                    <button class="cancle" @click="toRefundGoods" :data-id="state.orderId" :data-status="state.status" v-if="state.business !== 'SCORE' && state.order.type !== 'PENNY'">申请退款</button>
+                    <button class="service btn" :style="'background: ' + state.themeColor + ';border: 2rpx solid ' + state.themeColor + ';'" @click="isOpenCustomerService ? '' : 'callContact'">联系客服</button>
+                </view>
+            </view>
+            <view v-if="state.order.status == '待评价'">
+                <view class="top-tips">
+                    <view class="top">
+                        <text>感谢您对线上商城的信任</text>
+                        <text>您的鼓励将是我们前进的动力。</text>
+                    </view>
+                </view>
+                <view class="top-button-box" v-if="state.butFalse">
+                    <button class="cancle" @click="toEvaluate" :data-id="state.orderId">去评价</button>
+                    <button class="cancle" @click="toRefundGoods" :data-id="state.orderId" :data-status="state.status" v-if="state.business !== 'SCORE' && state.order.type !== 'PENNY'">申请退款</button>
+                    <!-- <button class="cancle" wx:if="{{canOneMore}}" bindtap="oneMore">再来一单</button> -->
+                    <button class="service btn" :style="'background: ' + state.themeColor + ';border: 2rpx solid ' + state.themeColor + ';'" @click="isOpenCustomerService ? '' : 'callContact'">联系客服</button>
+                </view>
+            </view>
+            <view v-if="state.order.status == '退款中' || state.order.status == '接龙失败，退款中'">
+                <view class="top-tips">
+                    <view class="top">
+                        <text>订单您已申请退款</text>
+                        <text>退款金额将在2个工作日内原路退回。</text>
+                    </view>
+                    <text class="bottom"></text>
+                </view>
+                <view class="top-button-box" v-if="state.butFalse">
+                    <button class="cancle" @click="toService1">联系门店</button>
+                    <button class="cancle" @click="cancalRefund" :hidden="state.cancelFlag">取消退款</button>
+                    <!-- <button class="cancle" wx:if="{{canOneMore}}" bindtap="oneMore">再来一单</button> -->
+                    <button class="service btn" :style="'background: ' + state.themeColor + ';border: 2rpx solid ' + state.themeColor + ';'" @click="isOpenCustomerService ? '' : 'callContact'">联系客服</button>
+                </view>
+            </view>
+            <view v-if="state.order.status == '已退款' || state.order.status == '接龙失败，已退款'">
+                <view class="top-tips">
+                    <view class="top">
+                        <text>您的订单已退款成功</text>
+                        <text>退款金额已退回原路。</text>
+                    </view>
+                </view>
+                <view class="top-button-box" v-if="state.butFalse">
+                    <button class="cancle" @click="toMoneyGoing" v-if="state.order.type === 'PENNY'">钱款去向</button>
+                    <!-- <button class="cancle" wx:if="{{canOneMore}}" bindtap="oneMore">再来一单</button> -->
+                    <button class="service btn" :style="'background: ' + state.themeColor + ';border: 2rpx solid ' + state.themeColor + ';'" @click="isOpenCustomerService ? '' : 'callContact'">联系客服</button>
+                </view>
+            </view>
+            <view v-if="state.order.status == '部分退款'">
+                <view class="top-tips">
+                    <view class="top">
+                        <text>您的订单已部分退款成功</text>
+                        <text>退款金额已退回原路。</text>
+                    </view>
+                </view>
+                <view class="top-button-box" v-if="state.butFalse">
+                    <button class="cancle" @click="toRefundGoods" :data-id="state.orderId" :data-status="state.status" v-if="state.business !== 'SCORE' && state.order.orderCanRefund && state.order.type !== 'PENNY'">申请退款</button>
+                    <button class="cancle" @click="toMoneyGoing" v-if="state.order.type === 'PENNY'">钱款去向</button>
+                    <!-- <button class="cancle" wx:if="{{canOneMore}}" bindtap="oneMore">再来一单</button> -->
+                </view>
+            </view>
+            <view v-if="state.order.status == '待拼团'">
+                <view class="top-tips">
+                    <view class="top">
+                        <text>订单拼团还在等待拼团</text>
+                        <text>拼团记得叫上小伙伴哦~</text>
+                    </view>
+                </view>
+                <view class="top-button-box" v-if="state.butFalse">
+                    <button class="cancle" @click="toRefundGoods" :data-id="state.orderId" :data-status="state.status" :data-type="'REFUND'" v-if="state.business !== 'SCORE'">申请退款</button>
+                    <button class="to-invitation btn" :style="'background: ' + state.themeColor + ';border: 2rpx solid ' + state.themeColor + ';'" open-type="share" @click="shareGroup" :hidden="state.teamMemberCount - state.joinMemberCount == 0 || state.teamBuyEnd">邀请好友</button>
+                </view>
+            </view>
+            <view v-if="state.order.status == '已成团'">
+                <view class="top-tips">
+                    <view class="top">
+                        <text>订单拼团已经成团</text>
+                        <text>门店正在努力备货，请耐心等待~</text>
+                    </view>
+                </view>
+                <view class="top-button-box" v-if="state.butFalse">
+                    <button class="cancle" @click="toRefundGoods" :data-id="state.orderId" :data-status="state.status" :data-type="'REFUND'" v-if="state.business !== 'SCORE'">申请退款</button>
+                    <button class="to-invitation btn" :style="'background: ' + state.themeColor + ';border: 2rpx solid ' + state.themeColor + ';'" open-type="share" @click="shareGroup" :hidden="state.teamMemberCount - state.joinMemberCount == 0 || state.teamBuyEnd">邀请好友</button>
+                </view>
+            </view>
+            <view v-if="state.order.status == '已取消'">
+                <view class="top-tips">
+                    <view class="top">
+                        <text>订单已支付超时</text>
+                        <text>超出支付时间订单已自动取消。</text>
+                    </view>
+                </view>
+                <!-- <view class="top-button-box" wx:if="{{state.canOneMore && state.butFalse}}">
+                    <button class="cancle" wx:if="{{state.canOneMore}}" bindtap="oneMore">再来一单</button>
                 </view> -->
             </view>
-            <view class="ship-details" :hidden="state.currentItem !== trackingList[trackActiveIndex].id && state.orderTraceType != 'DLY'">
-                <view v-if="trackingList[trackActiveIndex].trailUrl || state.orderTraceType != 'DLY'" class="trajectory" :data-trackingNumber="trackingList[trackActiveIndex].trackingNumber" :data-item="trackingList[trackActiveIndex]" @click.stop="toTrajectory">查看轨迹 →</view>
-                <view class="content" v-if="trackingList[trackActiveIndex].shipdetails.length > 0">
-                    <view class="express-item" v-for="(item , index) in trackingList[trackActiveIndex].shipdetails" :hidden="!state.showAll && index != 0" :key="index">
-                        <image :src="state.imagesPath.current_clock" v-if="item.newest"></image>
-                        <image :src="state.imagesPath.pass_clock" v-if="!item.newest"></image>
-                        <view class="express-info">
-                            <text class="time">{{item.time}}</text>
-                            <view class="status">{{item.context}}<text @click="callDistributionPhone">{{state.distributionPhone}}</text></view>
+            <view v-if="state.order.status == '支付失败'">
+                <view class="top-tips">
+                    <view class="top">
+                        <text>订单已支付失败</text>
+                    </view>
+                </view>
+                <!-- <view class="top-button-box" wx:if="{{state.canOneMore && state.butFalse}}">
+                    <button class="cancle" wx:if="{{state.canOneMore}}" bindtap="oneMore">再来一单</button>
+                </view> -->
+            </view>
+            <view v-if="state.order.status == '待付尾款'">
+                <view class="top-tips">
+                    <view class="top">
+                        <text>订单已支付</text>
+                        <text v-if="state.butFalse" class="order-tips" :style="'color:' + state.themeColor + ';'">请于{{state.advanceSellTime.balanceDate}}期间支付尾款</text>
+                        <text v-if="state.shipmentType === 'EXPRESS'">支付尾款后配送~</text>
+                        <text v-if="state.shipmentType === 'SELF'">支付尾款后自提~</text>
+                    </view>
+                </view>
+                <view class="top-button-box" v-if="state.butFalse">
+                    <button class="payment" :style="'color: ' + state.themeColor + ';border: 2rpx solid ' + state.themeColor + ';'" @click="toPayTail" :data-id="state.orderId">待付尾款</button>
+                </view>
+            </view>
+        </view>
+        <view class="receive-box" v-if="state.shipmentType === 'EXPRESS' && state.memberName">
+            <view class="icon-box">
+                <image :src="state.imagesPath.iconOrderPosition"></image>
+            </view>
+            <view class="receive-info">
+                <view>
+                    {{state.memberName}}
+                    <text>{{state.mobile}}</text>
+                </view>
+                <view>{{state.address ? state.address : ""}}</view>
+            </view>
+        </view>
+        <view class="invite-join" v-if="state.isTeamShare">
+            <view class="group-title">
+                <view v-if="!state.teamBuyEnd">
+                    <view v-if="state.teamStatus == 'success'">拼团成功</view>
+                    <view v-else>还差 {{state.teamMemberCount - state.joinMemberCount}} 人拼团成功</view>
+                </view>
+                <view v-if="state.teamBuyEnd">当前团购活动已过期</view>
+                <view v-if="!state.teamBuyEnd">
+                    <view v-if="state.teamStatus != 'success'">剩余时间
+                        <text>{{state.countDownList.hou}}:{{state.countDownList.min}}:{{state.countDownList.sec}}</text>
+                    </view>
+                </view>
+                <view v-if="state.teamBuyEnd"></view>
+            </view>
+            <view class="group-people-list">
+                <view v-if="teamBuyingType !== 'THOUSAND'">
+                    <view class="people-item leader" v-for="(item , idx) in state.joinMbrs" :key="idx" v-if="idx == 0" :hidden="state.joinPeopleCount == 0">
+                        <image :src="item.avatar"></image>
+                        <text class="leader-label">团长</text>
+                    </view>
+                </view>
+                <view v-if="teamBuyingType === 'THOUSAND'">
+                    <view class="people-item" v-for="(item , index) in state.joinMbrs" :key="index" v-if="state.teamPeopleCount > 10 ? index < 9 : index < state.teamPeopleCount">
+                        <image :src="item.avatar"></image>
+                    </view>
+                    <view class="people-item" v-for="(item , index) in state.teamPeopleCount - state.joinPeopleCount" v-if="state.teamPeopleCount > 10 ? index < 9 - state.joinPeopleCount : state.teamPeopleCount - state.joinPeopleCount" :key="index">
+                        <text>?</text>
+                    </view>
+                </view>
+                <view v-if="teamBuyingType !== 'THOUSAND'">
+                    <view class="people-item" v-for="(item , index) in state.joinMbrs" :key="index" v-if="state.teamPeopleCount > 10 ? index < 8 : index < state.teamPeopleCount" :hidden="index == 0">
+                        <image :src="item.avatar"></image>
+                    </view>
+                    <view class="people-item" v-for="(item , index) in state.teamPeopleCount - state.joinPeopleCount" v-if="state.teamPeopleCount > 10 ? index < 9 - state.joinPeopleCount : state.teamPeopleCount - state.joinPeopleCount" :key="index">
+                        <text>?</text>
+                    </view>
+                </view>
+                <view class="people-more" v-if="state.teamPeopleCount > 10" :key="index">
+                    <image :src="state.imagesPath.iconCollageMore"></image>
+                </view>
+            </view>
+            <view v-if="state.teamMemberCount - state.joinMemberCount == 0 || state.teamBuyEnd ? false : true">
+                <button class="join-group usable" :style="'background-color: ' + state.themeColor" open-type="share" @click="shareGroup" :hidden="state.teamMemberCount - state.joinMemberCount == 0 || state.teamBuyEnd">邀请好友参团</button>
+                <view :hidden="state.teamBuyEnd || state.teamStatus == 'success'" class="group-share-text">分享到3个群，有95%的机会在5分钟内成团</view>
+            </view>
+            <view v-else>
+                <view class="group-success" v-if="state.teamStatus == 'success'">
+                    <icon type="success" size="20" :color="state.themeColor">
+                    <text>门店正在配货 请耐心等待片刻</text>
+                </icon></view>
+            </view>
+        </view>
+        <view v-if="(state.shipmentType === 'SELF' || state.shipmentType === 'EXPRESS') && state.order.type !== 'CYCLE' && (!state.subOrders || state.subOrders.length < 2)">
+            <view class="pickup-store">
+                <view class="navigation-box">
+                  <view class="title">
+                    {{state.order.business == 'SERVICE' ? '服务' : state.shipmentType == 'EXPRESS' ? '配送' : '提货'}}门店：{{state.order.storeName}}
+                  </view>
+                </view>
+                <view class="selftake-time color-454545" v-if="state.order.teamId != null || state.order.type === 'SOLITAIRE'">
+                    {{state.selfTimeScope}}
+                </view>
+                <view class="selftake-time color-454545" v-else-if="state.order.business == 'SERVICE' && state.order.selfPickBeginTime">
+                    <view>
+                      预约时间：{{state.order.selfPickBeginTime}}
+                    </view>
+                    <view>
+                      预约手机：{{state.order.receiverMobile}}
+                    </view>
+                </view>
+                <view class="selftake-time color-454545" v-else-if="state.selfTimeScope">
+                    {{state.shipmentType == 'EXPRESS' ? '配送' : '提货'}}时间：{{state.selfTimeScope}}
+                </view>
+                <!-- 门店时间 -->
+                <view class="selftake-time color-454545" v-else-if="state.storeInfo && state.storeInfo.storeHours">
+                  {{state.shipmentType == 'EXPRESS' ? '配送' : '提货'}}时间：{{state.storeInfo.storeHours}}
+                </view>
+                <view class="self-address color-454545" v-if="state.order.business != 'SERVICE' && state.storeInfo && state.shipmentType === 'SELF' && state.storeInfo.province">
+                  自提地址：{{state.storeInfo.province || ''}}{{state.storeInfo.city || ''}}{{state.storeInfo.district || ''}}{{state.storeInfo.address || ''}}
+                </view>
+                <view class="self-address color-454545">
+                  订单备注：{{state.order.remark || ''}}
+                </view>
+                <view v-if="state.order.status === '已付款' && state.order.type != 'SERVICE'" class="order-btn-box">
+                  <!-- <view class="navigation" wx:if="{{state.shipmentType === 'SELF'}}" catchtap="navToStore">
+                    <image src="{{state.imagesPath.iconStoreNav}}"></image>
+                    <text>到这去</text>
+                  </view> -->
+                  <button type="default" size="mini" @click.stop="editTime" plain="" v-if="state.status && !(state.status == '待付款' || orderfrom || state.status == '付款待自提') && state.selfTimeScope && state.orderDeliveryTimeCanModifyCount && state.orderDeliveryTimeCanModifyCount > state.order.deliveryTimeModifyCount">
+                    <image class="order-icon" :src="state.imagesPath.orderEditTime" mode="heightFix"></image>
+                    修改时间/备注
+                  </button>
+                  <button v-if="state.shipmentType === 'SELF'" type="default" size="mini" plain="" @click.stop="navToStore">
+                    <image class="order-icon" :src="state.imagesPath.orderAddress" mode="heightFix"></image>
+                    导航地址
+                  </button>
+                </view>
+                <view v-if="(state.order.status === '待服务' || state.shipmentType === 'SELF' && (state.order.status === '待自提' || state.order.status === '已付款')) && !state.showBarcode">
+                  <image mode="widthFix" @click="getOrder" class="self-code-img" :src="state.imagesPath.selfCode"></image>
+                </view>
+                <view v-else-if="state.order.status === '待自提' || state.business == 'SCORE' && state.order.status == '已付款'">
+                    <view class="code-box">
+                        <view class="barcode-box" @click="showBarcode ? 'handleToBigBarcode' : ''">
+                            <view v-if="state.showBarcode">
+                                <canvas id="orderBarcode" type="2d" :style="state.barcodeImageUrl ? '' : 'left: -999999rpx;'">
+                                <image :src="state.barcodeImageUrl" v-if="state.barcodeImageUrl"></image>
+                            </canvas></view>
+                            <view v-else>
+                                <image mode="widthFix" :src="state.imagesPath.iconOrderCode"></image>
+                            </view>
+                        </view>
+                        <text class="code-text" v-if="state.showBarcode">{{state.codeText}}</text>
+                        <text class="selfTime-text" v-if="!state.showBarcode">{{state.selfTimeText}}</text>
+                    </view>
+                    <view class="deliveryTimeStatement" v-if="state.deliveryTimeStatement">
+                        该订单内含有特殊可自提/配送时间商品，此类商品自提/配送时间以该商品描述为准</view>
+                </view>
+            </view>
+        </view>
+        <!-- 添加快递类 展示配送信息 -->
+        <view class="addressBox" v-if="refundStatus == 'REFUND_WAITRECEIVER' && state.order.shipmentType === 'LOGISTICAL'">
+            <view class="addressBox-active">
+                <view class="addressBox-active-left">
+                    <image src="http://wmsaas-prod.oss-cn-beijing.aliyuncs.com/wmsaas-prod/20221109/1590217534970281985/%E7%BB%84%202@2x.png"></image>
+                    
+                </view>
+                <view class="addressBox-active-content">
+                    <view class="addressBox-active-content-top">
+                        {{refundAddress.contact}} {{refundAddress.mobile}}
+                    </view>
+                    <view>
+                        {{refundAddress.address}}
+                    </view>
+                </view>
+                <view class="addressBox-active-right" @click="clipBtn">
+                    <image src="http://wmsaas-prod.oss-cn-beijing.aliyuncs.com/wmsaas-prod/20221109/1590217908309475330/%E5%BD%A2%E7%8A%B6%201@2x.png"></image>
+                    
+                </view>
+            </view>
+            <view class="addressBox-active-bottom" @click="addressBox">
+                <view class="addressBox-active-bottom-top">
+                    我已寄出
+                </view>
+                <view class="addressBox-active-bottom-bottom">
+                    {{state.order.refundTrackingNumber ? '查看物流信息' : '填写物流信息'}} <image style="width: 12rpx; height: 23rpx; vertical-align: middle; margin-left: 8rpx;" :src="state.imagesPath.iconRight2"></image>
+                </view>
+            </view>
+        </view>
+
+        <view class="tracking_content" v-if="trackingList && trackingList.length > 0">
+            <view class="track_tabbar">
+                <view v-for="(item , index) in trackingList" :style="'color: ' + (state.trackActiveIndex === index ? state.themeColor : '#999')" :class="state.trackActiveIndex === index ? 'tab_active' : ''" :key="i" :data-id="item.id" :data-index="index" @click="clickShipdetails">
+                    包裹{{index + 1}}
+                </view>
+            </view>
+            <view class="tracking-item">
+                <view class="header">
+                    <view>运单号:<text class="express-number">{{trackingList[trackActiveIndex].trackingNumber}}</text><text class="copy_text" @click.stop="clipBtn1" :style="'color:' + state.themeColor" :data-track="trackingList[trackActiveIndex].trackingNumber">复制</text></view>
+                    <view>国内承运人:<text class="express-name">{{trackingList[trackActiveIndex].trackingCom}}</text></view>
+                    <view>国内承运人电话:<text class="express-tel" :style="'color: ' + state.themeColor" @click="callTrackingPhone">{{trackingList[trackActiveIndex].phoneNum}}</text></view>
+                    <view class="checkGoods" v-if="state.orderTraceType != 'DLY'" :data-trackingNumber="trackingList[trackActiveIndex].trackingNumber" :data-item="trackingList[trackActiveIndex]" @click.stop="checkGoods">查看商品</view>
+                    <!-- <view class="right">配送详情<image class="right-icon {{state.currentItem === trackingList[trackActiveIndex].id ? 'active' : ''}}" src="{{state.imagesPath.iconRight2}}" ></image>
+                    </view> -->
+                </view>
+                <view class="ship-details" :hidden="state.currentItem !== trackingList[trackActiveIndex].id && state.orderTraceType != 'DLY'">
+                    <view v-if="trackingList[trackActiveIndex].trailUrl || state.orderTraceType != 'DLY'" class="trajectory" :data-trackingNumber="trackingList[trackActiveIndex].trackingNumber" :data-item="trackingList[trackActiveIndex]" @click.stop="toTrajectory">查看轨迹 →</view>
+                    <view class="content" v-if="trackingList[trackActiveIndex].shipdetails.length > 0">
+                        <view class="express-item" v-for="(item , index) in trackingList[trackActiveIndex].shipdetails" :hidden="!state.showAll && index != 0" :key="index">
+                            <image :src="state.imagesPath.current_clock" v-if="item.newest"></image>
+                            <image :src="state.imagesPath.pass_clock" v-if="!item.newest"></image>
+                            <view class="express-info">
+                                <text class="time">{{item.time}}</text>
+                                <view class="status">{{item.context}}<text @click="callDistributionPhone">{{state.distributionPhone}}</text></view>
+                            </view>
                         </view>
                     </view>
-                </view>
-                <view v-if="trackingList[trackActiveIndex].shipdetails.length > 1" @click="changeShow" class="show_btn" :style="'color:' + state.themeColor">
-                    {{state.showAll ? '收起' : '展开'}}
-                </view>
-                <view class="no-data" v-if="trackingList[trackActiveIndex].shipdetails.length == 0">
-                    <text>暂无快递信息</text>
-                </view>
-            </view>
-        </view>
-    </view>
-    <view v-if="state.subOrders && state.subOrders.length > 0">
-      <view class="goods-box sub-orders-box good-type-box" v-for="(item , goodTypeIndex) in state.subOrders">
-        <!-- <view>
-          <image wx:if="{{item.shipmentType == 'LOGISTICAL' && item.business == 'DISTRIBUTION'}}" src="{{state.imagesPath.distributionGood}}" mode="heightFix" class="good-type-icon"></image>
-          <image wx:elif="{{item.shipmentType == 'nextDay'}}" src="{{state.imagesPath.nextDayGood}}" mode="heightFix" class="good-type-icon"></image>
-          <image wx:else src="{{state.imagesPath.storeGood}}" mode="heightFix" class="good-type-icon"></image>
-        </view> -->
-        <view class="good-type-title">
-          <view style="color: #137DFF" v-if="item.shipmentType == 'LOGISTICAL' && item.business == 'DISTRIBUTION' && state.shoppingData.distribution">{{state.shoppingData.distribution.labelName}}</view>
-          <view style="color: #23C257" v-else-if="item.type == 'NEXT_DAY' && state.shoppingData.nextDay">{{state.shoppingData.nextDay.labelName}}</view>
-          <view style="color: #F66600" v-else>{{state.shoppingData.store ? state.shoppingData.store.labelName : '门店商品'}}</view>
-        </view>
-        <view class="group-top" v-if="item.type === 'TEAMBUING'">
-          <image class="group-bg" :src="state.imagesPath.perfectOrderImg" mode="widthFix"></image>
-        </view>
-        <view class="group-top" v-if="item.type === 'SOLITAIRE'">
-            <image class="group-bg" :src="state.imagesPath.perfectOrderSolitaireImg" mode="widthFix"></image>
-        </view>
-        <view class="good-type-config-item" v-if="item.business != 'DISTRIBUTION'">
-          <view class="delivery-method-name" v-if="item.business != 'DISTRIBUTION' && item.type !== 'SOLITAIRE'">配送方式</view>
-          <view class="type-check-box" :hidden="item.business === 'DISTRIBUTION' || item.type === 'SOLITAIRE'">
-                <view v-if="item.shipmentType == 'SELF'" :class="'self-take ' + (state.subOrders[goodTypeIndex].shipmentType == 'SELF' ? 'active' : '')" :style="theme.mainColor + theme.borderColor">
-                    <image :src="state.imagesPath.iconOrderSelfTakeActive"></image>
-                    <text :style="theme.mainColor">到店自提</text>
-                </view>
-                <view v-if="item.shipmentType == 'EXPRESS'" :class="'dispatch ' + (state.subOrders[goodTypeIndex].shipmentType == 'EXPRESS' ? 'active' : '')" :style="theme.mainColor + theme.borderColor">
-                    <image :src="state.imagesPath.iconOrderTakeoutActive"></image>
-                    <text :style="theme.mainColor">{{item.business === 'DISTRIBUTION' || isDistributionOrder ? "快递配送" : "外卖配送"}}</text>
-                </view>
-          </view>
-        </view>
-        <!-- <view class="good-type-config-item self-time-box" wx:if="{{item.type !== 'CYCLE' && item.type !== 'TEAMBUING' && item.type !== 'ADVANCE_SELL' && item.type !== 'SOLITAIRE' && item.business !== 'DISTRIBUTION'}}">
-          <view class="picker time-picker" > 
-              <view> 
-                  <view>
-                      <text wx:if="{{item.shipmentType == 'EXPRESS'}}">配送时间</text>
-                      <text wx:else>自提时间</text>
-                  </view>  
-                  <view>
-                      <text style="{{theme.mainColor}}">{{state.selfTimeScope}}</text>
-                  </view>  
-              </view>
-          </view>
-        </view> -->
-        <view class="goods-list" v-if="item.products && item.productNum == 1">
-          <view class="goods-item-box" v-for="(item , index) in item.products" :key="index">
-              <view class="goods-item" v-if="!item.giftProduct">
-                  <view class="goods-img" @click.stop="toGoodsDetails" :data-id="item.productId">
-                      <image :src="item.imageUrl || state.imagesPath.storeOrderDefaultIcon" mode="widthFix"></image>
-                      <image class="seckill-icon" mode="widthFix" v-if="item.grabActivityId" :src="state.imagesPath.iconSeckillSeat"></image>
-                  </view>
-                  <view class="goods-info">
-                      <view class="goods-name" @click.stop="toGoodsDetails" :data-id="item.productId">{{state.order.type && state.order.type !== 'CYCLE' ? item.name : state.order.activityName}}</view>
-                      <view class="goods-detail-info" v-if="item.style === 'MEALS2'">
-                          <text v-for="(item , index) in item.list" :key="index">{{item.groupProductCount}}x{{item.productName}}</text>
-                      </view>
-                      <view class="goods-label" v-else-if="item.packagingLabelName">{{item.packagingLabelName}}</view>
-                      <view class="goods-desc" v-else-if="state.order.type === 'CYCLE'">{{state.order.products[0].cycleFixedName}}</view>
-                      <view class="goods-desc" v-else>{{item.specs}}</view>
-                      
-                      <view class="goods-desc" v-if="item.deliveryTimeStatement && state.order.type !== 'CYCLE'" style="color: #ff9f43;">
-                          {{item.deliveryTimeStatement}}</view>
-                      <view class="number-price">
-                          <view class="goods-count"><text>x{{item.productNum}}</text>
-                              <text class="refund-num" v-if="item.refundAmount">已退{{item.refundAmount}}</text>
-                          </view>
-                          <!-- <view class="goods-count" wx:if="{{state.order.type === 'CYCLE'}}"><text wx:if="{{item.cyclePhase}}">第{{item.cyclePhase}}期</text>
-                        </view> -->
-                          <view class="goods-price" v-if="state.order.business === 'SCORE' || state.order.type == 'SCORE_PRICE'">
-                              <text class="nowPrice">{{state.scorePayment ? state.scorePayment + '积分' : ''}}{{state.order.cashTotal && state.order.cashTotal > 0 && toFix(state.order.cashTotal - state.shipmentAmount) > 0 ? '+￥' + toFix(state.order.cashTotal - state.shipmentAmount) + '元' : ''}}</text>
-                          </view>
-                          <view class="goods-price" v-else>
-                              <text class="nowPrice">￥{{item.price}}</text>
-                          </view>
-                      </view>
-                  </view>
-              </view>
-              <view class="gift-box" v-if="item.giftProduct">
-                  <view class="gift-title">赠品:</view>
-                  <view class="gift-item-box">
-                      <view class="gift-item">
-                          <view>
-                              <view class="gift-img-box">
-                                  <image :src="item.imageUrl"></image>
-                              </view>
-                              <text>{{item.name}}</text>
-                          </view>
-                          <view class="gift-num">x{{item.productNum}}</view>
-                      </view>
-                  </view>
-              </view>
-          </view>
-        </view>
-        <view class="goods-list" v-else-if="item.products && item.productNum > 1">
-          <view class="goods-item-box">
-              <view class="goods-item">
-                <view class="goods-img-box">
-                  <view v-for="(item , index) in item.products" v-if="index < 4" :key="index" class="goods-img" @click.stop="toGoodsDetails" :data-id="item.productId">
-                    <image :src="item.imageUrl || state.imagesPath.storeOrderDefaultIcon" mode="widthFix"></image>
-                    <image class="seckill-icon" mode="widthFix" v-if="item.grabActivityId" :src="state.imagesPath.iconSeckillSeat"></image>
-                  </view>
-                </view>
-                <view class="good-num" @click="showGood" :data-idx="goodTypeIndex">
-                  共{{item.productNum}}件
-                  <image class="right-point" :src="state.imagesPath.iconRight2"></image>
-                </view>
-              </view>
-          </view>
-        </view>
-        <view class="bill-details">
-          <view class="balance-accounts">
-              商品小计：
-              <text>￥{{toFix(item.orderAmount)}}</text>
-          </view>
-        </view>
-        <view class="good-type-config-item store-info" v-if="solitaireType !== 'ACTIVITY' && item.business !== 'DISTRIBUTION'">
-          <view>配送门店</view>
-          <view class="store-details">
-            <view>{{item.storeName}}</view>
-          </view>
-        </view>
-        <view class="good-type-config-item section-box dispatching-fee" v-if="item.shipmentType !== 'SELF'">
-          <view class="left">运费</view>
-          <view v-if="item.shipmentAmount != 0">
-            <view>
-              ￥{{item.shipmentAmount}}
-            </view>
-          </view>
-          <view v-else>
-            <view>
-              {{item.shipmentAmount == 0 ? '包邮' : ''}}
-            </view>
-          </view>
-        </view>
-        <view class="good-type-config-item pay-item" :hidden="item.shipmentType === 'SELF'" v-if="item.deductibleShipmentAmonut && item.deductibleShipmentAmonut > 0">
-            <view class="left">运费券</view>
-            <view class="right coupon">
-                <view :hidden="item.deductibleShipmentAmonut !== 0 ? false : true">
-                    <view class="coupon-amount-box">
-                        <text class="coupon-amount">-￥{{toFix(item.deductibleShipmentAmonut)}}</text>
+                    <view v-if="trackingList[trackActiveIndex].shipdetails.length > 1" @click="changeShow" class="show_btn" :style="'color:' + state.themeColor">
+                        {{state.showAll ? '收起' : '展开'}}
+                    </view>
+                    <view class="no-data" v-if="trackingList[trackActiveIndex].shipdetails.length == 0">
+                        <text>暂无快递信息</text>
                     </view>
                 </view>
             </view>
         </view>
-        <view class="good-type-config-item row">
-            <view class="title">备注</view>
-            <view class="right">
-                <view class="info">{{item.remarks ? item.remarks : item.remark || '-'}}</view>
+        <view v-if="state.subOrders && state.subOrders.length > 0">
+          <view class="goods-box sub-orders-box good-type-box" v-for="(item , goodTypeIndex) in state.subOrders">
+            <!-- <view>
+              <image wx:if="{{item.shipmentType == 'LOGISTICAL' && item.business == 'DISTRIBUTION'}}" src="{{state.imagesPath.distributionGood}}" mode="heightFix" class="good-type-icon"></image>
+              <image wx:elif="{{item.shipmentType == 'nextDay'}}" src="{{state.imagesPath.nextDayGood}}" mode="heightFix" class="good-type-icon"></image>
+              <image wx:else src="{{state.imagesPath.storeGood}}" mode="heightFix" class="good-type-icon"></image>
+            </view> -->
+            <view class="good-type-title">
+              <view style="color: #137DFF" v-if="item.shipmentType == 'LOGISTICAL' && item.business == 'DISTRIBUTION' && state.shoppingData.distribution">{{state.shoppingData.distribution.labelName}}</view>
+              <view style="color: #23C257" v-else-if="item.type == 'NEXT_DAY' && state.shoppingData.nextDay">{{state.shoppingData.nextDay.labelName}}</view>
+              <view style="color: #F66600" v-else>{{state.shoppingData.store ? state.shoppingData.store.labelName : '门店商品'}}</view>
             </view>
-        </view>
-      </view>
-    </view>
-    <view class="goods-box" v-else>
-      <!-- <view class="goods-count" wx:if="{{state.order.type === 'CYCLE'}}"><text wx:if="{{item.cyclePhase}}">第{{item.cyclePhase}}期</text>
-                          </view>  -->
-        <view class="title-box">
-          <image :src="state.imagesPath.storeOrderIcon" v-if="state.storeOrderId" mode="widthFix"></image>
-          {{state.order.business == 'SERVICE' ? "服务项目" : "商品信息"}}{{state.order.type === 'CYCLE' && state.options.status !== '付款待自提' && state.goodsList[0].cyclePhase ? '（第' + state.goodsList[0].cyclePhase + '期）' : ''}}
-        </view>
-        <view class="goods-list" @click="toPennyDetails">
-            <view class="goods-item-box" v-for="(item , index) in state.goodsList" :key="index" :hidden="index > 2 && !state.showMore">
-                <view class="goods-item" v-if="!item.giftProduct">
-                    <view class="goods-img" @click.stop="toGoodsDetails" :data-id="item.productId">
+            <view class="group-top" v-if="item.type === 'TEAMBUING'">
+              <image class="group-bg" :src="state.imagesPath.perfectOrderImg" mode="widthFix"></image>
+            </view>
+            <view class="group-top" v-if="item.type === 'SOLITAIRE'">
+                <image class="group-bg" :src="state.imagesPath.perfectOrderSolitaireImg" mode="widthFix"></image>
+            </view>
+            <view class="good-type-config-item" v-if="item.business != 'DISTRIBUTION'">
+              <view class="delivery-method-name" v-if="item.business != 'DISTRIBUTION' && item.type !== 'SOLITAIRE'">配送方式</view>
+              <view class="type-check-box" :hidden="item.business === 'DISTRIBUTION' || item.type === 'SOLITAIRE'">
+                    <view v-if="item.shipmentType == 'SELF'" :class="'self-take ' + (state.subOrders[goodTypeIndex].shipmentType == 'SELF' ? 'active' : '')" :style="theme.mainColor + theme.borderColor">
+                        <image :src="state.imagesPath.iconOrderSelfTakeActive"></image>
+                        <text :style="theme.mainColor">到店自提</text>
+                    </view>
+                    <view v-if="item.shipmentType == 'EXPRESS'" :class="'dispatch ' + (state.subOrders[goodTypeIndex].shipmentType == 'EXPRESS' ? 'active' : '')" :style="theme.mainColor + theme.borderColor">
+                        <image :src="state.imagesPath.iconOrderTakeoutActive"></image>
+                        <text :style="theme.mainColor">{{item.business === 'DISTRIBUTION' || isDistributionOrder ? "快递配送" : "外卖配送"}}</text>
+                    </view>
+              </view>
+            </view>
+            <!-- <view class="good-type-config-item self-time-box" wx:if="{{item.type !== 'CYCLE' && item.type !== 'TEAMBUING' && item.type !== 'ADVANCE_SELL' && item.type !== 'SOLITAIRE' && item.business !== 'DISTRIBUTION'}}">
+              <view class="picker time-picker" > 
+                  <view> 
+                      <view>
+                          <text wx:if="{{item.shipmentType == 'EXPRESS'}}">配送时间</text>
+                          <text wx:else>自提时间</text>
+                      </view>  
+                      <view>
+                          <text style="{{theme.mainColor}}">{{state.selfTimeScope}}</text>
+                      </view>  
+                  </view>
+              </view>
+            </view> -->
+            <view class="goods-list" v-if="item.products && item.productNum == 1">
+              <view class="goods-item-box" v-for="(item , index) in item.products" :key="index">
+                  <view class="goods-item" v-if="!item.giftProduct">
+                      <view class="goods-img" @click.stop="toGoodsDetails" :data-id="item.productId">
+                          <image :src="item.imageUrl || state.imagesPath.storeOrderDefaultIcon" mode="widthFix"></image>
+                          <image class="seckill-icon" mode="widthFix" v-if="item.grabActivityId" :src="state.imagesPath.iconSeckillSeat"></image>
+                      </view>
+                      <view class="goods-info">
+                          <view class="goods-name" @click.stop="toGoodsDetails" :data-id="item.productId">{{state.order.type && state.order.type !== 'CYCLE' ? item.name : state.order.activityName}}</view>
+                          <view class="goods-detail-info" v-if="item.style === 'MEALS2'">
+                              <text v-for="(item , index) in item.list" :key="index">{{item.groupProductCount}}x{{item.productName}}</text>
+                          </view>
+                          <view class="goods-label" v-else-if="item.packagingLabelName">{{item.packagingLabelName}}</view>
+                          <view class="goods-desc" v-else-if="state.order.type === 'CYCLE'">{{state.order.products[0].cycleFixedName}}</view>
+                          <view class="goods-desc" v-else>{{item.specs}}</view>
+                          
+                          <view class="goods-desc" v-if="item.deliveryTimeStatement && state.order.type !== 'CYCLE'" style="color: #ff9f43;">
+                              {{item.deliveryTimeStatement}}</view>
+                          <view class="number-price">
+                              <view class="goods-count"><text>x{{item.productNum}}</text>
+                                  <text class="refund-num" v-if="item.refundAmount">已退{{item.refundAmount}}</text>
+                              </view>
+                              <!-- <view class="goods-count" wx:if="{{state.order.type === 'CYCLE'}}"><text wx:if="{{item.cyclePhase}}">第{{item.cyclePhase}}期</text>
+                            </view> -->
+                              <view class="goods-price" v-if="state.order.business === 'SCORE' || state.order.type == 'SCORE_PRICE'">
+                                  <text class="nowPrice">{{state.scorePayment ? state.scorePayment + '积分' : ''}}{{state.order.cashTotal && state.order.cashTotal > 0 && toFix(state.order.cashTotal - state.shipmentAmount) > 0 ? '+￥' + toFix(state.order.cashTotal - state.shipmentAmount) + '元' : ''}}</text>
+                              </view>
+                              <view class="goods-price" v-else>
+                                  <text class="nowPrice">￥{{item.price}}</text>
+                              </view>
+                          </view>
+                      </view>
+                  </view>
+                  <view class="gift-box" v-if="item.giftProduct">
+                      <view class="gift-title">赠品:</view>
+                      <view class="gift-item-box">
+                          <view class="gift-item">
+                              <view>
+                                  <view class="gift-img-box">
+                                      <image :src="item.imageUrl"></image>
+                                  </view>
+                                  <text>{{item.name}}</text>
+                              </view>
+                              <view class="gift-num">x{{item.productNum}}</view>
+                          </view>
+                      </view>
+                  </view>
+              </view>
+            </view>
+            <view class="goods-list" v-else-if="item.products && item.productNum > 1">
+              <view class="goods-item-box">
+                  <view class="goods-item">
+                    <view class="goods-img-box">
+                      <view v-for="(item , index) in item.products" v-if="index < 4" :key="index" class="goods-img" @click.stop="toGoodsDetails" :data-id="item.productId">
                         <image :src="item.imageUrl || state.imagesPath.storeOrderDefaultIcon" mode="widthFix"></image>
                         <image class="seckill-icon" mode="widthFix" v-if="item.grabActivityId" :src="state.imagesPath.iconSeckillSeat"></image>
+                      </view>
                     </view>
-                    <view class="goods-info">
-                        <view class="goods-name" @click.stop="toGoodsDetails" :data-id="item.productId">{{state.order.type && state.order.type !== 'CYCLE' ? item.name : state.order.activityName}}</view>
-                        <view class="goods-desc gradeImgbox" v-if="state.order.business == 'SERVICE'">
-                          <image class="gradeImg" v-if="state.order.serviceStaffGradeImg" mode="heightFix" :src="state.order.serviceStaffGradeImg"></image>
-                          {{state.order.serviceStaffNickname}}（服务时长：{{state.order.serviceDuration1 ? state.order.serviceDuration1 + '-' : ''}}{{state.order.serviceDuration}}分钟）
-                        </view>
-                        <view class="goods-detail-info" v-if="item.style === 'MEALS2'">
-                            <text v-for="(item , index) in item.list" :key="index">{{item.groupProductCount}}x{{item.productName}}</text>
-                        </view>
-                        <view class="goods-label" v-else-if="item.packagingLabelName">{{item.packagingLabelName}}</view>
-                        <view class="goods-desc" v-else-if="state.order.type === 'CYCLE'">{{state.order.products[0].cycleFixedName}}</view>
-                        <view class="goods-desc" v-else>{{item.specs}}</view>
-                        
-                        <view class="goods-desc" v-if="item.deliveryTimeStatement && state.order.type !== 'CYCLE'" style="color: #ff9f43;">
-                            {{item.deliveryTimeStatement}}</view>
-                        <view class="number-price">
-                            <view class="goods-count"><text>x{{item.productNum}}</text>
-                                <text class="refund-num" v-if="item.refundAmount">已退{{item.refundAmount}}</text>
-                                <text class="refund-num" v-if="item.refundedCount">已退{{item.refundedCount}}</text>
-                            </view>
-                            <!-- <view class="goods-count" wx:if="{{state.order.type === 'CYCLE'}}"><text wx:if="{{item.cyclePhase}}">第{{item.cyclePhase}}期</text>
-                          </view> -->
-                            <view class="goods-price" v-if="state.order.business === 'SCORE' || state.order.type == 'SCORE_PRICE'">
-                                <text class="nowPrice">{{state.scorePayment ? state.scorePayment + '积分' : ''}}{{state.order.cashTotal && state.order.cashTotal > 0 && toFix(state.order.cashTotal - state.shipmentAmount) > 0 ? '+￥' + toFix(state.order.cashTotal - state.shipmentAmount) + '元' : ''}}</text>
-                            </view>
-                            <view class="goods-price" v-else>
-                                <text class="nowPrice">￥{{item.price}}</text>
-                            </view>
+                    <view class="good-num" @click="showGood" :data-idx="goodTypeIndex">
+                      共{{item.productNum}}件
+                      <image class="right-point" :src="state.imagesPath.iconRight2"></image>
+                    </view>
+                  </view>
+              </view>
+            </view>
+            <view class="bill-details">
+              <view class="balance-accounts">
+                  商品小计：
+                  <text>￥{{toFix(item.orderAmount)}}</text>
+              </view>
+            </view>
+            <view class="good-type-config-item store-info" v-if="solitaireType !== 'ACTIVITY' && item.business !== 'DISTRIBUTION'">
+              <view>配送门店</view>
+              <view class="store-details">
+                <view>{{item.storeName}}</view>
+              </view>
+            </view>
+            <view class="good-type-config-item section-box dispatching-fee" v-if="item.shipmentType !== 'SELF'">
+              <view class="left">运费</view>
+              <view v-if="item.shipmentAmount != 0">
+                <view>
+                  ￥{{item.shipmentAmount}}
+                </view>
+              </view>
+              <view v-else>
+                <view>
+                  {{item.shipmentAmount == 0 ? '包邮' : ''}}
+                </view>
+              </view>
+            </view>
+            <view class="good-type-config-item pay-item" :hidden="item.shipmentType === 'SELF'" v-if="item.deductibleShipmentAmonut && item.deductibleShipmentAmonut > 0">
+                <view class="left">运费券</view>
+                <view class="right coupon">
+                    <view :hidden="item.deductibleShipmentAmonut !== 0 ? false : true">
+                        <view class="coupon-amount-box">
+                            <text class="coupon-amount">-￥{{toFix(item.deductibleShipmentAmonut)}}</text>
                         </view>
                     </view>
                 </view>
-                <view class="gift-box" v-if="item.giftProduct">
-                    <view class="gift-title">赠品:</view>
-                    <view class="gift-item-box">
-                        <view class="gift-item">
-                            <view>
-                                <view class="gift-img-box">
-                                    <image :src="item.imageUrl"></image>
+            </view>
+            <view class="good-type-config-item row">
+                <view class="title">备注</view>
+                <view class="right">
+                    <view class="info">{{item.remarks ? item.remarks : item.remark || '-'}}</view>
+                </view>
+            </view>
+          </view>
+        </view>
+        <view class="goods-box" v-else>
+          <!-- <view class="goods-count" wx:if="{{state.order.type === 'CYCLE'}}"><text wx:if="{{item.cyclePhase}}">第{{item.cyclePhase}}期</text>
+                              </view>  -->
+            <view class="title-box">
+              <image :src="state.imagesPath.storeOrderIcon" v-if="state.storeOrderId" mode="widthFix"></image>
+              {{state.order.business == 'SERVICE' ? "服务项目" : "商品信息"}}{{state.order.type === 'CYCLE' && state.options.status !== '付款待自提' && state.goodsList[0].cyclePhase ? '（第' + state.goodsList[0].cyclePhase + '期）' : ''}}
+            </view>
+            <view class="goods-list" @click="toPennyDetails">
+                <view class="goods-item-box" v-for="(item , index) in state.goodsList" :key="index" :hidden="index > 2 && !state.showMore">
+                    <view class="goods-item" v-if="!item.giftProduct">
+                        <view class="goods-img" @click.stop="toGoodsDetails" :data-id="item.productId">
+                            <image :src="item.imageUrl || state.imagesPath.storeOrderDefaultIcon" mode="widthFix"></image>
+                            <image class="seckill-icon" mode="widthFix" v-if="item.grabActivityId" :src="state.imagesPath.iconSeckillSeat"></image>
+                        </view>
+                        <view class="goods-info">
+                            <view class="goods-name" @click.stop="toGoodsDetails" :data-id="item.productId">{{state.order.type && state.order.type !== 'CYCLE' ? item.name : state.order.activityName}}</view>
+                            <view class="goods-desc gradeImgbox" v-if="state.order.business == 'SERVICE'">
+                              <image class="gradeImg" v-if="state.order.serviceStaffGradeImg" mode="heightFix" :src="state.order.serviceStaffGradeImg"></image>
+                              {{state.order.serviceStaffNickname}}（服务时长：{{state.order.serviceDuration1 ? state.order.serviceDuration1 + '-' : ''}}{{state.order.serviceDuration}}分钟）
+                            </view>
+                            <view class="goods-detail-info" v-if="item.style === 'MEALS2'">
+                                <text v-for="(item , index) in item.list" :key="index">{{item.groupProductCount}}x{{item.productName}}</text>
+                            </view>
+                            <view class="goods-label" v-else-if="item.packagingLabelName">{{item.packagingLabelName}}</view>
+                            <view class="goods-desc" v-else-if="state.order.type === 'CYCLE'">{{state.order.products[0].cycleFixedName}}</view>
+                            <view class="goods-desc" v-else>{{item.specs}}</view>
+                            
+                            <view class="goods-desc" v-if="item.deliveryTimeStatement && state.order.type !== 'CYCLE'" style="color: #ff9f43;">
+                                {{item.deliveryTimeStatement}}</view>
+                            <view class="number-price">
+                                <view class="goods-count"><text>x{{item.productNum}}</text>
+                                    <text class="refund-num" v-if="item.refundAmount">已退{{item.refundAmount}}</text>
+                                    <text class="refund-num" v-if="item.refundedCount">已退{{item.refundedCount}}</text>
                                 </view>
-                                <text>{{item.completeName || item.name}}</text>
+                                <!-- <view class="goods-count" wx:if="{{state.order.type === 'CYCLE'}}"><text wx:if="{{item.cyclePhase}}">第{{item.cyclePhase}}期</text>
+                              </view> -->
+                                <view class="goods-price" v-if="state.order.business === 'SCORE' || state.order.type == 'SCORE_PRICE'">
+                                    <text class="nowPrice">{{state.scorePayment ? state.scorePayment + '积分' : ''}}{{state.order.cashTotal && state.order.cashTotal > 0 && toFix(state.order.cashTotal - state.shipmentAmount) > 0 ? '+￥' + toFix(state.order.cashTotal - state.shipmentAmount) + '元' : ''}}</text>
+                                </view>
+                                <view class="goods-price" v-else>
+                                    <text class="nowPrice">￥{{item.price}}</text>
+                                </view>
                             </view>
-                            <view class="gift-num">x{{item.productNum}}</view>
+                        </view>
+                    </view>
+                    <view class="gift-box" v-if="item.giftProduct">
+                        <view class="gift-title">赠品:</view>
+                        <view class="gift-item-box">
+                            <view class="gift-item">
+                                <view>
+                                    <view class="gift-img-box">
+                                        <image :src="item.imageUrl"></image>
+                                    </view>
+                                    <text>{{item.completeName || item.name}}</text>
+                                </view>
+                                <view class="gift-num">x{{item.productNum}}</view>
+                            </view>
                         </view>
                     </view>
                 </view>
             </view>
-        </view>
-        <view class="viewMore" @click="viewMore" v-if="state.goodsList.length > 3">
-            {{state.showMore ? "点击收起" : "查看更多"}}
-            <image :src="state.showMore ? state.imagesPath.iconCollect : state.imagesPath.iconDropDown"></image>
-        </view>
-        <view class="dividing-line" v-if="state.order.shipmentType === 'EXPRESS' || state.order.shipmentType === 'LOGISTICAL' || state.couponDeductTotal > 0 || state.coupon && state.coupon.price > 0 || cashDeductTotal > 0 || state.order.promotionTotalFee > 0 || state.giftCardAmount > 0 || state.cardPrice > 0">
-            <image :src="state.imagesPath.iconDividingline"></image>
-        </view>
-        <view class="bill-details">
-            <view class="bill-details-item" v-if="state.order.shipmentType === 'EXPRESS' || state.order.shipmentType === 'LOGISTICAL'">
-                <view class="title">运费
-                    <text :hidden="state.shipmentCouponDiscount == 0">(运费券已减{{state.shipmentCouponDiscount}}元)</text>
-                </view>
-                <view class="amount" style="color:#333">+￥{{filtToFix(state.shipmentAmount - state.shipmentCouponDiscount)}}
-                </view>
+            <view class="viewMore" @click="viewMore" v-if="state.goodsList.length > 3">
+                {{state.showMore ? "点击收起" : "查看更多"}}
+                <image :src="state.showMore ? state.imagesPath.iconCollect : state.imagesPath.iconDropDown"></image>
             </view>
-            <!-- <view class="bill-details-item">
-                <view class="title">积分抵扣</view>
-                <view class="amount">-￥{{state.scoreAmount}}</view>
-            </view> -->
-            <view class="bill-details-item" :hidden="state.couponDeductTotal > 0 || state.coupon && state.coupon.price > 0 ? false : true">
-                <view class="title">优惠券
-                    <view class="coupon-name" v-if="state.coupon.activityName">
-                        (
-                        <text>{{state.coupon.activityName}}</text> )
+            <view class="dividing-line" v-if="state.order.shipmentType === 'EXPRESS' || state.order.shipmentType === 'LOGISTICAL' || state.couponDeductTotal > 0 || state.coupon && state.coupon.price > 0 || cashDeductTotal > 0 || state.order.promotionTotalFee > 0 || state.giftCardAmount > 0 || state.cardPrice > 0">
+                <image :src="state.imagesPath.iconDividingline"></image>
+            </view>
+            <view class="bill-details">
+                <view class="bill-details-item" v-if="state.order.shipmentType === 'EXPRESS' || state.order.shipmentType === 'LOGISTICAL'">
+                    <view class="title">运费
+                        <text :hidden="state.shipmentCouponDiscount == 0">(运费券已减{{state.shipmentCouponDiscount}}元)</text>
+                    </view>
+                    <view class="amount" style="color:#333">+￥{{filtToFix(state.shipmentAmount - state.shipmentCouponDiscount)}}
                     </view>
                 </view>
-                <!-- - shipmentCouponDiscount 注释优惠券减去运费优惠逻辑 -->
-                <view class="amount" v-if="state.couponDeductTotal && state.couponDeductTotal > 0">-￥{{filtToFix(state.couponDeductTotal ? state.couponDeductTotal - state.shipmentCouponDiscount : 0)}}</view>
-                <view class="amount" v-else>-￥{{filtToFix(state.coupon.price ? state.coupon.price - state.shipmentCouponDiscount : 0)}}</view>
+                <!-- <view class="bill-details-item">
+                    <view class="title">积分抵扣</view>
+                    <view class="amount">-￥{{state.scoreAmount}}</view>
+                </view> -->
+                <view class="bill-details-item" :hidden="state.couponDeductTotal > 0 || state.coupon && state.coupon.price > 0 ? false : true">
+                    <view class="title">优惠券
+                        <view class="coupon-name" v-if="state.coupon.activityName">
+                            (
+                            <text>{{state.coupon.activityName}}</text> )
+                        </view>
+                    </view>
+                    <!-- - shipmentCouponDiscount 注释优惠券减去运费优惠逻辑 -->
+                    <view class="amount" v-if="state.couponDeductTotal && state.couponDeductTotal > 0">-￥{{filtToFix(state.couponDeductTotal ? state.couponDeductTotal - state.shipmentCouponDiscount : 0)}}</view>
+                    <view class="amount" v-else>-￥{{filtToFix(state.coupon.price ? state.coupon.price - state.shipmentCouponDiscount : 0)}}</view>
+                </view>
+                <view class="bill-details-item" :hidden="cashDeductTotal > 0 ? false : true">
+                    <view class="title">活动优惠</view>
+                    <view class="amount">-￥{{cashDeductTotal}}</view>
+                </view>
+                <view class="bill-details-item" :hidden="state.order.promotionTotalFee > 0 ? false : true">
+                    <view class="title">支付渠道优惠</view>
+                    <view class="amount">-￥{{state.order.promotionTotalFee}}</view>
+                </view>
+                <view class="bill-details-item" :hidden="state.giftCardAmount > 0 ? false : true">
+                    <view class="title">礼品卡</view>
+                    <view class="amount">-￥{{state.giftCardAmount}}</view>
+                </view>
+                <view class="bill-details-item" :hidden="state.cardPrice > 0 ? false : true">
+                    <view class="title">储值余额</view>
+                    <view class="amount">-￥{{state.cardPrice}}</view>
+                </view>
             </view>
-            <view class="bill-details-item" :hidden="cashDeductTotal > 0 ? false : true">
-                <view class="title">活动优惠</view>
-                <view class="amount">-￥{{cashDeductTotal}}</view>
+            <view class="dividing-line">
+                <image :src="state.imagesPath.iconDividingline"></image>
             </view>
-            <view class="bill-details-item" :hidden="state.order.promotionTotalFee > 0 ? false : true">
-                <view class="title">支付渠道优惠</view>
-                <view class="amount">-￥{{state.order.promotionTotalFee}}</view>
+            <view class="bill-total" v-if="state.balanceEnable">
+                <view class="discount-amounts" v-if="deductibleTotal + state.deductibleShipmentAmonut > 0">
+                    已优惠￥{{filtToFix(deductibleTotal + state.deductibleShipmentAmonut)}}</view>
+                <view class="balance-accounts">
+                    {{state.order.type === 'CYCLE' && state.goodsList[0].cyclePhase ? '每期金额：' : '共计：'}}
+                    <text>￥{{state.cashTotal}} </text>
+                </view>
             </view>
-            <view class="bill-details-item" :hidden="state.giftCardAmount > 0 ? false : true">
-                <view class="title">礼品卡</view>
-                <view class="amount">-￥{{state.giftCardAmount}}</view>
-            </view>
-            <view class="bill-details-item" :hidden="state.cardPrice > 0 ? false : true">
-                <view class="title">储值余额</view>
-                <view class="amount">-￥{{state.cardPrice}}</view>
+            <view class="bill-total" v-else>
+                <view class="discount-amounts"></view>
+                <view class="balance-accounts">
+                    已付定金:￥{{orderAmount}} 需付尾款:
+                    <text>￥{{state.balanceTotal}}</text>
+                </view>
             </view>
         </view>
-        <view class="dividing-line">
-            <image :src="state.imagesPath.iconDividingline"></image>
-        </view>
-        <view class="bill-total" v-if="state.balanceEnable">
-            <view class="discount-amounts" v-if="deductibleTotal + state.deductibleShipmentAmonut > 0">
-                已优惠￥{{filtToFix(deductibleTotal + state.deductibleShipmentAmonut)}}</view>
-            <view class="balance-accounts">
-                {{state.order.type === 'CYCLE' && state.goodsList[0].cyclePhase ? '每期金额：' : '共计：'}}
-                <text>￥{{state.cashTotal}} </text>
+        <view class="order-box" v-if="state.order.type === 'CYCLE'">
+          <view class="title">
+            <view>配送进度</view>
+            <view class="delivery-rt">
+              <view class="top">{{state.order.status === '待发货' || state.order.status === '支付失败' || state.order.status === '待付尾款' || state.order.status === '已付款' ? '0' : state.order.childOrder[0].cyclePhase}}/{{state.order.childOrder.length}}次</view>
             </view>
-        </view>
-        <view class="bill-total" v-else>
-            <view class="discount-amounts"></view>
-            <view class="balance-accounts">
-                已付定金:￥{{orderAmount}} 需付尾款:
-                <text>￥{{state.balanceTotal}}</text>
-            </view>
-        </view>
-    </view>
-    <view class="order-box" v-if="state.order.type === 'CYCLE'">
-      <view class="title">
-        <view>配送进度</view>
-        <view class="delivery-rt">
-          <view class="top">{{state.order.status === '待发货' || state.order.status === '支付失败' || state.order.status === '待付尾款' || state.order.status === '已付款' ? '0' : state.order.childOrder[0].cyclePhase}}/{{state.order.childOrder.length}}次</view>
-        </view>
-      </view>
-      <view class="delivery-list">
-        <view class="delivery-list-item" v-for="(item , index) in state.order.childOrder">
-          <view class="item-lt">
-            <view>第{{item.cyclePhase}}期</view>
-            <view>{{item.deliveryTime}} ({{item.weekDay}})</view>
-            <view>{{item.cycleTimeName || ''}}</view>
           </view>
-          <view class="item-rt edit" @click="doShowUpdateTime" :data-id="item.id" v-if="(item.status === '已付款' || item.status === '待自提' || item.status === '待发货') && state.options.status !== '付款待自提' && !item.dlyThirdSuccess && item.isUpdateDeliveryTime">
-            修改时间
-            <!-- <picker mode="selector" bindtap="doShowUpdateTime" data-id="{{item.id}}" bindchange="doUpdateTime" value="{{index}}" range="{{state.updateTimeArr}}" range-key="cycleTime">
-            </picker> -->
-          </view>
-          <!-- && (!item.dlyThirdSuccess && item.isUpdateDeliveryTime) -->
-          <!-- && !(item.originalStatus == 'CREATED' && item.isReview == 1) -->
-          <view class="item-rt edit" @click="cancalRefundCycle" :data-id="item.id" v-else-if="item.status == '退款中'">
-            取消退款
-          </view>
-          <view class="item-rt" v-else-if="state.options.status !== '付款待自提'">
-            <view v-if="state.options.status !== '付款待自提'" style="display: inline-block;">
-              {{item.status}}
+          <view class="delivery-list">
+            <view class="delivery-list-item" v-for="(item , index) in state.order.childOrder">
+              <view class="item-lt">
+                <view>第{{item.cyclePhase}}期</view>
+                <view>{{item.deliveryTime}} ({{item.weekDay}})</view>
+                <view>{{item.cycleTimeName || ''}}</view>
+              </view>
+              <view class="item-rt edit" @click="doShowUpdateTime" :data-id="item.id" v-if="(item.status === '已付款' || item.status === '待自提' || item.status === '待发货') && state.options.status !== '付款待自提' && !item.dlyThirdSuccess && item.isUpdateDeliveryTime">
+                修改时间
+                <!-- <picker mode="selector" bindtap="doShowUpdateTime" data-id="{{item.id}}" bindchange="doUpdateTime" value="{{index}}" range="{{state.updateTimeArr}}" range-key="cycleTime">
+                </picker> -->
+              </view>
+              <!-- && (!item.dlyThirdSuccess && item.isUpdateDeliveryTime) -->
+              <!-- && !(item.originalStatus == 'CREATED' && item.isReview == 1) -->
+              <view class="item-rt edit" @click="cancalRefundCycle" :data-id="item.id" v-else-if="item.status == '退款中'">
+                取消退款
+              </view>
+              <view class="item-rt" v-else-if="state.options.status !== '付款待自提'">
+                <view v-if="state.options.status !== '付款待自提'" style="display: inline-block;">
+                  {{item.status}}
+                </view>
+              </view> 
             </view>
-          </view> 
+          </view>
         </view>
-      </view>
-    </view>
-    <view class="order-box" v-if="state.status == '配送中' || state.status == '待配送' || state.status == '待发货'">
-        <view class="title">
-            <text>配送信息</text>
+        <view class="order-box" v-if="state.status == '配送中' || state.status == '待配送' || state.status == '待发货'">
+            <view class="title">
+                <text>配送信息</text>
 
-        </view>
-        <!-- <view class='row'  wx:if="{{trackingList.length != '0'}}">
-            <text class="color-454545">快递公司：</text>
-            <view class="order-code">
-                <text selectable='true'>{{trackingList[0].trackingCom}}</text>
             </view>
-        </view> -->
-        <view class="row" v-if="trackingList.length != '0'">
-            <text class="color-454545">物流信息：</text>
-            <view class="order-code">
-                <text selectable="true" :style="'color:' + state.themeColor" @click="toTrackingDetails">查看配送信息</text>
+            <!-- <view class='row'  wx:if="{{trackingList.length != '0'}}">
+                <text class="color-454545">快递公司：</text>
+                <view class="order-code">
+                    <text selectable='true'>{{trackingList[0].trackingCom}}</text>
+                </view>
+            </view> -->
+            <view class="row" v-if="trackingList.length != '0'">
+                <text class="color-454545">物流信息：</text>
+                <view class="order-code">
+                    <text selectable="true" :style="'color:' + state.themeColor" @click="toTrackingDetails">查看配送信息</text>
+                </view>
             </view>
-        </view>
-        <view class="row">
-            <text class="color-454545">配送地址：</text>
-           <view style="flex: 1 1 auto">
-            <view style="font-size: 24rpx;line-height: 35rpx;margin-top: 20rpx;text-align: right">{{state.address}} {{state.memberName}}{{state.mobile}}</view>
-            <!-- <view></view> -->
-           </view>
-        </view>
-    </view>
-    <view class="invoice-box" v-if="state.showInvoice">
-        <view class="title">发票信息</view>
-        <view class="row">
-            <text class="color-454545">抬头类型：</text>
-            <text>{{state.invoice.type === 'PERSONAL' ? '个人或事业单位' : '企业'}}</text>
-        </view>
-        <view class="row">
-            <text class="color-454545">发票抬头：</text>
-            <text>{{state.invoice.title}}</text>
-        </view>
-        <view class="row" v-if="state.invoice.taxNumber">
-            <text class="color-454545">税 号：</text>
-            <text>{{state.invoice.taxNumber}}</text>
-        </view>
-    </view>
-    <view class="order-box" v-if="state.subOrders && state.subOrders.length > 0">
-      <view class="title">金额明细</view>
-      <view>
-          <view class="pay-item">
-            <view class="left">商品总价</view>
-            <view class="right">
-                <text>+￥{{toFix(state.order.orderAmount)}}</text>
-            </view>
-          </view>
-          <view class="pay-item" v-if="state.shipmentAmount > 0">
-            <view class="left">运费总价</view>
-            <view class="right">
-                <text>+￥{{state.shipmentAmount}}</text>
-            </view>
-          </view>
-          <view class="pay-item" v-if="cashDeductTotal > 0">
-              <view class="left">活动优惠</view>
-              <view class="right">
-                  <text class="amount-box">-￥{{cashDeductTotal}}</text>
+            <view class="row">
+                <text class="color-454545">配送地址：</text>
+              <view style="flex: 1 1 auto">
+                <view style="font-size: 24rpx;line-height: 35rpx;margin-top: 20rpx;text-align: right">{{state.address}} {{state.memberName}}{{state.mobile}}</view>
+                <!-- <view></view> -->
               </view>
-          </view>
-          <view class="pay-item" v-if="inputAmount > 0">
-              <view class="left">整单优惠</view>
-              <view class="right">
-                  <text class="amount-box">-￥{{inputAmount}}</text>
+            </view>
+        </view>
+        <view class="invoice-box" v-if="state.showInvoice">
+            <view class="title">发票信息</view>
+            <view class="row">
+                <text class="color-454545">抬头类型：</text>
+                <text>{{state.invoice.type === 'PERSONAL' ? '个人或事业单位' : '企业'}}</text>
+            </view>
+            <view class="row">
+                <text class="color-454545">发票抬头：</text>
+                <text>{{state.invoice.title}}</text>
+            </view>
+            <view class="row" v-if="state.invoice.taxNumber">
+                <text class="color-454545">税 号：</text>
+                <text>{{state.invoice.taxNumber}}</text>
+            </view>
+        </view>
+        <view class="order-box" v-if="state.subOrders && state.subOrders.length > 0">
+          <view class="title">金额明细</view>
+          <view>
+              <view class="pay-item">
+                <view class="left">商品总价</view>
+                <view class="right">
+                    <text>+￥{{toFix(state.order.orderAmount)}}</text>
+                </view>
               </view>
-          </view>
-          <view class="pay-item" v-if="state.couponDeductTotal > 0 || state.coupon && state.coupon.price > 0">
-              <view class="left">
-                  优惠券
+              <view class="pay-item" v-if="state.shipmentAmount > 0">
+                <view class="left">运费总价</view>
+                <view class="right">
+                    <text>+￥{{state.shipmentAmount}}</text>
+                </view>
               </view>
-              <view class="right">
-                  <view>
-                      <view class="coupon-amount-box">
-                          <!-- <image class="coupon-bg" src="{{state.imagesPath.iconCouponBgRed}}" mode="widthFix"
-                              lazy-load="false" />
-                          <image class="coupon-bg" src="{{state.imagesPath.iconCouponBgRed}}" mode="widthFix"
-                              lazy-load="false" /> -->
-                            <view class="coupon-amount" v-if="state.couponDeductTotal && state.couponDeductTotal > 0">-￥{{filtToFix(state.couponDeductTotal ? state.couponDeductTotal - state.shipmentCouponDiscount : 0)}}</view>
-                            <view class="coupon-amount" v-else>-￥{{filtToFix(state.coupon.price ? state.coupon.price - state.shipmentCouponDiscount : 0)}}</view>
+              <view class="pay-item" v-if="cashDeductTotal > 0">
+                  <view class="left">活动优惠</view>
+                  <view class="right">
+                      <text class="amount-box">-￥{{cashDeductTotal}}</text>
+                  </view>
+              </view>
+              <view class="pay-item" v-if="inputAmount > 0">
+                  <view class="left">整单优惠</view>
+                  <view class="right">
+                      <text class="amount-box">-￥{{inputAmount}}</text>
+                  </view>
+              </view>
+              <view class="pay-item" v-if="state.couponDeductTotal > 0 || state.coupon && state.coupon.price > 0">
+                  <view class="left">
+                      优惠券
+                  </view>
+                  <view class="right">
+                      <view>
+                          <view class="coupon-amount-box">
+                              <!-- <image class="coupon-bg" src="{{state.imagesPath.iconCouponBgRed}}" mode="widthFix"
+                                  lazy-load="false" />
+                              <image class="coupon-bg" src="{{state.imagesPath.iconCouponBgRed}}" mode="widthFix"
+                                  lazy-load="false" /> -->
+                                <view class="coupon-amount" v-if="state.couponDeductTotal && state.couponDeductTotal > 0">-￥{{filtToFix(state.couponDeductTotal ? state.couponDeductTotal - state.shipmentCouponDiscount : 0)}}</view>
+                                <view class="coupon-amount" v-else>-￥{{filtToFix(state.coupon.price ? state.coupon.price - state.shipmentCouponDiscount : 0)}}</view>
+                          </view>
                       </view>
                   </view>
               </view>
-          </view>
-          <view class="pay-item" v-if="state.shipmentCouponDiscount > 0">
-            <view class="left">运费优惠合计</view>
-            <view class="right">
-              <view class="coupon-amount-box">
-                <text class="coupon-amount">-￥{{state.shipmentCouponDiscount}}</text>
+              <view class="pay-item" v-if="state.shipmentCouponDiscount > 0">
+                <view class="left">运费优惠合计</view>
+                <view class="right">
+                  <view class="coupon-amount-box">
+                    <text class="coupon-amount">-￥{{state.shipmentCouponDiscount}}</text>
+                  </view>
+                </view>
               </view>
+          </view>
+
+          <view class="bill-details1">
+              <view class="discount-amounts" v-if="cashDeductTotal + (state.couponDeductTotal ? state.couponDeductTotal : state.coupon ? state.coupon.price : 0) > 0">已优惠￥{{toFix(cashDeductTotal + (state.couponDeductTotal ? state.couponDeductTotal : state.coupon ? state.coupon.price : 0))}}</view>
+              <view class="balance-accounts">
+                  支付金额：
+                  <text>￥{{toFix(state.order.cashTotal)}}</text>
+              </view>
+          </view>
+        </view>
+        <view class="order-box">
+            <view class="title">
+                <text>订单信息</text>
+
+                <view class="callPhone" @click="isOpenCustomerService ? '' : 'callContact'"><button v-if="state.isOpenCustomerService"> 
+                        <image :src="kefuIcon" mode="widthFix"></image> 在线客服
+                </button></view>
+            </view>
+            <view class="row" v-if="!sendOrderId">
+                <!-- <text class="color-454545">订 单 号：</text> -->
+                <text class="color-454545" :decode="true">单&emsp;&emsp;号：</text>
+                <view class="order-code">
+                    <text selectable="true">{{state.order.id}}</text>
+                    <view @click="copyOrderId" :style="'color:' + state.themeColor">复制</view>
+                </view>
+            </view>
+            <view class="row" v-else>
+                <!-- <text class="color-454545">订 单 号：</text> -->
+                <text class="color-454545" :decode="true">单&emsp;&emsp;号：</text>
+                <view class="order-code">
+                    <text selectable="true">{{sendOrderId}}</text>
+                    <view @click="copyOrderId" :style="'color:' + state.themeColor">复制</view>
+                </view>
+            </view>
+            <view class="row">
+                <text class="color-454545">支付方式：</text>
+                <text>{{state.payMethodText}}</text>
+            </view>
+            <view class="row">
+                <text class="color-454545">下单时间：</text>
+                <text>{{state.order.createTime}}</text>
+            </view>
+            <view class="row num-express" v-if="state.trackingNumber">
+                <text class="color-454545">运单号：</text>
+                <view class="tracking-num" :style="'color:' + state.themeColor">
+                    <text>{{state.trackingNumber ? state.trackingNumber : '暂无您的快递信息'}}</text>
+                    <text v-if="state.trackingNumber" @click="toTrackingDetails">查看详情 ></text>
+                </view>
+            </view>
+            <view class="row refund-row" v-if="state.refundDataList.length > 0">
+                <text class="color-454545">累计退款：</text>
+                <view class="tracking-num refund-list-line" :style="'color:' + state.themeColor">
+                    <text v-if="state.refundTotal">￥{{filtToFix(state.refundTotal)}}</text>
+                    <view v-for="(item , index) in state.refundDataList" :key="index" class="refund-list" :data-id="item.id" @click="toAddRefundDetails">
+                        <text class="refund-id">{{item.id}}</text>
+                        <view class="refund-status gray-color" v-if="item.status === 'FINISHED'">完成退款</view>
+                        <!-- 退款 -->
+                        <view class="refund-status gray-color" v-if="item.status === 'FAILED'">退款失败</view>
+                        <view class="refund-status" v-if="item.status === 'CREATED'">待审核</view>
+                        <view class="refund-status gray-color" v-if="item.status === 'RETURNING'">退换货中</view>
+                        <view class="refund-status gray-color" v-if="item.status === 'PARTREJECTED'">部分退款</view>
+                        <view class="refund-status gray-color" v-if="item.status === 'REJECTED'">已拒绝</view>
+                        <view class="refund-status gray-color" v-if="item.status === 'CANCELED'">取消申请</view>
+                        <view class="refund-status gray-color" v-if="item.status === 'REFUND_WAITRECEIVER'">商家待收货</view>
+                    </view>
+                </view>
+            </view>
+            <!-- <view class='row remarks'>
+                <text class="color-454545">订单备注：</text>
+                <text class="remarks-info" selectable='true'>{{state.order.remark || ''}}</text>
+            </view> -->
+        </view>
+        
+        <view class="store-box" v-if="!(state.order.business === 'DISTRIBUTION' && state.order.shipmentType === 'EXPRESS')">
+            <view class="title">门店信息</view>
+            <view class="store-row">
+                <view class="left">
+                    <view class="name">{{state.order.storeName}}</view>
+                    <view class="address">{{state.order.storeAddress}}</view>
+                </view>
+                <view class="right">
+                    <view class="address" @click="viewStoreLocation">
+                        <image :src="state.imagesPath.iconOrderDetailAddress" mode="widthFix" lazy-load="false"></image>
+                    </view>
+                    <view class="tel" @click="contactStore">
+                        <image :src="state.imagesPath.iconTelephone" mode="widthFix" lazy-load="false"></image>
+                    </view>
+                </view>
+            </view>
+        </view>
+        <view class="share-raffle" v-if="state.canRaffle">
+            <image class="share-raffle-img" :src="state.imagesPath.iconLuckdrawShare"></image>
+            <button open-type="share" data-shareType="raffle"></button>
+        </view>
+        <view class="group-share-img-box">
+            <canvas canvas-id="groupPictureCanvas">
+        </canvas></view>
+    </view>
+    <view class="mantle" v-if="state.afterShow" @click="showPopu">
+        <view class="shouhouBox" :style="!(state.order.status == '配送中' && state.order.shipmentType == 'EXPRESS') ? '' : 'height:297rpx'">
+            <text>选择售后类型</text>
+            <view class="shouhouBox-active" :style="!(state.order.status == '配送中' && state.order.shipmentType == 'EXPRESS') ? '' : 'height:153rpx'">
+                <view v-if="!(state.order.status == '配送中' && state.order.shipmentType == 'EXPRESS')" class="active-a" :data-type="'REFUND'" @click="toRefundPage">
+                    <view class="active-one">
+                        <image :src="xingIcon"></image><text>我要退款（无需退货）</text>
+                    </view>
+                    <view class="Noreceived">没收到货，或与卖家协商同意不用退货只退款</view>
+                    <view class="arrow">
+                        <image style="width: 28rpx;height: 38rpx;" src="http://gomore-gssm.oss-cn-hangzhou.aliyuncs.com/taiko_bj_image/arrow.jpg"></image>
+                    </view>
+                </view>
+                <view class="active-a" :data-type="'RETURNS_AND_REFUND'" @click="toRefundPage">
+                    <view class="active-one">
+                        <image :src="xingIcon2"></image><text>我要退货退款</text>
+                    </view>
+                    <view class="received">已收到货，需要退还收到的货物</view>
+                    <view class="arrow">
+                        <image style="width: 28rpx;height: 38rpx;" src="http://gomore-gssm.oss-cn-hangzhou.aliyuncs.com/taiko_bj_image/arrow.jpg"></image>
+                    </view>
+                </view>
+            </view>
+        </view>
+    </view>
+    <view class="barcode-box-backGround" v-if="state.showBigBarcode" @click="handleToSmallBarcode">
+        <view class="box">
+            <view class="barcode-box">
+                <view v-if="state.showBarcode">
+                    <canvas id="orderBarcode" type="2d" :style="state.bigBarcode ? '' : 'left: -999999rpx;'">
+                    <image :src="state.bigBarcode" v-if="state.barcodeImageUrl"></image>
+                </canvas></view>
+                <view v-else>
+                    <image mode="widthFix" :src="state.imagesPath.iconOrderCode"></image>
+                </view>
+            </view>
+            <text class="code-text" v-if="state.showBarcode">{{state.codeText}}</text>
+        </view>
+    </view>
+
+    <view class="payment-type" v-if="state.goodDetailShow" @click="changeGoodDetailShow">
+      <view class="payment-model" @click.stop="">
+        <view class="spec-close-box" @click="changeGoodDetailShow">
+            <image :src="state.imagesPath.iconCloseImg" mode="widthFix"></image>
+          </view>
+        <view class="model-title">商品信息</view>
+        <view class="model-body">
+          <view class="goods-item-box" v-for="(item , index) in state.subOrders[editActiveIdx].products" :key="index">
+            <view class="goods-item" @click.stop="toGoodsDetails" :data-id="item.productId">
+                <view class="goods-img">
+                    <image :src="item.imageUrl" mode="aspectFit"></image>
+                </view>
+                <view class="goods-info">
+                    <view class="goods-left">
+                        <view class="goods-name">{{item.name}}</view>
+                        <view class="goods-detail-info" v-if="item.style === 'MEALS2'">
+                            <text v-for="(item , index) in item.groupProducts" :key="index">{{item.groupProductCount}}x{{item.productName}}</text>
+                        </view>
+                        <text class="goods-desc" v-else-if="item.description">{{item.description}}</text>
+                        <view v-if="item.require" class="require_label">
+                            必选
+                        </view>
+                        <view class="goods-label" v-else-if="item.labelName">{{item.labelName}}</view>
+                        <view class="goods-desc" v-else-if="item.specs">{{item.specs ? item.specs : ''}}</view>
+                        <!-- wx:if="{{item.deliveryTimeStatement}}"  -->
+                        <view class="goods-desc" style="color: #ff9f43;">
+                            {{item.deliveryTimeStatement ? item.deliveryTimeStatement : ''}}</view>
+                        <view class="goods-advanceSell-price" v-if="state.subOrders[editActiveIdx].type === 'ADVANCE_SELL'">
+                            <!-- {{item.addvanceSellPrice===item.sellPrice ? '预售价' : '定金'}}￥{{item.sellPrice}}</view> -->
+                            {{item.addvanceSellPrice === item.sellPrice ? '预售价' : state.subOrders[editActiveIdx].advanceSellInfo.payType === 'FULL' ? '全款' : '定金'}}￥{{item.price}}</view>
+                        <!-- <view class='goods-price' wx:if="{{state.orderType === 'CYCLE'}}">
+                          <text class="nowPrice"><text>￥</text>{{allPrice}}</text> 
+                        </view> -->
+                        <view class="goods-price" v-if="state.subOrders[editActiveIdx].type === 'SCORE_PRICE'">
+                            <text class="nowPrice"><text></text>{{state.subOrders[editActiveIdx].integral}}</text> 积分
+                        </view>
+                        <view class="goods-price" v-else-if="state.subOrders[editActiveIdx].type === 'ADVANCE_SELL'"></view>
+                        <view class="goods-price" v-else>
+                            <text class="nowPrice" style="color: #ff9f43;"><text>￥</text>{{state.subOrders[editActiveIdx].type === 'CYCLE' && !item.giftProduct ? state.subOrders[editActiveIdx].allPrice : item.price}}</text>
+                            <text class="oldPrice" v-if="orderDetailGood[item.productId] && item.sellPrice < orderDetailGood[item.productId].price">￥{{orderDetailGood[item.productId].price}}</text>
+                        </view>
+                    </view>
+                    <view class="goods-right">
+                        <view class="goods-count">
+                            x{{item.productNum}}</view>
+                    </view>
+                </view>
             </view>
           </view>
+        </view>
       </view>
+    </view>
+    <pay :order-data="state.orderData" path="order" :payType="state.payType"></pay>
+    <image class="movable-view" v-if="state.homeBack" :src="state.imagesPath.toHome" @click="toHome"></image>
 
-      <view class="bill-details1">
-          <view class="discount-amounts" v-if="cashDeductTotal + (state.couponDeductTotal ? state.couponDeductTotal : state.coupon ? state.coupon.price : 0) > 0">已优惠￥{{toFix(cashDeductTotal + (state.couponDeductTotal ? state.couponDeductTotal : state.coupon ? state.coupon.price : 0))}}</view>
-          <view class="balance-accounts">
-              支付金额：
-              <text>￥{{toFix(state.order.cashTotal)}}</text>
+    <popup :show="state.flag" position="bottom" custom-class="bottom" @close="toggleGoodsSpecPopup">
+        <view class="popup-content">
+            <view class="popup-title">商品信息</view>
+            <view class="popup-hd">
+                <text>{{state.commodityInfo.trackingCom}} | {{state.commodityInfo.trackingNumber}}</text>
+            </view>
+            <view class="popup-bd">
+                <view v-for="(item , index) in state.commodityInfo.list" :key="idx" class="item">
+                    <view class="icon">
+                        <image :src="item.imageUrl" mode="widthFix"></image>
+                    </view>
+                    <view class="textbox">
+                        <view class="title">{{item.name}}</view>
+                        <view>数量：{{state.order.type === 'CYCLE' ? item.perDeliveryQuantity : item.qty}}件</view>
+                    </view>
+                </view>
+            </view>
+        </view>
+    </popup>
+    <popup :show="detailPopup" position="bottom" custom-class="bottom" @close="toggleGoodsNormalPopup">
+      <view class="spec-box">
+        <view class="close-text" :style="'color: ' + state.themeColor" @click="toggleGoodsNormalPopup">取消</view>
+        <view class="spec-date">
+          <view class="hd">选择时间</view>
+          <view class="item-spec" v-for="(item , index) in state.updateTimeArr" :data-index="index" :data-id="item.id" @click="doCurrent" :style="state.cycleActive == index ? 'background-color: ' + state.themeColor + ';color:#fff;' : ''">
+            {{item.cycleTime}}
           </view>
-      </view>
-    </view>
-    <view class="order-box">
-        <view class="title">
-            <text>订单信息</text>
-
-            <view class="callPhone" @click="isOpenCustomerService ? '' : 'callContact'"><button v-if="state.isOpenCustomerService"> 
-                    <image :src="kefuIcon" mode="widthFix"></image> 在线客服
-            </button></view>
         </view>
-        <view class="row" v-if="!sendOrderId">
-            <!-- <text class="color-454545">订 单 号：</text> -->
-            <text class="color-454545" :decode="true">单&emsp;&emsp;号：</text>
-            <view class="order-code">
-                <text selectable="true">{{state.order.id}}</text>
-                <view @click="copyOrderId" :style="'color:' + state.themeColor">复制</view>
-            </view>
-        </view>
-        <view class="row" v-else>
-            <!-- <text class="color-454545">订 单 号：</text> -->
-            <text class="color-454545" :decode="true">单&emsp;&emsp;号：</text>
-            <view class="order-code">
-                <text selectable="true">{{sendOrderId}}</text>
-                <view @click="copyOrderId" :style="'color:' + state.themeColor">复制</view>
-            </view>
-        </view>
-        <view class="row">
-            <text class="color-454545">支付方式：</text>
-            <text>{{state.payMethodText}}</text>
-        </view>
-        <view class="row">
-            <text class="color-454545">下单时间：</text>
-            <text>{{state.order.createTime}}</text>
-        </view>
-        <view class="row num-express" v-if="state.trackingNumber">
-            <text class="color-454545">运单号：</text>
-            <view class="tracking-num" :style="'color:' + state.themeColor">
-                <text>{{state.trackingNumber ? state.trackingNumber : '暂无您的快递信息'}}</text>
-                <text v-if="state.trackingNumber" @click="toTrackingDetails">查看详情 ></text>
-            </view>
-        </view>
-        <view class="row refund-row" v-if="state.refundDataList.length > 0">
-            <text class="color-454545">累计退款：</text>
-            <view class="tracking-num refund-list-line" :style="'color:' + state.themeColor">
-                <text v-if="state.refundTotal">￥{{filtToFix(state.refundTotal)}}</text>
-                <view v-for="(item , index) in state.refundDataList" :key="index" class="refund-list" :data-id="item.id" @click="toAddRefundDetails">
-                    <text class="refund-id">{{item.id}}</text>
-                    <view class="refund-status gray-color" v-if="item.status === 'FINISHED'">完成退款</view>
-                    <!-- 退款 -->
-                    <view class="refund-status gray-color" v-if="item.status === 'FAILED'">退款失败</view>
-                    <view class="refund-status" v-if="item.status === 'CREATED'">待审核</view>
-                    <view class="refund-status gray-color" v-if="item.status === 'RETURNING'">退换货中</view>
-                    <view class="refund-status gray-color" v-if="item.status === 'PARTREJECTED'">部分退款</view>
-                    <view class="refund-status gray-color" v-if="item.status === 'REJECTED'">已拒绝</view>
-                    <view class="refund-status gray-color" v-if="item.status === 'CANCELED'">取消申请</view>
-                    <view class="refund-status gray-color" v-if="item.status === 'REFUND_WAITRECEIVER'">商家待收货</view>
-                </view>
-            </view>
-        </view>
-        <!-- <view class='row remarks'>
-            <text class="color-454545">订单备注：</text>
-            <text class="remarks-info" selectable='true'>{{state.order.remark || ''}}</text>
-        </view> -->
-    </view>
-    
-    <view class="store-box" v-if="!(state.order.business === 'DISTRIBUTION' && state.order.shipmentType === 'EXPRESS')">
-        <view class="title">门店信息</view>
-        <view class="store-row">
-            <view class="left">
-                <view class="name">{{state.order.storeName}}</view>
-                <view class="address">{{state.order.storeAddress}}</view>
-            </view>
-            <view class="right">
-                <view class="address" @click="viewStoreLocation">
-                    <image :src="state.imagesPath.iconOrderDetailAddress" mode="widthFix" lazy-load="false"></image>
-                </view>
-                <view class="tel" @click="contactStore">
-                    <image :src="state.imagesPath.iconTelephone" mode="widthFix" lazy-load="false"></image>
-                </view>
-            </view>
-        </view>
-    </view>
-    <view class="share-raffle" v-if="state.canRaffle">
-        <image class="share-raffle-img" :src="state.imagesPath.iconLuckdrawShare"></image>
-        <button open-type="share" data-shareType="raffle"></button>
-    </view>
-    <view class="group-share-img-box">
-        <canvas canvas-id="groupPictureCanvas">
-    </canvas></view>
-</view>
-<view class="mantle" v-if="state.afterShow" @click="showPopu">
-    <view class="shouhouBox" :style="!(state.order.status == '配送中' && state.order.shipmentType == 'EXPRESS') ? '' : 'height:297rpx'">
-        <text>选择售后类型</text>
-        <view class="shouhouBox-active" :style="!(state.order.status == '配送中' && state.order.shipmentType == 'EXPRESS') ? '' : 'height:153rpx'">
-            <view v-if="!(state.order.status == '配送中' && state.order.shipmentType == 'EXPRESS')" class="active-a" :data-type="'REFUND'" @click="toRefundPage">
-                <view class="active-one">
-                    <image :src="xingIcon"></image><text>我要退款（无需退货）</text>
-                </view>
-                <view class="Noreceived">没收到货，或与卖家协商同意不用退货只退款</view>
-                <view class="arrow">
-                    <image style="width: 28rpx;height: 38rpx;" src="http://gomore-gssm.oss-cn-hangzhou.aliyuncs.com/taiko_bj_image/arrow.jpg"></image>
-                </view>
-            </view>
-            <view class="active-a" :data-type="'RETURNS_AND_REFUND'" @click="toRefundPage">
-                <view class="active-one">
-                    <image :src="xingIcon2"></image><text>我要退货退款</text>
-                </view>
-                <view class="received">已收到货，需要退还收到的货物</view>
-                <view class="arrow">
-                    <image style="width: 28rpx;height: 38rpx;" src="http://gomore-gssm.oss-cn-hangzhou.aliyuncs.com/taiko_bj_image/arrow.jpg"></image>
-                </view>
-            </view>
-        </view>
-    </view>
-</view>
-<view class="barcode-box-backGround" v-if="state.showBigBarcode" @click="handleToSmallBarcode">
-    <view class="box">
-        <view class="barcode-box">
-            <view v-if="state.showBarcode">
-                <canvas id="orderBarcode" type="2d" :style="state.bigBarcode ? '' : 'left: -999999rpx;'">
-                <image :src="state.bigBarcode" v-if="state.barcodeImageUrl"></image>
-            </canvas></view>
-            <view v-else>
-                <image mode="widthFix" :src="state.imagesPath.iconOrderCode"></image>
-            </view>
-        </view>
-        <text class="code-text" v-if="state.showBarcode">{{state.codeText}}</text>
-    </view>
-</view>
-
-<view class="payment-type" v-if="state.goodDetailShow" @click="changeGoodDetailShow">
-  <view class="payment-model" @click.stop="">
-    <view class="spec-close-box" @click="changeGoodDetailShow">
-        <image :src="state.imagesPath.iconCloseImg" mode="widthFix"></image>
-      </view>
-    <view class="model-title">商品信息</view>
-    <view class="model-body">
-      <view class="goods-item-box" v-for="(item , index) in state.subOrders[editActiveIdx].products" :key="index">
-        <view class="goods-item" @click.stop="toGoodsDetails" :data-id="item.productId">
-            <view class="goods-img">
-                <image :src="item.imageUrl" mode="aspectFit"></image>
-            </view>
-            <view class="goods-info">
-                <view class="goods-left">
-                    <view class="goods-name">{{item.name}}</view>
-                    <view class="goods-detail-info" v-if="item.style === 'MEALS2'">
-                        <text v-for="(item , index) in item.groupProducts" :key="index">{{item.groupProductCount}}x{{item.productName}}</text>
-                    </view>
-                    <text class="goods-desc" v-else-if="item.description">{{item.description}}</text>
-                    <view v-if="item.require" class="require_label">
-                        必选
-                    </view>
-                    <view class="goods-label" v-else-if="item.labelName">{{item.labelName}}</view>
-                    <view class="goods-desc" v-else-if="item.specs">{{item.specs ? item.specs : ''}}</view>
-                    <!-- wx:if="{{item.deliveryTimeStatement}}"  -->
-                    <view class="goods-desc" style="color: #ff9f43;">
-                        {{item.deliveryTimeStatement ? item.deliveryTimeStatement : ''}}</view>
-                    <view class="goods-advanceSell-price" v-if="state.subOrders[editActiveIdx].type === 'ADVANCE_SELL'">
-                        <!-- {{item.addvanceSellPrice===item.sellPrice ? '预售价' : '定金'}}￥{{item.sellPrice}}</view> -->
-                        {{item.addvanceSellPrice === item.sellPrice ? '预售价' : state.subOrders[editActiveIdx].advanceSellInfo.payType === 'FULL' ? '全款' : '定金'}}￥{{item.price}}</view>
-                    <!-- <view class='goods-price' wx:if="{{state.orderType === 'CYCLE'}}">
-                      <text class="nowPrice"><text>￥</text>{{allPrice}}</text> 
-                    </view> -->
-                    <view class="goods-price" v-if="state.subOrders[editActiveIdx].type === 'SCORE_PRICE'">
-                        <text class="nowPrice"><text></text>{{state.subOrders[editActiveIdx].integral}}</text> 积分
-                    </view>
-                    <view class="goods-price" v-else-if="state.subOrders[editActiveIdx].type === 'ADVANCE_SELL'"></view>
-                    <view class="goods-price" v-else>
-                        <text class="nowPrice" style="color: #ff9f43;"><text>￥</text>{{state.subOrders[editActiveIdx].type === 'CYCLE' && !item.giftProduct ? state.subOrders[editActiveIdx].allPrice : item.price}}</text>
-                        <text class="oldPrice" v-if="orderDetailGood[item.productId] && item.sellPrice < orderDetailGood[item.productId].price">￥{{orderDetailGood[item.productId].price}}</text>
-                    </view>
-                </view>
-                <view class="goods-right">
-                    <view class="goods-count">
-                        x{{item.productNum}}</view>
-                </view>
-            </view>
+        <view class="spec-button-box">
+          <form @submit="doUpdateTime" @click.stop="noop">
+            <button form-type="submit" class="spec-button" :style="'background: ' + state.themeColor" data-addtype="detail">确定</button>
+          </form>
         </view>
       </view>
-    </view>
+    </popup>
+    <popup :show="state.showEditTime" position="middle" custom-class="middle" @close="showEditTimeChange">
+        <view class="number-modal-body">
+            <view class="number-modal-content">
+                <view class="title">修改配送时间/备注</view>
+                <view class="content">
+                  <view class="content-title">配送时间</view>
+                  <view @click="getCalculateTime" class="content-config-item">
+                      <text>{{storePickupTime}}</text>
+                      <image class="right-point" :src="state.imagesPath.iconRight2"></image>
+                  </view>
+                  <view class="content-title">备注</view>
+                  <view class="content-config-item">
+                    <textarea name="remark" placeholder="请输入您要备注的信息..." :value="state.editRemark" maxlength="50" @input="handelTextArea"></textarea>
+                  </view>
+                </view>
+                <view class="button-box">
+                    <button class="cancel" @click.stop="showEditTimeChange">取消</button>
+                    <button class="confirm" :style="'color: ' + theme.color" @click.stop="onConfirm">确定</button>
+                </view>
+            </view>
+        </view>
+    </popup>
+    <popup :show="state.showTime" position="bottom">
+        <time-picker @onClose="onClose" :title="item.type == 'dispatch' ? '配送时间' : '自提时间'" :deliveryTimeData="state.deliveryTimeData" :deliveryTime="state.deliveryTime" @selectTime="selectTime"></time-picker>
+    </popup>
   </view>
-</view>
-<pay :order-data="state.orderData" path="order" :payType="state.payType"></pay>
-<image class="movable-view" v-if="state.homeBack" :src="state.imagesPath.toHome" @click="toHome"></image>
-
-<popup :show="state.flag" position="bottom" custom-class="bottom" @close="toggleGoodsSpecPopup">
-    <view class="popup-content">
-        <view class="popup-title">商品信息</view>
-        <view class="popup-hd">
-            <text>{{state.commodityInfo.trackingCom}} | {{state.commodityInfo.trackingNumber}}</text>
-        </view>
-        <view class="popup-bd">
-            <view v-for="(item , index) in state.commodityInfo.list" :key="idx" class="item">
-                <view class="icon">
-                    <image :src="item.imageUrl" mode="widthFix"></image>
-                </view>
-                <view class="textbox">
-                    <view class="title">{{item.name}}</view>
-                    <view>数量：{{state.order.type === 'CYCLE' ? item.perDeliveryQuantity : item.qty}}件</view>
-                </view>
-            </view>
-        </view>
-    </view>
-</popup>
-<popup :show="detailPopup" position="bottom" custom-class="bottom" @close="toggleGoodsNormalPopup">
-  <view class="spec-box">
-    <view class="close-text" :style="'color: ' + state.themeColor" @click="toggleGoodsNormalPopup">取消</view>
-    <view class="spec-date">
-      <view class="hd">选择时间</view>
-      <view class="item-spec" v-for="(item , index) in state.updateTimeArr" :data-index="index" :data-id="item.id" @click="doCurrent" :style="state.cycleActive == index ? 'background-color: ' + state.themeColor + ';color:#fff;' : ''">
-        {{item.cycleTime}}
-      </view>
-    </view>
-    <view class="spec-button-box">
-      <form @submit="doUpdateTime" @click.stop="noop">
-        <button form-type="submit" class="spec-button" :style="'background: ' + state.themeColor" data-addtype="detail">确定</button>
-      </form>
-    </view>
-  </view>
-</popup>
-<popup :show="state.showEditTime" position="middle" custom-class="middle" @close="showEditTimeChange">
-    <view class="number-modal-body">
-        <view class="number-modal-content">
-            <view class="title">修改配送时间/备注</view>
-            <view class="content">
-              <view class="content-title">配送时间</view>
-              <view @click="getCalculateTime" class="content-config-item">
-                  <text>{{storePickupTime}}</text>
-                  <image class="right-point" :src="state.imagesPath.iconRight2"></image>
-              </view>
-              <view class="content-title">备注</view>
-              <view class="content-config-item">
-                <textarea name="remark" placeholder="请输入您要备注的信息..." :value="state.editRemark" maxlength="50" @input="handelTextArea"></textarea>
-              </view>
-            </view>
-            <view class="button-box">
-                <button class="cancel" @click.stop="showEditTimeChange">取消</button>
-                <button class="confirm" :style="'color: ' + theme.color" @click.stop="onConfirm">确定</button>
-            </view>
-        </view>
-    </view>
-</popup>
-<popup :show="state.showTime" position="bottom">
-    <time-picker @onClose="onClose" :title="item.type == 'dispatch' ? '配送时间' : '自提时间'" :deliveryTimeData="state.deliveryTimeData" :deliveryTime="state.deliveryTime" @selectTime="selectTime"></time-picker>
-</popup>
-</view>
 </template>
 <script setup>
 import xingIcon from '@/utils/newretail/image/xing.png'
@@ -1141,6 +1155,7 @@ import _utilsUtilsJs from "@/utils/newretail/utils";
 import _utilsSelfJs from "@/utils/newretail/self";
 import _apiRequestJs from "@/service/api/newretail/request";
 import _apiOrderServiceJs from "@/service/api/newretail/orderService";
+import timePicker from "@/pages-sub/newretail/components/timer-picker/index";
 // import { onLoad, onReady, onShow, onHide, onUnload, onPullDownRefresh, onReachBottom, onShareAppMessage } from "@dcloudio/uni-app";
 import { reactive } from "vue";
 import pay from '@/pages-sub/newretail/components/pay/pay.vue';

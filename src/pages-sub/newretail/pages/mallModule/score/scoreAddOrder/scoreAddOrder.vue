@@ -247,6 +247,7 @@ import _apiPromotionService from "@/service/api/newretail/promotionService";
 import _apiScoreProductService from "@/service/api/newretail/scoreProductService";
 import _apiMemberServiceJs from "@/service/api/newretail/memberService";
 import _utilsImagesPath from "@/utils/newretail/imagesPath";
+import timePicker from "@/pages-sub/newretail/components/timer-picker/index";
 // import { onLoad, onReady, onShow, onHide, onUnload, onPullDownRefresh, onReachBottom, onShareAppMessage } from "@dcloudio/uni-app";
 import { reactive } from "vue";
 import popup from '@/pages-sub/newretail/components/popup/popup.vue';
